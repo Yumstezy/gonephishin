@@ -11,16 +11,22 @@ Gone Phishin' protects older and less-tech-savvy users from phishing links in th
 The product has two surfaces:
 
 1. A **Chrome extension** that scans links on supported webmail and social-DM sites, marks them with a clear safety status, and intercepts clicks on dangerous ones with a plain-English warning.
-2. A **single-page web app** (`gonephishin.com`) where caregivers (typically adult children) can install the extension, sign in, and pair with their parent's browser to see what phishing attempts their parent is encountering.
+2. A **single-page web app** (`gonephishin.com`) where users can install the extension, sign in, and view a dashboard of phishing attempts they (or a paired senior) have encountered.
 
-The target user of the extension is a senior who does not want — and will not maintain — an account, password, or technical configuration. The target user of the dashboard is a worried adult child who wants visibility without invading their parent's privacy.
+The product supports two usage modes, switched at install time inside the extension popup:
+
+- **Caregiver-paired mode**: an adult child creates an account, generates a 6-digit pairing code, and reads it to a senior over the phone. The senior types the code into the popup once. The caregiver sees the senior's danger events; the senior never has an account.
+- **Self-managed mode**: a tech-comfortable senior creates their own account and signs into the extension directly. They see their own dashboard. No code, no third party.
+
+Both modes share the same underlying data model and dashboard UI — the only difference is who owns the circle and how the extension gets paired to it.
 
 ## 2. Non-Goals
 
 - We do **not** scan email content (subjects, senders, or message bodies). URLs only.
 - We do **not** build our own threat intelligence — we rely on Google Safe Browsing plus a small set of local heuristics.
-- We do **not** support seniors creating their own accounts. Seniors are represented by a `circle` owned by their caregiver.
-- We do **not** support real-time chat, password management, or recovery flows for seniors.
+- We do **not** require seniors to have an account. Caregiver-paired mode lets a senior use the extension fully without ever signing up. Self-managed mode is opt-in for seniors who want their own dashboard.
+- We do **not** support real-time chat, password management, or recovery flows for seniors who decline to make an account (caregiver-paired mode is the answer for that population).
+- We do **not** support a single circle being shared between a self-managed senior account *and* a caregiver account in v0.1. One owner per circle. (Multi-member circles are deferred to v0.2 — see §9.)
 - We do **not** request `<all_urls>` host permissions. The extension only operates on the explicit list of supported sites.
 
 ## 3. Architecture
@@ -28,16 +34,18 @@ The target user of the extension is a senior who does not want — and will not 
 ```
 ┌─────────────────────┐         ┌──────────────────────┐         ┌─────────────────────┐
 │  Chrome Extension   │ ──API──▶│   Vercel Web App     │ ──API──▶│  Google Safe        │
-│  (the senior's      │         │   (gonephishin.com)  │         │  Browsing API       │
-│   browser)          │ ◀───────│   - Landing page     │         └─────────────────────┘
-│  - Content scripts  │         │   - Caregiver login  │
+│  (user's browser)   │         │   (gonephishin.com)  │         │  Browsing API       │
+│                     │ ◀───────│   - Landing page     │         └─────────────────────┘
+│  - Content scripts  │         │   - Sign-in (open)   │
 │  - Service worker   │         │   - API routes       │ ──reads/writes──▶  ┌──────────┐
 │  - Popup (pairing)  │         │   - Dashboard        │                    │  Neon    │
-└─────────────────────┘         └──────────────────────┘                    │ Postgres │
-                                            │                               └──────────┘
-                                            │ auth via
-                                            ▼
-                                       ┌──────────┐
+└─────────────────────┘         │   - /extension/      │                    │ Postgres │
+       ▲                        │       activate       │                    └──────────┘
+       │ chrome.runtime.        └──────────────────────┘
+       │ sendMessage from                   │
+       │ activate page (direct              │ auth via
+       │ sign-in mode)                      ▼
+       └────────────────────────────── ┌──────────┐
                                        │  Clerk   │
                                        └──────────┘
 ```
@@ -96,7 +104,8 @@ apps/extension/
 ├── manifest.json
 ├── src/
 │   ├── background/
-│   │   └── service-worker.ts      # API calls, cache, pairing state
+│   │   ├── service-worker.ts      # API calls, cache, pairing state
+│   │   └── external-message.ts    # receives token from web app activate page
 │   ├── content/
 │   │   ├── shared/
 │   │   │   ├── link-scanner.ts    # finds <a> tags, batches them
@@ -107,8 +116,10 @@ apps/extension/
 │   │       └── outlook.ts
 │   ├── popup/
 │   │   ├── App.tsx
-│   │   ├── PairingScreen.tsx
-│   │   └── StatusScreen.tsx
+│   │   ├── ChooseModeScreen.tsx   # "I have a code" vs "Sign in for myself"
+│   │   ├── CodePairingScreen.tsx  # 6-digit code entry (caregiver mode)
+│   │   ├── DirectSignInScreen.tsx # opens web auth, waits for token (self mode)
+│   │   └── StatusScreen.tsx       # post-pairing status display
 │   └── modal/
 │       └── warning-modal.ts
 ```
@@ -156,6 +167,7 @@ The modal copy is plain English, large type, two buttons: **Go Back (default, la
 - `storage` — local cache + pairing state
 - `alarms` — periodic cache TTL cleanup
 - `host_permissions` — *only* `mail.google.com/*` and `outlook.live.com/*` for v0.1
+- `externally_connectable.matches` — `https://gonephishin.com/*` so the web app's activate page can hand a fresh extension token to the service worker via `chrome.runtime.sendMessage` (used by direct sign-in mode)
 
 No `<all_urls>`, no `webRequest`, no `webRequestBlocking`. This minimizes Chrome Web Store review friction and matches the "single purpose" listing requirement.
 
@@ -174,15 +186,18 @@ No `<all_urls>`, no `webRequest`, no `webRequestBlocking`. This minimizes Chrome
 apps/web/app/
 ├── page.tsx                    # Single scrolling marketing page
 │                                # Sections: Hero · How it works · Privacy · FAQ · Install
-├── (app)/                      # Caregiver-only, Clerk-protected
+├── (app)/                      # Signed-in users (caregiver OR self-managing senior)
 │   ├── layout.tsx
 │   ├── dashboard/page.tsx      # List of circles + per-circle summary
-│   ├── circle/[id]/page.tsx    # Per-senior detail view
-│   └── settings/page.tsx
+│   ├── circle/[id]/page.tsx    # Detail view for one circle
+│   ├── settings/page.tsx
+│   └── extension/activate/page.tsx   # Direct sign-in handoff page (sends token
+│                                     # to extension via chrome.runtime.sendMessage)
 └── api/
     ├── scan/route.ts                    # Extension → Safe Browsing proxy
     ├── pair/code/route.ts               # Generate pairing code
     ├── pair/redeem/route.ts             # Extension submits code
+    ├── pair/direct/route.ts             # Mint extension token from authed session
     ├── pair/invite/route.ts             # Email invite (v0.2)
     ├── events/log/route.ts              # Extension reports danger events
     └── events/list/route.ts             # Dashboard reads events
@@ -192,29 +207,33 @@ apps/web/app/
 
 A single scrolling page with anchor sections:
 
-- **Hero**: "Protect Mom and Dad from Phishing Scams." + Install button (links to Chrome Web Store)
+- **Hero**: dual headline — *"Protect yourself, or someone you love, from phishing scams."* + Install button (links to Chrome Web Store)
 - **How it works**: 3 steps (Install → Browse normally → We watch for danger)
-- **Family pairing pitch**: screenshot/illustration of the dashboard, plain explanation that it doesn't read emails
+- **Two ways to use it**: side-by-side comparison of *"For yourself"* (sign in directly, see your own dashboard) vs *"For a family member"* (pair with a 6-digit code over the phone)
 - **Privacy promise**: "We never read your emails. Period." + link to detailed privacy section
 - **FAQ**: install instructions, what data we see, how to cancel, how to remove the extension
-- **Footer**: Privacy, Contact, Sign-in for caregivers
+- **Footer**: Privacy, Contact, Sign-in
 
 The user will provide visual components for this page in a follow-up session.
 
-### 6.3 Caregiver dashboard
+### 6.3 Dashboard
 
-- **/dashboard** — list of circles (paired seniors). Each card: senior label, last activity, count of dangerous links blocked this week.
-- **/circle/[id]** — timeline of danger events: *Date · Threat type · Domain · Outcome (dismissed | ignored_warning | shown)*. Includes a prominent "Generate New Pairing Code" button.
-- **/settings** — caregiver profile, revoke extension tokens, delete circle, delete account.
+The dashboard UI is the same regardless of mode — only the framing copy adapts based on whether the signed-in user owns a self-managed or caregiver-managed circle.
+
+- **/dashboard** — list of circles owned by the signed-in user. Each card: label, last activity, count of dangerous links blocked this week. A self-managing senior typically has one circle labeled "Me" or their own name; a caregiver may have several ("Mom", "Dad").
+- **/circle/[id]** — timeline of danger events: *Date · Threat type · Domain · Outcome (dismissed | ignored_warning | shown)*. Includes a prominent "Generate New Pairing Code" button (relevant for caregiver-managed circles or for re-pairing a lost device).
+- **/settings** — profile, list of active extension tokens (with "revoke" buttons), delete circle, delete account.
+- **/extension/activate** — only used during direct sign-in pairing. The page is opened by the popup, requires the user to be logged into Clerk, calls `POST /api/pair/direct`, and uses `chrome.runtime.sendMessage` to hand the resulting token back to the extension. Shows "You're all set — you can close this tab" on success. Auto-creates a default circle for the user if they don't have one yet.
 
 ### 6.4 API routes
 
 | Route | Caller | Purpose |
 |---|---|---|
 | `POST /api/scan` | Extension service worker | Body: `{ urls: string[] }` → returns `[{ url, verdict, source }]`. Authed via `Authorization: Bearer <extension-token>` if paired, or anonymous (per-IP rate limit) if not. Response also includes `{ paired: boolean }` so the popup can update if a token has been revoked. |
-| `POST /api/pair/code` | Caregiver dashboard | Generate a 6-digit code for a circle. Returns `{ code, expiresAt }`. Authed via Clerk session; caller must own the target circle. |
-| `POST /api/pair/redeem` | Extension popup | Body: `{ code }` → returns `{ token, circleId, seniorLabel }` on success. Per-IP rate limited. Unauthenticated (the code is the secret). |
-| `POST /api/pair/invite` | Caregiver dashboard (v0.2) | Body: `{ email, circleId }` → emails an activation link. Authed via Clerk session; caller must own the circle. |
+| `POST /api/pair/code` | Dashboard (caregiver) | Generate a 6-digit code for a circle. Returns `{ code, expiresAt }`. Authed via Clerk session; caller must own the target circle. |
+| `POST /api/pair/redeem` | Extension popup | Body: `{ code }` → returns `{ token, circleId, label }` on success. Per-IP rate limited. Unauthenticated (the code is the secret). |
+| `POST /api/pair/direct` | `/extension/activate` page | No body. Authed via Clerk session. Auto-creates a default circle for the user if none exists, mints a fresh `extension_token` for it, returns `{ token, circleId, label }`. The activate page then forwards the token to the extension via `chrome.runtime.sendMessage`. |
+| `POST /api/pair/invite` | Dashboard (v0.2) | Body: `{ email, circleId }` → emails an activation link. Authed via Clerk session; caller must own the circle. |
 | `POST /api/events/log` | Extension | Body: `{ url, threatType, action, sourceSite }`. Authed via `Authorization: Bearer <extension-token>`. No-op (200) if extension is unpaired — events without a circle are not stored. |
 | `GET /api/events/list?circleId=...` | Dashboard | Paginated event list. Authed via Clerk session. **Authorization check**: returns 404 unless the circle's `owner_id` matches the calling user. |
 
@@ -223,13 +242,14 @@ The user will provide visual components for this page in a follow-up session.
 - `/api/scan`: per extension token (paired) or per IP (anonymous). Hard cap chosen to comfortably handle one user reading email but block scraping abuse.
 - `/api/pair/redeem`: per IP, to prevent code brute-force. 6-digit codes have 1M permutations and 1h TTL, so a per-IP cap of 10 attempts/hour is plenty.
 - `/api/pair/code`: per circle, max 5 active codes (older codes auto-invalidated when a 6th is generated).
+- `/api/pair/direct`: per Clerk user, max 10 fresh tokens per hour. Prevents an attacker who briefly hijacks a session from minting many long-lived tokens.
 
 ## 7. Data Model
 
 Six tables, all in Postgres. Drizzle ORM schema definitions live in `apps/web/lib/db/schema.ts`.
 
 ```
-users (caregivers only)
+users (anyone with an account — caregiver or self-managing senior)
 ├── id              uuid    pk
 ├── clerk_user_id   text    unique
 ├── email           text
@@ -239,8 +259,9 @@ users (caregivers only)
 circles
 ├── id              uuid    pk
 ├── owner_id        uuid    fk → users.id
-├── senior_label    text                   -- e.g. "Mom"
-├── senior_email    text    nullable        -- only for invite flow (v0.2)
+├── label           text                    -- e.g. "Mom", "Dad", "Me"
+├── mode            text                    -- 'caregiver' | 'self'
+├── senior_email    text    nullable         -- only for caregiver invite flow (v0.2)
 ├── created_at      timestamptz
 
 pairing_codes
@@ -284,6 +305,7 @@ scan_cache
 - Extension tokens are hashed in the DB (sha256). Only the extension holds the plaintext bearer token.
 - `danger_events.circle_id` is nullable so the extension is useful for unpaired seniors too.
 - We never store any email content, sender, or subject. URLs only.
+- `circles.mode` distinguishes self-managed (`'self'`) from caregiver-managed (`'caregiver'`) circles. Self-managed circles use the direct-sign-in pairing path; caregiver-managed circles use the 6-digit code path. The `mode` field exists primarily so the dashboard can render appropriate copy ("Your protection" vs "Mom's protection") and so we can later restrict v0.2 features (e.g., email invites) to the right mode.
 
 ## 8. Error Handling & Edge Cases
 
@@ -296,8 +318,11 @@ scan_cache
 - **"Continue Anyway"**: opens the link without re-scanning on arrival; logged as `action: 'ignored_warning'` if paired. The user has explicitly overridden the warning.
 - **Bad pairing code**: extension shows a single message — *"That code didn't work. Ask your family for a new one."* No distinction between expired/incorrect/used (simpler for the senior).
 - **Caregiver generates new code while old one is active**: older codes for that circle are invalidated.
-- **Extension reinstalled**: token gone → reverts to anonymous mode. Caregiver can issue a new code.
-- **Caregiver deletes circle**: token revoked. Next `/api/scan` response includes `{ paired: false }`; popup updates.
+- **Direct sign-in: user closes the activate page early**: the popup polls `/api/scan` with no token; if no message arrives within 60 seconds, it shows "Sign-in didn't finish — try again" and the user can retry.
+- **Direct sign-in: extension popup is closed before token arrives**: `chrome.runtime.sendMessage` from an external page still reaches the service worker, which persists the token; on next popup open, the StatusScreen reflects the paired state.
+- **Direct sign-in: user is already signed into a different Clerk account**: the activate page mints a token tied to whichever account is active in their browser. Switching accounts is a normal Clerk flow.
+- **Extension reinstalled**: token gone → reverts to anonymous mode. User re-pairs (either by code or direct sign-in).
+- **Owner deletes circle**: token revoked. Next `/api/scan` response includes `{ paired: false }`; popup updates and prompts re-pairing.
 - **Repeated "Continue Anyway"**: each occurrence logged. Dashboard surfaces these prominently — they indicate active social engineering with partial success and are the most important caregiver signal.
 - **Content script crash**: page renders normally, links unhighlighted. The extension never breaks page functionality on its own errors.
 - **MV3 service worker termination**: all state is in `chrome.storage.local`, so cold restarts don't lose pairing or cache.
@@ -315,17 +340,19 @@ v0.1 ships across two sessions (see §10 Build Order). The total v0.1 surface is
 - **Gmail and Outlook.com** site adapters
 - Subtle underline + badge for Safe / Unknown / Sketchy / Dangerous
 - Click-time intercept modal for Sketchy + Dangerous
-- Popup with Pairing + Status screens
+- Popup with Choose-Mode → CodePairing or DirectSignIn → Status screens
 - Local 24h verdict cache
+- `externally_connectable` for direct-sign-in token handoff
 - Anonymous mode supported (no pairing required for the extension to be useful)
 
 **Web app:**
 
 - Single scrolling marketing page (uses components the user will provide)
-- Caregiver Clerk sign-in
-- Dashboard: circles list + per-circle event log
-- Pairing-code flow only (no email invite yet)
-- API routes: `/api/scan`, `/api/pair/code`, `/api/pair/redeem`, `/api/events/log`, `/api/events/list`
+- Clerk sign-in (open to anyone — caregivers and self-managing seniors)
+- Dashboard: circles list + per-circle event log (UI adapts to mode)
+- `/extension/activate` page that hands a token to the extension via `chrome.runtime.sendMessage`
+- Pairing-code flow + direct-sign-in flow (no email invite yet — that's v0.2)
+- API routes: `/api/scan`, `/api/pair/code`, `/api/pair/redeem`, `/api/pair/direct`, `/api/events/log`, `/api/events/list`
 
 **Backend (shared by both):**
 
@@ -340,6 +367,7 @@ v0.1 ships across two sessions (see §10 Build Order). The total v0.1 surface is
 - Email-invite pairing flow (Resend)
 - Caregiver email/push alerts on danger events
 - Onboarding polish (first-run popup walkthrough)
+- **Multi-member circles** — let a self-managing senior add a family member as a viewer of their dashboard, or let a caregiver promote a paired senior to a real account-holder on the same circle. Adds a `circle_members` join table and access-control changes to `/api/events/list`.
 
 ### v0.3+
 
@@ -359,17 +387,18 @@ Two sessions. Each ends with a working, demoable artifact.
 1. Scaffold Turborepo monorepo (`apps/web`, `apps/extension`, `packages/shared`, `packages/ui`)
 2. Provision Neon Postgres + minimal Next.js app on Vercel
 3. Implement `/api/scan`: Safe Browsing Lookup API v4 client + heuristic pre-check + 6h `scan_cache` table
-4. Build extension: manifest, service worker, Gmail + Outlook site adapters, link painter, click guard, warning modal, popup status screen
+4. Build extension: manifest (with `externally_connectable` already declared), service worker, Gmail + Outlook site adapters, link painter, click guard, warning modal, ChooseMode + Status popup screens
 5. End state: install the extension, open Gmail/Outlook, links get marked, clicking a known-bad URL shows the warning. **Pairing not required** — anonymous mode works end-to-end.
 
 **Session 2 — tomorrow (v0.1b):**
 
 1. Single-scroll marketing page using components the user supplies
-2. Clerk integration + caregiver sign-in
-3. Dashboard (circles list + per-circle events) and Settings
-4. Pairing endpoints (`/api/pair/code`, `/api/pair/redeem`) and extension popup pairing screen
-5. Event logging (`/api/events/log`, `/api/events/list`) wired into the click-guard flow
-6. End state: a caregiver can sign up, generate a code, the senior types it into the extension popup, and danger events appear in the caregiver's dashboard.
+2. Clerk integration + open sign-in (caregivers AND self-managing seniors)
+3. Dashboard (circles list + per-circle events) with mode-aware copy, plus Settings
+4. **Caregiver pairing path**: `/api/pair/code` + `/api/pair/redeem` + popup `CodePairingScreen`
+5. **Direct sign-in path**: `/extension/activate` page + `/api/pair/direct` endpoint + popup `DirectSignInScreen` + `chrome.runtime.sendMessage` handler in the service worker
+6. Event logging (`/api/events/log`, `/api/events/list`) wired into the click-guard flow
+7. End state: (a) a caregiver can sign up, generate a code, the senior types it into the popup, and danger events appear in the caregiver's dashboard; (b) a self-managing senior can sign up, click "Sign in for myself" in the popup, complete Clerk auth, and immediately see their own dashboard populating with events.
 
 **Session 3+ — release:**
 
