@@ -1,0 +1,35 @@
+.gp-link[data-gp-state] {
+  border-bottom: 2px solid currentColor !important;
+  text-decoration: none !important;
+}
+.gp-link[data-gp-state]::after {
+  display: inline-block;
+  font-size: 0.85em;
+  margin-left: 0.25em;
+  vertical-align: baseline;
+  font-family: system-ui, sans-serif;
+}
+.gp-link[data-gp-state="safe"] {
+  color: #15803d !important;
+}
+.gp-link[data-gp-state="safe"]::after {
+  content: "✓";
+}
+.gp-link[data-gp-state="unknown"] {
+  color: #6b7280 !important;
+}
+.gp-link[data-gp-state="unknown"]::after {
+  content: "?";
+}
+.gp-link[data-gp-state="sketchy"] {
+  color: #b45309 !important;
+}
+.gp-link[data-gp-state="sketchy"]::after {
+  content: "⚠";
+}
+.gp-link[data-gp-state="dangerous"] {
+  color: #b91c1c !important;
+}
+.gp-link[data-gp-state="dangerous"]::after {
+  content: "🛑";
+}
