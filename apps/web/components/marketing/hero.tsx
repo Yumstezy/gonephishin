@@ -41,10 +41,10 @@ export const Hero = () => {
                 key={item}
                 href="#"
                 className="text-[10px] transition-colors sm:text-xs md:text-sm"
-                style={{ color: "rgba(225, 224, 204, 0.8)" }}
-                onMouseEnter={(e) => (e.currentTarget.style.color = "#E1E0CC")}
+                style={{ color: "rgba(255, 255, 255, 0.8)" }}
+                onMouseEnter={(e) => (e.currentTarget.style.color = "#ffffff")}
                 onMouseLeave={(e) =>
-                  (e.currentTarget.style.color = "rgba(225, 224, 204, 0.8)")
+                  (e.currentTarget.style.color = "rgba(255, 255, 255, 0.8)")
                 }
               >
                 {item}
@@ -58,7 +58,7 @@ export const Hero = () => {
             <div className="col-span-12 lg:col-span-8">
               <h1
                 className="font-medium leading-[0.85] tracking-[-0.07em] text-[26vw] sm:text-[24vw] md:text-[22vw] lg:text-[20vw] xl:text-[19vw] 2xl:text-[20vw]"
-                style={{ color: "#E1E0CC" }}
+                style={{ color: "#ffffff" }}
               >
                 <WordsPullUp text={HEADLINE} showAsterisk />
               </h1>
@@ -87,13 +87,13 @@ export const Hero = () => {
                   delay: 0.7,
                   ease: [0.16, 1, 0.3, 1],
                 }}
-                className="group inline-flex items-center gap-2 self-start rounded-full bg-primary py-1 pl-5 pr-1 text-sm font-medium text-black transition-all hover:gap-3 sm:text-base"
+                className="group inline-flex items-center gap-2 self-start rounded-full bg-primary py-1 pl-5 pr-1 text-sm font-medium text-primary-foreground transition-all hover:gap-3 sm:text-base"
               >
                 {CTA_LABEL}
                 <span className="flex h-9 w-9 items-center justify-center rounded-full bg-black transition-transform group-hover:scale-110 sm:h-10 sm:w-10">
                   <ArrowRight
                     className="h-4 w-4"
-                    style={{ color: "#E1E0CC" }}
+                    style={{ color: "#ffffff" }}
                   />
                 </span>
               </motion.button>
