@@ -7,12 +7,12 @@ export function paintAnchors(
   for (const r of results) {
     const anchors = anchorsByUrl.get(r.url) ?? [];
     for (const a of anchors) {
-      // Image-only anchors (logos, social icons, app-store buttons) are
-      // self-explanatory click targets — adding a green ✓ underneath each
-      // one is pure clutter. Skip painting Safe for those, but still paint
-      // warnings (Unknown/Sketchy/Dangerous) since those need user attention
-      // regardless of whether the link is an icon or text.
-      if (r.verdict === "safe" && isImageOnlyLink(a)) {
+      // Skip the Safe ✓ when the link is an image (logos, icons,
+      // app-store buttons) or short text (nav links, button labels).
+      // Those don't benefit from a "checked OK" indicator and the badge
+      // becomes pure clutter. Warnings (Unknown/Sketchy/Dangerous) still
+      // paint on every link regardless — they need attention.
+      if (r.verdict === "safe" && (isImageOnlyLink(a) || isShortText(a))) {
         a.title = describe(r);
         continue;
       }
@@ -28,6 +28,13 @@ function isImageOnlyLink(a: HTMLAnchorElement): boolean {
   const text = a.textContent?.trim() ?? "";
   if (text.length > 0) return false;
   return !!a.querySelector("img, svg, picture");
+}
+
+const SHORT_TEXT_LIMIT = 25; // ~3-4 words; tune if needed
+
+function isShortText(a: HTMLAnchorElement): boolean {
+  const text = a.textContent?.trim() ?? "";
+  return text.length > 0 && text.length < SHORT_TEXT_LIMIT;
 }
 
 function describe(r: ScanResult): string {
