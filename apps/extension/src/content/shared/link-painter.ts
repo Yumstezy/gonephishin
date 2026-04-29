@@ -3,12 +3,19 @@ import type { Verbosity } from "../../shared/settings.js";
 import { isLikelyCta } from "./cta-detection.js";
 
 /**
- * Tag every scanned anchor with data-gp-state so the hover tooltip can find
- * it. Only add the visible `gp-link` class (which triggers the colored
- * underline + inline badge) when it actually matters: the link is flagged
- * sketchy/dangerous (safety overrides clutter), or — for safe/unknown
- * links — the link looks like a primary call-to-action the user is about
- * to click. Verbose mode marks everything.
+ * Apply the always-visible inline mark to scanned anchors that warrant it
+ * (warnings always; for safe/unknown only when the link is a likely CTA),
+ * and tag those same anchors with data-gp-state so the hover tooltip
+ * activates on them.
+ *
+ * Anchors that don't get painted are left completely untouched — no class,
+ * no data attrs, no hover behavior. That keeps the extension out of the
+ * user's way while reading dense promo emails: only the link they're
+ * actually about to click reveals a pill on hover.
+ *
+ * Click-guard protection isn't reduced — it lives on data-gp-url (set
+ * earlier by the scanner) and the verdict map, both of which are
+ * populated regardless of whether the painter applies a visible mark.
  */
 export function paintAnchors(
   results: ScanResult[],
@@ -18,13 +25,13 @@ export function paintAnchors(
   for (const r of results) {
     const anchors = anchorsByUrl.get(r.url) ?? [];
     for (const a of anchors) {
-      a.dataset.gpState = r.verdict;
-      if (r.threatType) a.dataset.gpThreat = r.threatType;
       a.title = describe(r);
 
-      if (shouldPaintInline(r.verdict, verbosity, a)) {
-        a.classList.add("gp-link");
-      }
+      if (!shouldPaintInline(r.verdict, verbosity, a)) continue;
+
+      a.classList.add("gp-link");
+      a.dataset.gpState = r.verdict;
+      if (r.threatType) a.dataset.gpThreat = r.threatType;
     }
   }
 }
@@ -34,14 +41,9 @@ function shouldPaintInline(
   verbosity: Verbosity,
   a: HTMLAnchorElement,
 ): boolean {
-  // Always-on warnings — a dangerous footer link must still scream.
   if (verdict === "sketchy" || verdict === "dangerous") return true;
-
   if (verbosity === "verbose") return true;
   if (verbosity === "minimal") return false;
-
-  // Standard: only mark Safe/Unknown when the user is realistically about
-  // to click them.
   return isLikelyCta(a);
 }
 
