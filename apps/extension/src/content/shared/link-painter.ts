@@ -1,12 +1,14 @@
-import type { ScanResult } from "@gonephishin/shared";
-import { shouldPaintAlways, type Verbosity } from "../../shared/settings.js";
+import type { ScanResult, Verdict } from "@gonephishin/shared";
+import type { Verbosity } from "../../shared/settings.js";
+import { isLikelyCta } from "./cta-detection.js";
 
 /**
  * Tag every scanned anchor with data-gp-state so the hover tooltip can find
  * it. Only add the visible `gp-link` class (which triggers the colored
- * underline + inline badge) when verbosity rules say to paint always —
- * otherwise the link stays untouched and the tooltip on hover is the user's
- * cue that the extension is doing something.
+ * underline + inline badge) when it actually matters: the link is flagged
+ * sketchy/dangerous (safety overrides clutter), or — for safe/unknown
+ * links — the link looks like a primary call-to-action the user is about
+ * to click. Verbose mode marks everything.
  */
 export function paintAnchors(
   results: ScanResult[],
@@ -20,11 +22,27 @@ export function paintAnchors(
       if (r.threatType) a.dataset.gpThreat = r.threatType;
       a.title = describe(r);
 
-      if (shouldPaintAlways(r.verdict, verbosity)) {
+      if (shouldPaintInline(r.verdict, verbosity, a)) {
         a.classList.add("gp-link");
       }
     }
   }
+}
+
+function shouldPaintInline(
+  verdict: Verdict,
+  verbosity: Verbosity,
+  a: HTMLAnchorElement,
+): boolean {
+  // Always-on warnings — a dangerous footer link must still scream.
+  if (verdict === "sketchy" || verdict === "dangerous") return true;
+
+  if (verbosity === "verbose") return true;
+  if (verbosity === "minimal") return false;
+
+  // Standard: only mark Safe/Unknown when the user is realistically about
+  // to click them.
+  return isLikelyCta(a);
 }
 
 function describe(r: ScanResult): string {

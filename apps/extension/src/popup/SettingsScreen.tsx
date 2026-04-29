@@ -86,7 +86,7 @@ function descriptionFor(v: Verbosity): string {
     case "minimal":
       return "Only suspicious or dangerous links get a colored mark. Hover any link for details.";
     case "standard":
-      return "Suspicious, dangerous, and unverified links get marked. Hover safe links for details.";
+      return "Suspicious and dangerous links always get a mark. Plus: the main button-style links you're likely to click. Hover any other link for details.";
     case "verbose":
       return "Every link gets a colored mark, including safe ones.";
   }
