@@ -1,8 +1,7 @@
-/* All four states get a 2px colored underline + a badge. Sized for older
-   readers — badge is full text size, not subscript. The painter skips
-   image-only links (logos, social icons, app-store buttons) for Safe so
-   icon-heavy footers don't get cluttered, but text links — where the
-   badge actually communicates "this was checked" — always show it. */
+/* Inline always-on indicators. Only applied to anchors carrying the
+   `gp-link` class — link-painter.ts decides which states get the class
+   based on user verbosity. The hover tooltip in hover-tooltip.ts handles
+   the rest, so no inline badge is needed for Safe by default. */
 .gp-link[data-gp-state] {
   border-bottom: 2px solid currentColor !important;
   text-decoration: none !important;
@@ -15,24 +14,33 @@
   vertical-align: baseline;
   font-family: system-ui, sans-serif;
 }
+
+/* Safe — usually unpainted, but Verbose mode shows a green ✓. */
 .gp-link[data-gp-state="safe"] {
   color: #15803d !important;
 }
 .gp-link[data-gp-state="safe"]::after {
   content: "✓";
 }
+
+/* Unknown — magnifying glass + bright blue underline. The old "?" was easy
+   to mistake for normal punctuation; 🔍 reads as "we tried to look it up". */
 .gp-link[data-gp-state="unknown"] {
-  color: #6b7280 !important;
+  color: #1d4ed8 !important;
 }
 .gp-link[data-gp-state="unknown"]::after {
-  content: "?";
+  content: "🔍";
 }
+
+/* Sketchy — amber underline + warning sign. */
 .gp-link[data-gp-state="sketchy"] {
   color: #b45309 !important;
 }
 .gp-link[data-gp-state="sketchy"]::after {
   content: "⚠";
 }
+
+/* Dangerous — red underline + stop sign. */
 .gp-link[data-gp-state="dangerous"] {
   color: #b91c1c !important;
 }

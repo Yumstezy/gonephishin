@@ -153,14 +153,26 @@ This is the seam that lets us add Yahoo, Facebook, etc. in v0.2+ without changin
 
 ### 5.3 Link state visuals
 
-| State | Visual | Click behavior |
+The user can pick from three verbosity modes in the popup's Settings tab:
+
+- **Minimal** — only Sketchy and Dangerous get always-visible inline marks. Everything else is hover-only via the tooltip pill.
+- **Standard** *(default)* — Sketchy, Dangerous, and Unknown get always-visible inline marks. Safe is hover-only.
+- **Verbose** — every link, including Safe, gets the inline mark.
+
+Inline mark format (when applied) is a 2px colored bottom border + an inline badge after the link:
+
+| State | Inline mark | Click behavior |
 |---|---|---|
-| ✅ Safe | Subtle green underline + small ✓ badge | Opens normally |
-| ❓ Unknown | Subtle gray underline + small ? badge | Opens normally |
-| ⚠️ Sketchy | Yellow underline + ⚠ badge | Click intercepted → confirm modal |
+| ✅ Safe | Green underline + ✓ badge | Opens normally |
+| 🔍 Unknown | Blue underline + 🔍 badge | Opens normally (with tooltip warning to be careful) |
+| ⚠️ Sketchy | Amber underline + ⚠ badge | Click intercepted → confirm modal |
 | 🚨 Dangerous | Red underline + 🛑 badge | Click intercepted → strong warning modal |
 
-The modal copy is plain English, large type, two buttons: **Go Back (default, large, green)** and **Continue Anyway (small, gray)**. The "Continue Anyway" branch logs `action: 'ignored_warning'` to the backend if paired.
+Hover any scanned link to bring up a **floating pill** rendered in a shadow-DOM-isolated tooltip — large icon, large headline ("Looks safe", "Not verified", "Looks suspicious", "Dangerous — don't click"), one-line explanation, and the URL in monospace. The pill is the primary signal for Safe links so the inline visuals stay clean. The pill's color and headline mirror the verdict so at-a-glance recognition is consistent across modes.
+
+The click-time warning modal copy is plain English, large type, two buttons: **Go Back (default, large, green)** and **Continue Anyway (small, gray)**. The "Continue Anyway" branch logs `action: 'ignored_warning'` to the backend if paired.
+
+A v0.2 enhancement (UX option C) replaces the per-link clutter problem entirely by adding a per-email banner — see §9 v0.2.
 
 ### 5.4 Permissions (manifest)
 
@@ -368,6 +380,7 @@ v0.1 ships across two sessions (see §10 Build Order). The total v0.1 surface is
 - Caregiver email/push alerts on danger events
 - Onboarding polish (first-run popup walkthrough)
 - **Multi-member circles** — let a self-managing senior add a family member as a viewer of their dashboard, or let a caregiver promote a paired senior to a real account-holder on the same circle. Adds a `circle_members` join table and access-control changes to `/api/events/list`.
+- **Per-email status banner (UX option C from §5.3)** — each scanned email gets a small banner at the top: *"Gone Phishin' scanned this email. 23 links — all safe."* or *"⚠ 1 link looks dangerous — jump to it"*. Built on top of the existing scanner output by aggregating verdicts per email-body region, then injecting a single banner element above the message. Replaces the per-link visual noise problem at a higher abstraction level. Requires the site adapters to expose a "message body root" callback so the banner attaches in the right place.
 
 ### v0.3+
 

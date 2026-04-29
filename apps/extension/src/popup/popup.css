@@ -1,22 +1,62 @@
 :root {
-  font-family: system-ui, sans-serif;
+  font-family: system-ui, -apple-system, sans-serif;
   font-size: 15px;
   color: #111;
 }
 body {
   margin: 0;
-  width: 320px;
-  padding: 16px;
+  width: 340px;
+  padding: 0;
   background: white;
 }
 h1 {
   font-size: 18px;
-  margin: 0 0 4px;
+  margin: 0 0 6px;
+}
+h2 {
+  font-size: 14px;
+  margin: 14px 0 8px;
+  color: #374151;
 }
 p {
   margin: 0 0 12px;
   color: #4b5563;
+  line-height: 1.4;
 }
+.divider {
+  margin: 16px 0;
+  border: none;
+  border-top: 1px solid #e5e7eb;
+}
+
+/* Tabs */
+.tabs {
+  display: flex;
+  border-bottom: 1px solid #e5e7eb;
+  background: #f9fafb;
+}
+.tab {
+  flex: 1;
+  padding: 12px;
+  border: none;
+  background: transparent;
+  font-size: 14px;
+  font-weight: 500;
+  color: #6b7280;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+}
+.tab.active {
+  color: #111;
+  border-bottom-color: #15803d;
+  background: white;
+}
+
+.tab-body {
+  padding: 16px;
+}
+
+/* Buttons & status (Choose Mode and Status screens) */
 .buttons {
   display: flex;
   flex-direction: column;
@@ -47,4 +87,57 @@ p {
   color: #065f46;
   padding: 10px;
   border-radius: 8px;
+}
+
+/* Settings */
+.setting-row {
+  margin-bottom: 16px;
+}
+.toggle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+}
+.toggle input {
+  width: 16px;
+  height: 16px;
+}
+.radio {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-bottom: 6px;
+  border: 1px solid #e5e7eb;
+}
+.radio:hover {
+  background: #f9fafb;
+}
+.radio input {
+  width: 16px;
+  height: 16px;
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+.hint {
+  font-size: 12px;
+  color: #6b7280;
+  margin: 4px 0 0;
+}
+.hint.inline {
+  font-size: 12px;
+  color: #6b7280;
+  font-weight: 400;
+}
+.footer-note {
+  font-size: 12px;
+  color: #9ca3af;
+  margin-top: 16px;
+  margin-bottom: 16px;
+  text-align: center;
 }

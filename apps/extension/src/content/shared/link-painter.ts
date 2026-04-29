@@ -1,40 +1,30 @@
 import type { ScanResult } from "@gonephishin/shared";
+import { shouldPaintAlways, type Verbosity } from "../../shared/settings.js";
 
+/**
+ * Tag every scanned anchor with data-gp-state so the hover tooltip can find
+ * it. Only add the visible `gp-link` class (which triggers the colored
+ * underline + inline badge) when verbosity rules say to paint always —
+ * otherwise the link stays untouched and the tooltip on hover is the user's
+ * cue that the extension is doing something.
+ */
 export function paintAnchors(
   results: ScanResult[],
   anchorsByUrl: Map<string, HTMLAnchorElement[]>,
+  verbosity: Verbosity,
 ): void {
   for (const r of results) {
     const anchors = anchorsByUrl.get(r.url) ?? [];
     for (const a of anchors) {
-      // Skip the Safe ✓ when the link is an image (logos, icons,
-      // app-store buttons) or short text (nav links, button labels).
-      // Those don't benefit from a "checked OK" indicator and the badge
-      // becomes pure clutter. Warnings (Unknown/Sketchy/Dangerous) still
-      // paint on every link regardless — they need attention.
-      if (r.verdict === "safe" && (isImageOnlyLink(a) || isShortText(a))) {
-        a.title = describe(r);
-        continue;
-      }
-      a.classList.add("gp-link");
       a.dataset.gpState = r.verdict;
       if (r.threatType) a.dataset.gpThreat = r.threatType;
       a.title = describe(r);
+
+      if (shouldPaintAlways(r.verdict, verbosity)) {
+        a.classList.add("gp-link");
+      }
     }
   }
-}
-
-function isImageOnlyLink(a: HTMLAnchorElement): boolean {
-  const text = a.textContent?.trim() ?? "";
-  if (text.length > 0) return false;
-  return !!a.querySelector("img, svg, picture");
-}
-
-const SHORT_TEXT_LIMIT = 25; // ~3-4 words; tune if needed
-
-function isShortText(a: HTMLAnchorElement): boolean {
-  const text = a.textContent?.trim() ?? "";
-  return text.length > 0 && text.length < SHORT_TEXT_LIMIT;
 }
 
 function describe(r: ScanResult): string {
@@ -42,7 +32,7 @@ function describe(r: ScanResult): string {
     case "safe":
       return "Gone Phishin' checked this link — it looks safe.";
     case "unknown":
-      return "Gone Phishin' couldn't check this link right now. Be careful.";
+      return "Gone Phishin' couldn't check this link. Be careful.";
     case "sketchy":
       return `Gone Phishin' thinks this link looks suspicious (${r.threatType ?? "unknown"}).`;
     case "dangerous":
