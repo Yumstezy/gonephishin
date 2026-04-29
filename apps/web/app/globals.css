@@ -28,6 +28,10 @@
     --input: 226 232 240;
     --ring: 15 23 42;
     --radius: 0.5rem;
+    --context-card-border: hsla(0, 0%, 92%, 1);
+    --ds-gray-1000: hsla(0, 0%, 9%, 1);
+    --ds-background-100: hsla(0, 0%, 100%, 1);
+    --ds-gray-900: hsla(0, 0%, 40%, 1);
   }
 
   @media (prefers-color-scheme: dark) {
@@ -56,5 +60,19 @@
   .noise-overlay {
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.5 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
     background-size: 240px 240px;
+  }
+  .theme {
+    --color-context-card-border: var(--context-card-border);
+    --color-gray-1000: var(--ds-gray-1000);
+    --color-background-100: var(--ds-background-100);
+    --color-gray-900: var(--ds-gray-900);
+    --color-ds-background-100: var(----ds-background-100);
+    --color-ds-gray-1000: var(----ds-gray-1000);
+  }
+  .dark {
+    --context-card-border: hsla(0, 0%, 18%, 1);
+    --ds-gray-1000: hsla(0, 0%, 93%, 1);
+    --ds-background-100: hsla(0,0%,4%, 1);
+    --ds-gray-900: hsla(0, 0%, 63%, 1);
   }
 }
