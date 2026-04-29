@@ -2,13 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Minimal shadcn-style theme tokens. Components that read --foreground /
-   --background (like the QR code) need these defined. We'll layer the real
-   brand palette on top once the user supplies it. */
+/* Minimal shadcn-style theme tokens. RGB triplets so Tailwind's
+   `text-primary/70` opacity modifier works via `rgb(var(--primary) / <alpha>)`.
+   Real brand palette will layer on top. */
 @layer base {
   :root {
     --background: #ffffff;
     --foreground: #0f172a;
+    /* Cream — the source-design accent. Used for hero text + button bg. */
+    --primary: 225 224 204;
   }
 
   @media (prefers-color-scheme: dark) {
@@ -16,5 +18,12 @@
       --background: #0f172a;
       --foreground: #f8fafc;
     }
+  }
+
+  /* Procedural film-grain noise used by the hero. SVG fractalNoise filter
+     baked into a base64 data URL so we don't ship a separate asset. */
+  .noise-overlay {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.5 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size: 240px 240px;
   }
 }
