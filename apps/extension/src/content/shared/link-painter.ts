@@ -7,11 +7,12 @@ export function paintAnchors(
   for (const r of results) {
     const anchors = anchorsByUrl.get(r.url) ?? [];
     for (const a of anchors) {
-      // Don't paint Safe — it's the overwhelming majority of links and
-      // marking each one creates visual clutter (newsletter footers, social
-      // icons, app-store badges). Only paint the states the user needs to
-      // act on: Unknown, Sketchy, Dangerous.
-      if (r.verdict === "safe") {
+      // Image-only anchors (logos, social icons, app-store buttons) are
+      // self-explanatory click targets — adding a green ✓ underneath each
+      // one is pure clutter. Skip painting Safe for those, but still paint
+      // warnings (Unknown/Sketchy/Dangerous) since those need user attention
+      // regardless of whether the link is an icon or text.
+      if (r.verdict === "safe" && isImageOnlyLink(a)) {
         a.title = describe(r);
         continue;
       }
@@ -21,6 +22,12 @@ export function paintAnchors(
       a.title = describe(r);
     }
   }
+}
+
+function isImageOnlyLink(a: HTMLAnchorElement): boolean {
+  const text = a.textContent?.trim() ?? "";
+  if (text.length > 0) return false;
+  return !!a.querySelector("img, svg, picture");
 }
 
 function describe(r: ScanResult): string {

@@ -1,11 +1,17 @@
+/* All four states get a 2px colored underline + a badge. Sized for older
+   readers — badge is full text size, not subscript. The painter skips
+   image-only links (logos, social icons, app-store buttons) for Safe so
+   icon-heavy footers don't get cluttered, but text links — where the
+   badge actually communicates "this was checked" — always show it. */
 .gp-link[data-gp-state] {
   border-bottom: 2px solid currentColor !important;
   text-decoration: none !important;
 }
 .gp-link[data-gp-state]::after {
   display: inline-block;
-  font-size: 0.85em;
-  margin-left: 0.25em;
+  font-size: 1em;
+  font-weight: 600;
+  margin-left: 0.3em;
   vertical-align: baseline;
   font-family: system-ui, sans-serif;
 }
