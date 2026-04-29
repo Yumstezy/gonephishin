@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { lookupSafeBrowsing } from "./safe-browsing.js";
+import { lookupSafeBrowsing } from "./safe-browsing";
 
 const fetchMock = vi.fn();
 

@@ -9,9 +9,9 @@ const describeIfDb = HAS_DB ? describe : describe.skip;
 
 describeIfDb("takeToken (requires DATABASE_URL)", () => {
   it("allows up to `limit` requests within the window", async () => {
-    const { db } = await import("./db/client.js");
-    const { rateLimitBuckets } = await import("./db/schema.js");
-    const { takeToken } = await import("./rate-limit.js");
+    const { db } = await import("./db/client");
+    const { rateLimitBuckets } = await import("./db/schema");
+    const { takeToken } = await import("./rate-limit");
     await db.delete(rateLimitBuckets);
     for (let i = 0; i < 3; i++) {
       const ok = await takeToken("scan", "1.1.1.1", {
@@ -28,9 +28,9 @@ describeIfDb("takeToken (requires DATABASE_URL)", () => {
   });
 
   it("isolates buckets by identity", async () => {
-    const { db } = await import("./db/client.js");
-    const { rateLimitBuckets } = await import("./db/schema.js");
-    const { takeToken } = await import("./rate-limit.js");
+    const { db } = await import("./db/client");
+    const { rateLimitBuckets } = await import("./db/schema");
+    const { takeToken } = await import("./rate-limit");
     await db.delete(rateLimitBuckets);
     expect(
       await takeToken("scan", "1.1.1.1", { limit: 1, windowMs: 60_000 }),
@@ -41,9 +41,9 @@ describeIfDb("takeToken (requires DATABASE_URL)", () => {
   });
 
   it("isolates buckets by scope", async () => {
-    const { db } = await import("./db/client.js");
-    const { rateLimitBuckets } = await import("./db/schema.js");
-    const { takeToken } = await import("./rate-limit.js");
+    const { db } = await import("./db/client");
+    const { rateLimitBuckets } = await import("./db/schema");
+    const { takeToken } = await import("./rate-limit");
     await db.delete(rateLimitBuckets);
     expect(
       await takeToken("scan", "1.1.1.1", { limit: 1, windowMs: 60_000 }),
@@ -55,8 +55,8 @@ describeIfDb("takeToken (requires DATABASE_URL)", () => {
 
   afterEach(async () => {
     if (!HAS_DB) return;
-    const { db } = await import("./db/client.js");
-    const { rateLimitBuckets } = await import("./db/schema.js");
+    const { db } = await import("./db/client");
+    const { rateLimitBuckets } = await import("./db/schema");
     await db.delete(rateLimitBuckets);
   });
 });

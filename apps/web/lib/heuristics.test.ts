@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { checkHeuristics } from "./heuristics.js";
+import { checkHeuristics } from "./heuristics";
 
 describe("checkHeuristics", () => {
   it("returns null for a clean popular domain", () => {

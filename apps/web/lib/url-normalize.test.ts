@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { normalizeUrl } from "./url-normalize.js";
+import { normalizeUrl } from "./url-normalize";
 
 describe("normalizeUrl", () => {
   it("lowercases the host and drops the default port", () => {

@@ -1,5 +1,5 @@
 import { sql } from "drizzle-orm";
-import { db } from "./db/client.js";
+import { db } from "./db/client";
 
 export interface RateLimitConfig {
   limit: number;
@@ -20,19 +20,21 @@ export async function takeToken(
   config: RateLimitConfig,
 ): Promise<boolean> {
   const key = `${scope}:${identity}`;
-  const now = new Date();
-  const windowStart = new Date(now.getTime() - config.windowMs);
+  // postgres-js with prepare:false doesn't auto-serialize Date in raw SQL,
+  // so we pass ISO strings.
+  const now = new Date().toISOString();
+  const windowStart = new Date(Date.now() - config.windowMs).toISOString();
 
   const result = await db.execute(sql`
     INSERT INTO rate_limit_buckets (bucket_key, window_start, count)
-    VALUES (${key}, ${now}, 1)
+    VALUES (${key}, ${now}::timestamptz, 1)
     ON CONFLICT (bucket_key) DO UPDATE
       SET window_start = CASE
-            WHEN rate_limit_buckets.window_start < ${windowStart} THEN ${now}
+            WHEN rate_limit_buckets.window_start < ${windowStart}::timestamptz THEN ${now}::timestamptz
             ELSE rate_limit_buckets.window_start
           END,
           count = CASE
-            WHEN rate_limit_buckets.window_start < ${windowStart} THEN 1
+            WHEN rate_limit_buckets.window_start < ${windowStart}::timestamptz THEN 1
             ELSE rate_limit_buckets.count + 1
           END
     RETURNING count

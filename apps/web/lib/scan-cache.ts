@@ -1,9 +1,9 @@
 import { createHash } from "node:crypto";
 import { and, gt, inArray } from "drizzle-orm";
 import type { ThreatType, Verdict } from "@gonephishin/shared";
-import { db } from "./db/client.js";
-import { scanCache } from "./db/schema.js";
-import { normalizeUrl } from "./url-normalize.js";
+import { db } from "./db/client";
+import { scanCache } from "./db/schema";
+import { normalizeUrl } from "./url-normalize";
 
 const TTL_MS = 6 * 60 * 60 * 1000; // 6h per spec §3 / §6
 
