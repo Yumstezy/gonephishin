@@ -23,7 +23,7 @@
     --accent: 241 245 249;
     --accent-foreground: 15 23 42;
     --destructive: 239 68 68;
-    --destructive-foreground: 248 250 252;
+    --destructive-foreground: oklch(1 0 0);
     --border: 226 232 240;
     --input: 226 232 240;
     --ring: 15 23 42;
@@ -68,11 +68,14 @@
     --color-gray-900: var(--ds-gray-900);
     --color-ds-background-100: var(----ds-background-100);
     --color-ds-gray-1000: var(----ds-gray-1000);
+    --color-destructive-foreground: oklch(1 0 0);
+    --color-color-destructive-foreground: var(----color-destructive-foreground);
   }
   .dark {
     --context-card-border: hsla(0, 0%, 18%, 1);
     --ds-gray-1000: hsla(0, 0%, 93%, 1);
     --ds-background-100: hsla(0,0%,4%, 1);
     --ds-gray-900: hsla(0, 0%, 63%, 1);
+    --destructive-foreground: oklch(1 0 0);
   }
 }
