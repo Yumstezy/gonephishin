@@ -1,3 +1,20 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Minimal shadcn-style theme tokens. Components that read --foreground /
+   --background (like the QR code) need these defined. We'll layer the real
+   brand palette on top once the user supplies it. */
+@layer base {
+  :root {
+    --background: #ffffff;
+    --foreground: #0f172a;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --background: #0f172a;
+      --foreground: #f8fafc;
+    }
+  }
+}
