@@ -24,8 +24,8 @@ function isInFinderPattern(row: number, col: number, size: number): boolean {
 export function QRCode({
   value,
   size = 268,
-  fgColor = "var(--foreground)",
-  bgColor = "var(--background)",
+  fgColor = "rgb(var(--foreground))",
+  bgColor = "rgb(var(--background))",
   errorCorrectionLevel = "M",
   className,
   ...props

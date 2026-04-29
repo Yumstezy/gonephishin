@@ -1,14 +1,50 @@
 import type { Config } from "tailwindcss";
 
+const rgb = (token: string) => `rgb(var(${token}) / <alpha-value>)`;
+
 export default {
   content: ["./app/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}"],
   theme: {
     extend: {
       colors: {
-        // Maps `bg-primary`, `text-primary`, `text-primary/70` etc. to the
-        // CSS variable defined in globals.css. The `<alpha-value>` placeholder
-        // is what makes Tailwind's `/70` opacity modifier work.
-        primary: "rgb(var(--primary) / <alpha-value>)",
+        border: rgb("--border"),
+        input: rgb("--input"),
+        ring: rgb("--ring"),
+        background: rgb("--background"),
+        foreground: rgb("--foreground"),
+        primary: {
+          DEFAULT: rgb("--primary"),
+          foreground: rgb("--primary-foreground"),
+        },
+        secondary: {
+          DEFAULT: rgb("--secondary"),
+          foreground: rgb("--secondary-foreground"),
+        },
+        destructive: {
+          DEFAULT: rgb("--destructive"),
+          foreground: rgb("--destructive-foreground"),
+        },
+        muted: {
+          DEFAULT: rgb("--muted"),
+          foreground: rgb("--muted-foreground"),
+        },
+        accent: {
+          DEFAULT: rgb("--accent"),
+          foreground: rgb("--accent-foreground"),
+        },
+        popover: {
+          DEFAULT: rgb("--popover"),
+          foreground: rgb("--popover-foreground"),
+        },
+        card: {
+          DEFAULT: rgb("--card"),
+          foreground: rgb("--card-foreground"),
+        },
+      },
+      borderRadius: {
+        lg: "var(--radius)",
+        md: "calc(var(--radius) - 2px)",
+        sm: "calc(var(--radius) - 4px)",
       },
     },
   },

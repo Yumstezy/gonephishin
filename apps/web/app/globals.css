@@ -2,21 +2,52 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Minimal shadcn-style theme tokens. RGB triplets so Tailwind's
-   `text-primary/70` opacity modifier works via `rgb(var(--primary) / <alpha>)`.
-   Real brand palette will layer on top. */
+/* Theme tokens, RGB triplets so Tailwind's `text-foo/70` opacity modifiers
+   resolve via `rgb(var(--foo) / <alpha-value>)`. Direct-CSS consumers (like
+   the QR code component) wrap in `rgb(...)` themselves. */
 @layer base {
   :root {
-    --background: #ffffff;
-    --foreground: #0f172a;
-    /* Cream — the source-design accent. Used for hero text + button bg. */
+    --background: 255 255 255;
+    --foreground: 15 23 42;
+    --card: 255 255 255;
+    --card-foreground: 15 23 42;
+    --popover: 255 255 255;
+    --popover-foreground: 15 23 42;
+    /* Cream — used by the hero button bg and matches the source design. */
     --primary: 225 224 204;
+    --primary-foreground: 15 23 42;
+    --secondary: 241 245 249;
+    --secondary-foreground: 15 23 42;
+    --muted: 241 245 249;
+    --muted-foreground: 100 116 139;
+    --accent: 241 245 249;
+    --accent-foreground: 15 23 42;
+    --destructive: 239 68 68;
+    --destructive-foreground: 248 250 252;
+    --border: 226 232 240;
+    --input: 226 232 240;
+    --ring: 15 23 42;
+    --radius: 0.5rem;
   }
 
   @media (prefers-color-scheme: dark) {
     :root {
-      --background: #0f172a;
-      --foreground: #f8fafc;
+      --background: 15 23 42;
+      --foreground: 248 250 252;
+      --card: 15 23 42;
+      --card-foreground: 248 250 252;
+      --popover: 15 23 42;
+      --popover-foreground: 248 250 252;
+      --primary-foreground: 15 23 42;
+      --secondary: 30 41 59;
+      --secondary-foreground: 248 250 252;
+      --muted: 30 41 59;
+      --muted-foreground: 148 163 184;
+      --accent: 30 41 59;
+      --accent-foreground: 248 250 252;
+      --border: 30 41 59;
+      --input: 30 41 59;
+      --ring: 226 232 240;
     }
   }
 
