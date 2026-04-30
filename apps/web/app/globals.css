@@ -63,17 +63,32 @@ html, body { margin: 0; padding: 0; }
 
 body {
   font-family: var(--font-geist-sans), 'Geist', system-ui, -apple-system, sans-serif;
-  background:
-    radial-gradient(ellipse 1100px 700px at 12% 6%, rgba(56, 189, 248, 0.18), transparent 60%),
-    radial-gradient(ellipse 900px 600px at 92% 38%, rgba(56, 189, 248, 0.10), transparent 65%),
-    radial-gradient(ellipse 1200px 800px at 30% 78%, rgba(99, 102, 241, 0.08), transparent 65%),
-    radial-gradient(ellipse 800px 600px at 88% 96%, rgba(56, 189, 248, 0.10), transparent 65%),
-    rgb(var(--background));
-  background-attachment: fixed;
+  background-color: rgb(var(--background));
   color: rgb(var(--foreground));
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-feature-settings: 'ss01', 'cv11';
+  position: relative;
+  z-index: 0;
+}
+
+/* Fixed sky-glow backdrop. Rendered as a position:fixed pseudo-element so
+   the browser composites it once, on its own GPU layer, instead of
+   repainting on every scroll frame (which background-attachment:fixed
+   does on Safari and Firefox and tanks scroll smoothness). */
+html::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 1100px 700px at 12% 6%, rgba(56, 189, 248, 0.18), transparent 60%),
+    radial-gradient(ellipse 900px 600px at 92% 38%, rgba(56, 189, 248, 0.10), transparent 65%),
+    radial-gradient(ellipse 1200px 800px at 30% 78%, rgba(99, 102, 241, 0.08), transparent 65%),
+    radial-gradient(ellipse 800px 600px at 88% 96%, rgba(56, 189, 248, 0.10), transparent 65%);
+  transform: translateZ(0);
+  will-change: transform;
 }
 
 .mono { font-family: var(--font-geist-mono), 'Geist Mono', ui-monospace, monospace; }
@@ -97,9 +112,23 @@ button { font-family: inherit; cursor: pointer; }
   transition:
     opacity 800ms cubic-bezier(0.16, 1, 0.3, 1),
     transform 800ms cubic-bezier(0.16, 1, 0.3, 1);
-  will-change: opacity, transform;
 }
+/* Only opt-in to compositor work while the reveal is active. After the
+   transition resolves we drop will-change so the browser can free the
+   layer — leaving will-change on long-lived elements is itself a perf
+   anti-pattern. */
+.reveal:not(.is-visible) { will-change: opacity, transform; }
 .reveal.is-visible { opacity: 1; transform: translateY(0); }
+
+/* Per-section paint scoping. Limits the area the browser has to repaint
+   when something inside a section changes (e.g. a reveal animating). */
+section.band,
+section.hero,
+section.privacy,
+section.showcase,
+section.final-cta {
+  contain: layout paint;
+}
 .reveal-delay-1 { transition-delay: 80ms; }
 .reveal-delay-2 { transition-delay: 160ms; }
 .reveal-delay-3 { transition-delay: 240ms; }
