@@ -1,37 +1,37 @@
 import Link from "next/link";
 
 /**
- * Two side-by-side cards pitching the two audiences (self-managed vs
- * caregiver-paired). Restyled to match the rest of the marketing page —
- * no shadcn Card primitive, just plain rounded panels with primary-tinted
- * left border per option.
+ * Two paths, stacked vertically as oversized rounded cards. Apple's
+ * single-column compare style — full-width on desktop, lots of breathing
+ * room. Each card has a friendly emoji-style indicator and one big CTA.
  */
 export function ComparePathsSection() {
   return (
-    <section className="bg-muted/40 py-24 md:py-32">
+    <section className="bg-secondary/40 py-32 md:py-40">
       <div className="mx-auto max-w-5xl px-6">
-        <div className="mb-14 text-center">
-          <h2 className="text-balance text-3xl font-semibold tracking-tight md:text-4xl">
-            Two ways to use Gone Phishin&apos;.
+        <div className="mb-20 text-center">
+          <h2 className="font-display text-balance text-4xl font-semibold leading-[1.05] tracking-tight md:text-6xl">
+            Two ways to <span className="text-primary">stay safe.</span>
           </h2>
-          <p className="mt-3 text-lg text-muted-foreground">
+          <p className="mx-auto mt-5 max-w-xl text-lg text-muted-foreground md:text-xl">
             Whichever side you&apos;re on, the protection is the same.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+        <div className="space-y-6">
           <PathCard
+            tone="primary"
             label="For yourself"
             title="Protect your own inbox."
-            blurb="Sign up, install the extension, and you'll see your own dashboard with every dangerous link we've stopped."
+            blurb="Sign up, install the extension, and you'll see every dangerous link we've stopped on your own dashboard."
             cta="Sign up — it's free"
             href="/sign-up"
-            primary
           />
           <PathCard
-            label="For a family member"
-            title="Watch out for someone you love."
-            blurb="Create your account, generate a 6-digit code, read it to them over the phone. They type it once. You see what dangerous links they encounter — without ever reading their email."
+            tone="warm"
+            label="For someone you love"
+            title="A parent. A grandparent. A friend."
+            blurb="Create your account, generate a six-digit code, and read it to them on the phone. You'll see the dangerous links they encounter — never anything they actually read."
             cta="Set up a family circle"
             href="/sign-up"
           />
@@ -42,39 +42,46 @@ export function ComparePathsSection() {
 }
 
 function PathCard({
+  tone,
   label,
   title,
   blurb,
   cta,
   href,
-  primary = false,
 }: {
+  tone: "primary" | "warm";
   label: string;
   title: string;
   blurb: string;
   cta: string;
   href: string;
-  primary?: boolean;
 }) {
+  const accentBg = tone === "primary" ? "bg-primary" : "bg-warm";
+  const accentText = tone === "primary" ? "text-primary" : "text-warm-foreground";
+
   return (
-    <div className="flex flex-col rounded-3xl border border-border bg-background p-8">
-      <p className="mb-4 text-xs font-semibold uppercase tracking-[0.18em] text-primary">
-        {label}
-      </p>
-      <h3 className="text-2xl font-semibold tracking-tight">{title}</h3>
-      <p className="mt-3 flex-1 text-base leading-relaxed text-muted-foreground">
-        {blurb}
-      </p>
-      <Link
-        href={href}
-        className={
-          primary
-            ? "mt-8 inline-flex w-fit items-center gap-2 rounded-full bg-primary px-6 py-2.5 text-sm font-semibold text-primary-foreground transition-transform hover:scale-[1.02]"
-            : "mt-8 inline-flex w-fit items-center gap-2 rounded-full border border-border bg-background px-6 py-2.5 text-sm font-medium text-foreground transition-colors hover:bg-muted"
-        }
-      >
-        {cta}
-      </Link>
-    </div>
+    <article className="group relative overflow-hidden rounded-3xl bg-background p-10 shadow-sm transition-shadow hover:shadow-md md:p-14">
+      <div
+        aria-hidden
+        className={`absolute -right-20 -top-20 h-64 w-64 rounded-full ${accentBg} opacity-10 transition-transform group-hover:scale-110`}
+      />
+      <div className="relative">
+        <p className={`mb-5 text-sm font-medium uppercase tracking-[0.14em] ${accentText}`}>
+          {label}
+        </p>
+        <h3 className="font-display text-balance text-3xl font-semibold leading-tight md:text-5xl">
+          {title}
+        </h3>
+        <p className="mt-5 max-w-xl text-lg leading-relaxed text-muted-foreground md:text-xl">
+          {blurb}
+        </p>
+        <Link
+          href={href}
+          className="mt-10 inline-flex items-center gap-2 rounded-full bg-foreground px-7 py-3 text-base font-medium text-background transition-transform hover:scale-[1.02]"
+        >
+          {cta} <span aria-hidden>→</span>
+        </Link>
+      </div>
+    </article>
   );
 }

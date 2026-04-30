@@ -7,6 +7,10 @@ export default {
   content: ["./app/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}"],
   theme: {
     extend: {
+      fontFamily: {
+        display: ["var(--font-display)", "-apple-system", "sans-serif"],
+        body: ["var(--font-body)", "-apple-system", "sans-serif"],
+      },
       colors: {
         border: rgb("--border"),
         input: rgb("--input"),
@@ -20,6 +24,10 @@ export default {
         secondary: {
           DEFAULT: rgb("--secondary"),
           foreground: rgb("--secondary-foreground"),
+        },
+        warm: {
+          DEFAULT: rgb("--warm"),
+          foreground: rgb("--warm-foreground"),
         },
         destructive: {
           DEFAULT: rgb("--destructive"),
@@ -44,8 +52,10 @@ export default {
       },
       borderRadius: {
         lg: "var(--radius)",
-        md: "calc(var(--radius) - 2px)",
-        sm: "calc(var(--radius) - 4px)",
+        md: "calc(var(--radius) - 4px)",
+        sm: "calc(var(--radius) - 8px)",
+        "3xl": "1.5rem",
+        "4xl": "2rem",
       },
       keyframes: {
         "accordion-down": {

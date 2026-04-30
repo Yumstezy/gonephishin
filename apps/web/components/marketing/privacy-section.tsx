@@ -1,25 +1,43 @@
 /**
- * Bold privacy promise on a primary-blue band. The single most important
- * trust signal on the marketing page — it's why families will install
- * this on a parent's browser, and why the parent will accept it.
+ * Full-bleed privacy promise — a single oversized statement on a deep
+ * brand-blue band. The trust signal that earns the install.
  */
 export function PrivacySection() {
   return (
-    <section className="bg-primary py-24 text-primary-foreground md:py-32">
-      <div className="mx-auto max-w-3xl px-6 text-center">
-        <h2 className="text-balance text-4xl font-semibold tracking-tight md:text-5xl">
-          We never read your emails. Period.
-        </h2>
-        <p className="mx-auto mt-6 max-w-xl text-lg leading-relaxed text-primary-foreground/85">
-          Gone Phishin&apos; only checks the links in your messages. Not the
-          subject. Not the sender. Not the body. Not the attachments. Just the
-          URLs — to verify they&apos;re safe before you click on them.
+    <section
+      id="privacy"
+      className="relative overflow-hidden bg-primary py-32 text-primary-foreground md:py-44"
+    >
+      {/* Soft glow blob — friendly, not corporate */}
+      <div
+        aria-hidden
+        className="absolute -left-32 top-1/2 h-96 w-96 -translate-y-1/2 rounded-full bg-warm/20 blur-3xl"
+      />
+      <div
+        aria-hidden
+        className="absolute -right-32 bottom-0 h-96 w-96 rounded-full bg-white/10 blur-3xl"
+      />
+
+      <div className="relative mx-auto max-w-4xl px-6 text-center">
+        <p className="mb-8 text-sm font-medium uppercase tracking-[0.14em] text-primary-foreground/70">
+          A promise
         </p>
-        <div className="mt-10 grid grid-cols-1 gap-3 text-left text-sm text-primary-foreground/85 sm:grid-cols-2">
+        <h2 className="font-display text-balance text-5xl font-semibold leading-[0.95] tracking-tight md:text-7xl lg:text-[96px]">
+          We never read
+          <br />
+          your <span className="text-warm">emails.</span>
+        </h2>
+        <p className="mx-auto mt-10 max-w-2xl text-balance text-lg leading-relaxed text-primary-foreground/85 md:text-xl">
+          Gone Phishin&apos; only checks the URLs in your messages. Not the
+          subject. Not the sender. Not the body. Not the attachments. Just
+          the links — to verify they&apos;re safe before you click.
+        </p>
+
+        <div className="mx-auto mt-14 grid max-w-2xl grid-cols-1 gap-3 text-left sm:grid-cols-2">
           <PromiseRow text="No email content ever leaves your browser" />
           <PromiseRow text="No tracking, no advertising, no resale" />
           <PromiseRow text="Permissions limited to Gmail and Outlook" />
-          <PromiseRow text="Open about how everything works, anytime" />
+          <PromiseRow text="Open about how it all works, anytime" />
         </div>
       </div>
     </section>
@@ -28,18 +46,18 @@ export function PrivacySection() {
 
 function PromiseRow({ text }: { text: string }) {
   return (
-    <div className="flex items-center gap-3 rounded-xl bg-primary-foreground/10 px-4 py-3">
+    <div className="flex items-start gap-3 rounded-2xl bg-primary-foreground/10 px-5 py-4 text-base text-primary-foreground/90">
       <svg
-        viewBox="0 0 24 24"
+        viewBox="0 0 20 20"
+        className="mt-1 h-4 w-4 shrink-0 text-warm"
+        aria-hidden
         fill="none"
-        className="h-4 w-4 shrink-0"
         stroke="currentColor"
         strokeWidth={2.5}
         strokeLinecap="round"
         strokeLinejoin="round"
-        aria-hidden
       >
-        <path d="M20 6 9 17l-5-5" />
+        <path d="M16 5 8 14l-4-4" />
       </svg>
       {text}
     </div>

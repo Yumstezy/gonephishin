@@ -2,37 +2,36 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Theme tokens, RGB triplets so Tailwind's `text-foo/70` opacity modifiers
-   resolve via `rgb(var(--foo) / <alpha-value>)`. Direct-CSS consumers (like
-   the QR code component) wrap in `rgb(...)` themselves. */
 @layer base {
-  /* Force light color scheme — without this, browsers in dark mode will
-     override our colors with their own dark theme defaults, which produces
-     unreadable contrast against our manually-set light tokens. */
+  /* Force light color-scheme so browsers in OS dark mode don't override
+     our manually-defined light tokens. */
   :root {
     color-scheme: light;
     --background: 255 255 255;
-    --foreground: 15 23 42;
+    --foreground: 10 25 41;
     --card: 255 255 255;
-    --card-foreground: 15 23 42;
+    --card-foreground: 10 25 41;
     --popover: 255 255 255;
-    --popover-foreground: 15 23 42;
-    /* Ocean blue (sky-700). Single accent against an otherwise monotone
-       slate/white palette — used for CTAs, links, emphasis. */
+    --popover-foreground: 10 25 41;
+    /* Ocean blue (sky-700) — the single brand accent. */
     --primary: 3 105 161;
     --primary-foreground: 255 255 255;
-    --secondary: 241 245 249;
-    --secondary-foreground: 15 23 42;
-    --muted: 241 245 249;
+    /* Soft tinted blue for full-bleed sections — sky-50 */
+    --secondary: 240 249 255;
+    --secondary-foreground: 10 25 41;
+    --muted: 248 250 252;
     --muted-foreground: 100 116 139;
-    --accent: 241 245 249;
-    --accent-foreground: 15 23 42;
+    --accent: 240 249 255;
+    --accent-foreground: 3 105 161;
+    /* Warm peach used SPARINGLY in illustrations only. */
+    --warm: 254 215 170;
+    --warm-foreground: 154 52 18;
     --destructive: 239 68 68;
     --destructive-foreground: 255 255 255;
     --border: 226 232 240;
     --input: 226 232 240;
-    --ring: 15 23 42;
-    --radius: 0.5rem;
+    --ring: 3 105 161;
+    --radius: 1rem;
     --context-card-border: hsla(0, 0%, 92%, 1);
     --ds-gray-1000: hsla(0, 0%, 9%, 1);
     --ds-background-100: hsla(0, 0%, 100%, 1);
@@ -42,50 +41,11 @@
   body {
     background-color: rgb(var(--background));
     color: rgb(var(--foreground));
+    font-family: var(--font-body), -apple-system, sans-serif;
   }
 
-  /* Procedural film-grain noise used by the hero. SVG fractalNoise filter
-     baked into a base64 data URL so we don't ship a separate asset. */
-  .noise-overlay {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.5 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-    background-size: 240px 240px;
-  }
-  .theme {
-    --color-context-card-border: var(--context-card-border);
-    --color-gray-1000: var(--ds-gray-1000);
-    --color-background-100: var(--ds-background-100);
-    --color-gray-900: var(--ds-gray-900);
-    --color-ds-background-100: var(----ds-background-100);
-    --color-ds-gray-1000: var(----ds-gray-1000);
-    --color-destructive-foreground: oklch(1 0 0);
-    --color-color-destructive-foreground: var(----color-destructive-foreground);
-    --animate-accordion-down: accordion-down 0.2s ease-out;
-    --animate-accordion-up: accordion-up 0.2s ease-out;
-  }
-  .dark {
-    --context-card-border: hsla(0, 0%, 18%, 1);
-    --ds-gray-1000: hsla(0, 0%, 93%, 1);
-    --ds-background-100: hsla(0,0%,4%, 1);
-    --ds-gray-900: hsla(0, 0%, 63%, 1);
-    --destructive-foreground: oklch(1 0 0);
-  }
-}
-
-@theme inline {
-  @keyframes accordion-down {
-  from {
-    height: 0;
-    }
-  to {
-    height: var(--radix-accordion-content-height);
-    }
-  }
-  @keyframes accordion-up {
-  from {
-    height: var(--radix-accordion-content-height);
-    }
-  to {
-    height: 0;
-    }
+  .font-display {
+    font-family: var(--font-display), -apple-system, sans-serif;
+    letter-spacing: -0.025em;
   }
 }
