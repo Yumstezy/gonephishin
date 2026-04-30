@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { ChooseModeScreen } from "./ChooseModeScreen.js";
 import { CodePairingScreen } from "./CodePairingScreen.js";
 import { DirectSignInScreen } from "./DirectSignInScreen.js";
+import { InlineSvg } from "./InlineSvg.js";
 import { SettingsScreen } from "./SettingsScreen.js";
 import { StatusScreen } from "./StatusScreen.js";
 import { getPairedState, type PairedState } from "../shared/paired-state.js";
@@ -20,6 +21,13 @@ export function App() {
 
   return (
     <>
+      <header className="brand-bar">
+        <span className="mark">
+          <InlineSvg src="/fish.svg" />
+        </span>
+        <span className="name">Gone Phishin&apos;</span>
+      </header>
+
       <nav className="tabs">
         <button
           className={`tab ${tab === "protection" ? "active" : ""}`}
@@ -41,14 +49,16 @@ export function App() {
             {view === "status" && (
               <>
                 <StatusScreen paired={paired} />
-                <hr className="divider" />
                 {!paired && (
-                  <button
-                    className="button"
-                    onClick={() => setView("choose")}
-                  >
-                    Pair this browser
-                  </button>
+                  <>
+                    <hr className="divider" />
+                    <button
+                      className="button button-primary"
+                      onClick={() => setView("choose")}
+                    >
+                      Pair this browser
+                    </button>
+                  </>
                 )}
               </>
             )}

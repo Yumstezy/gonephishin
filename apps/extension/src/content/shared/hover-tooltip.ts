@@ -68,52 +68,68 @@ function buildPill(verdict: {
   url: string;
 }): DocumentFragment {
   const tpl = document.createElement("template");
-  const { icon, headline, detail, color, bg } = pillCopy(verdict);
+  const { icon, headline, detail, accent } = pillCopy(verdict);
   tpl.innerHTML = `
     <style>
       :host { all: initial; }
       .pill {
         position: fixed;
         z-index: 2147483646;
-        max-width: 360px;
-        background: ${bg};
-        color: #111;
-        border: 2px solid ${color};
+        max-width: 340px;
+        background: #131a26;
+        border: 1px solid #1f2735;
         border-radius: 14px;
-        padding: 12px 16px;
-        font-family: system-ui, -apple-system, sans-serif;
-        box-shadow: 0 6px 20px rgba(0,0,0,.18);
+        padding: 12px 14px;
+        font-family:
+          'Geist', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+        box-shadow:
+          0 1px 2px rgba(0, 0, 0, 0.3),
+          0 8px 24px rgba(0, 0, 0, 0.45),
+          0 24px 60px rgba(0, 0, 0, 0.5);
         pointer-events: none;
-        animation: gp-pop 120ms ease-out;
+        animation: gp-pop 140ms cubic-bezier(0.16, 1, 0.3, 1);
+        color: #e7ecf3;
       }
       @keyframes gp-pop {
         from { opacity: 0; transform: translateY(-4px); }
         to   { opacity: 1; transform: translateY(0); }
       }
       .row { display: flex; align-items: center; gap: 10px; }
-      .icon { font-size: 22px; line-height: 1; }
+      .icon {
+        flex-shrink: 0;
+        width: 26px; height: 26px;
+        border-radius: 50%;
+        background: ${accent}1a;
+        border: 1px solid ${accent}55;
+        display: inline-flex; align-items: center; justify-content: center;
+        font-size: 14px; line-height: 1;
+      }
       .headline {
-        font-size: 16px;
-        font-weight: 700;
-        color: ${color};
+        font-size: 13.5px;
+        font-weight: 600;
+        color: ${accent};
+        letter-spacing: -0.01em;
       }
       .detail {
-        font-size: 13px;
-        color: #4b5563;
-        margin-top: 4px;
-        line-height: 1.4;
+        font-size: 12.5px;
+        color: #8a93a3;
+        margin-top: 6px;
+        line-height: 1.5;
       }
       .url {
+        font-family: 'Geist Mono', ui-monospace, monospace;
         font-size: 11px;
-        color: #6b7280;
-        margin-top: 6px;
+        color: #6b7383;
+        margin-top: 8px;
+        padding-top: 8px;
+        border-top: 1px solid #1f2735;
         word-break: break-all;
         max-width: 100%;
       }
     </style>
     <div class="pill" role="tooltip">
       <div class="row">
-        <span class="icon">${icon}</span>
+        <span class="icon" aria-hidden="true">${icon}</span>
         <span class="headline">${headline}</span>
       </div>
       <div class="detail">${detail}</div>
@@ -126,21 +142,15 @@ function buildPill(verdict: {
 function pillCopy(v: {
   verdict: Verdict;
   threatType: ScanResult["threatType"];
-}): {
-  icon: string;
-  headline: string;
-  detail: string;
-  color: string;
-  bg: string;
-} {
+}): { icon: string; headline: string; detail: string; accent: string } {
   switch (v.verdict) {
     case "safe":
       return {
-        icon: "✅",
+        icon: "✓",
         headline: "Looks safe",
-        detail: "Gone Phishin' checked this link and didn't find any signs of phishing.",
-        color: "#15803d",
-        bg: "#f0fdf4",
+        detail:
+          "Gone Phishin' checked this link and didn't find any signs of phishing.",
+        accent: "#34d399",
       };
     case "unknown":
       return {
@@ -148,28 +158,25 @@ function pillCopy(v: {
         headline: "Not verified",
         detail:
           "We couldn't check this link right now. Be careful — only click if you trust the sender.",
-        color: "#1d4ed8",
-        bg: "#eff6ff",
+        accent: "#38bdf8",
       };
     case "sketchy":
       return {
-        icon: "⚠️",
+        icon: "⚠",
         headline: "Looks suspicious",
         detail:
-          v.threatType?.startsWith("heuristic_typosquat") ?
-            "This link looks like a fake of a well-known brand. Don't click unless you're sure." :
-            "Something about this link looks off. Don't click unless you're sure.",
-        color: "#b45309",
-        bg: "#fffbeb",
+          v.threatType?.startsWith("heuristic_typosquat")
+            ? "This link looks like a fake of a well-known brand. Don't click unless you're sure."
+            : "Something about this link looks off. Don't click unless you're sure.",
+        accent: "#fbbf24",
       };
     case "dangerous":
       return {
-        icon: "🚫",
+        icon: "🛑",
         headline: "Dangerous — don't click",
         detail:
           "Google flagged this link as a known phishing or malware page. Do not click.",
-        color: "#b91c1c",
-        bg: "#fef2f2",
+        accent: "#f87171",
       };
   }
 }

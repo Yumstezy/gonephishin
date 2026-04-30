@@ -30,7 +30,7 @@ export function DirectSignInScreen({
         in, come back here.
       </p>
       <div className="buttons">
-        <button className="button" onClick={open}>
+        <button className="button button-primary" onClick={open}>
           Open sign-in
         </button>
         <button className="button" onClick={onBack}>

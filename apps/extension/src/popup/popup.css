@@ -1,143 +1,278 @@
+/* Gone Phishin' popup — dark Glowing Sky theme matching the marketing
+   site. Scoped to the popup window (340px wide). Class names mirror
+   what the existing screen components already render so we don't touch
+   the React. */
+
 :root {
-  font-family: system-ui, -apple-system, sans-serif;
-  font-size: 15px;
-  color: #111;
+  --background: #0b0f17;
+  --foreground: #e7ecf3;
+  --muted: #8a93a3;
+  --muted-2: #6b7383;
+  --border: #1f2735;
+  --border-soft: #161c27;
+  --secondary: #121823;
+  --surface: #131a26;
+  --primary: #38bdf8;
+  --primary-hover: #7dd3fc;
+  --primary-tint: rgba(56, 189, 248, 0.12);
+  --danger: #f87171;
+  --success: #34d399;
+  --success-tint: rgba(52, 211, 153, 0.10);
+
+  font-family:
+    'Geist', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 14px;
+  color: var(--foreground);
+  color-scheme: dark;
 }
+
+* { box-sizing: border-box; }
+
 body {
   margin: 0;
   width: 340px;
   padding: 0;
-  background: white;
+  background:
+    radial-gradient(ellipse 360px 240px at 90% 0%, rgba(56, 189, 248, 0.15), transparent 60%),
+    var(--background);
+  color: var(--foreground);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
+
+a { color: inherit; text-decoration: none; }
+button { font-family: inherit; cursor: pointer; }
+
+/* HEADER (brand strip) */
+.brand-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 16px 12px;
+  border-bottom: 1px solid var(--border-soft);
+}
+.brand-bar .mark {
+  display: inline-flex;
+  width: 22px; height: 22px;
+  color: var(--primary);
+  flex-shrink: 0;
+}
+.brand-bar .mark svg { width: 100%; height: 100%; display: block; }
+.brand-bar .name {
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--foreground);
+}
+
+/* TYPOGRAPHY */
 h1 {
-  font-size: 18px;
-  margin: 0 0 6px;
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  margin: 0 0 4px;
+  color: var(--foreground);
+  line-height: 1.25;
 }
 h2 {
-  font-size: 14px;
-  margin: 14px 0 8px;
-  color: #374151;
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  margin: 16px 0 10px;
+  color: var(--primary);
+  font-family: 'Geist Mono', ui-monospace, monospace;
 }
 p {
   margin: 0 0 12px;
-  color: #4b5563;
-  line-height: 1.4;
-}
-.divider {
-  margin: 16px 0;
-  border: none;
-  border-top: 1px solid #e5e7eb;
+  color: var(--muted);
+  line-height: 1.5;
+  font-size: 13.5px;
 }
 
-/* Tabs */
+.divider {
+  margin: 14px 0;
+  border: none;
+  border-top: 1px solid var(--border-soft);
+}
+
+/* TABS */
 .tabs {
   display: flex;
-  border-bottom: 1px solid #e5e7eb;
-  background: #f9fafb;
+  gap: 4px;
+  padding: 8px 16px;
+  border-bottom: 1px solid var(--border-soft);
+  background: rgba(11, 15, 23, 0.4);
 }
 .tab {
   flex: 1;
-  padding: 12px;
+  padding: 7px 10px;
   border: none;
   background: transparent;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 500;
-  color: #6b7280;
+  color: var(--muted);
   cursor: pointer;
-  border-bottom: 2px solid transparent;
+  border-radius: 8px;
+  transition: background-color .15s, color .15s;
+  font-family: inherit;
 }
+.tab:hover { color: var(--foreground); background: var(--secondary); }
 .tab.active {
-  color: #111;
-  border-bottom-color: #15803d;
-  background: white;
+  color: var(--foreground);
+  background: var(--surface);
+  box-shadow: inset 0 0 0 1px var(--border);
 }
 
 .tab-body {
-  padding: 16px;
+  padding: 14px 16px 16px;
 }
 
-/* Buttons & status (Choose Mode and Status screens) */
+/* BUTTONS */
 .buttons {
   display: flex;
   flex-direction: column;
   gap: 8px;
 }
 .button {
-  padding: 12px;
-  border-radius: 8px;
-  border: 1px solid #d1d5db;
-  background: white;
+  padding: 11px 14px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--foreground);
   text-align: left;
   cursor: pointer;
-  font-size: 14px;
+  font-size: 13.5px;
+  font-weight: 500;
+  font-family: inherit;
+  transition: background-color .15s, border-color .15s, transform .1s;
 }
+.button:hover { background: var(--secondary); border-color: #2a3243; }
+.button:active { transform: translateY(1px); }
 .button:disabled {
-  background: #f9fafb;
-  color: #9ca3af;
+  background: rgba(19, 26, 38, 0.5);
+  color: var(--muted-2);
   cursor: not-allowed;
 }
-.note {
-  font-size: 12px;
-  color: #6b7280;
-  margin-top: 4px;
+
+.button-primary {
+  background: var(--primary);
+  border-color: transparent;
+  color: #061018;
+  font-weight: 600;
+  text-align: center;
+  box-shadow:
+    0 1px 2px rgba(56, 189, 248, .3),
+    0 4px 14px rgba(56, 189, 248, .2);
 }
-.status {
-  font-size: 14px;
-  background: #ecfdf5;
-  color: #065f46;
-  padding: 10px;
-  border-radius: 8px;
+.button-primary:hover {
+  background: var(--primary-hover);
+  border-color: transparent;
 }
 
-/* Settings */
+.note {
+  font-size: 11.5px;
+  color: var(--muted-2);
+  margin-top: 6px;
+  line-height: 1.45;
+}
+
+/* STATUS PILL */
+.status {
+  font-size: 13px;
+  background: var(--success-tint);
+  color: var(--success);
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(52, 211, 153, 0.25);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  line-height: 1.45;
+}
+.status::before {
+  content: '';
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--success);
+  flex-shrink: 0;
+  box-shadow: 0 0 10px rgba(52, 211, 153, 0.6);
+}
+.status strong { color: var(--foreground); font-weight: 600; }
+
+/* SETTINGS */
 .setting-row {
-  margin-bottom: 16px;
+  margin-bottom: 18px;
 }
 .toggle {
   display: flex;
   align-items: center;
   gap: 10px;
-  font-size: 15px;
+  font-size: 13.5px;
   font-weight: 500;
   cursor: pointer;
+  color: var(--foreground);
 }
 .toggle input {
   width: 16px;
   height: 16px;
+  accent-color: var(--primary);
 }
 .radio {
   display: flex;
   align-items: flex-start;
   gap: 10px;
-  padding: 10px;
-  border-radius: 8px;
+  padding: 10px 12px;
+  border-radius: 10px;
   cursor: pointer;
   margin-bottom: 6px;
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  transition: background-color .15s, border-color .15s;
 }
-.radio:hover {
-  background: #f9fafb;
-}
+.radio:hover { background: var(--secondary); border-color: #2a3243; }
 .radio input {
   width: 16px;
   height: 16px;
   margin-top: 2px;
   flex-shrink: 0;
+  accent-color: var(--primary);
 }
+.radio span { font-size: 13px; color: var(--foreground); }
+.radio strong { color: var(--foreground); font-weight: 600; }
+
 .hint {
-  font-size: 12px;
-  color: #6b7280;
+  font-size: 11.5px;
+  color: var(--muted-2);
   margin: 4px 0 0;
+  line-height: 1.45;
 }
 .hint.inline {
-  font-size: 12px;
-  color: #6b7280;
+  font-size: 11.5px;
+  color: var(--muted);
   font-weight: 400;
 }
 .footer-note {
-  font-size: 12px;
-  color: #9ca3af;
+  font-family: 'Geist Mono', ui-monospace, monospace;
+  font-size: 10.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--muted-2);
   margin-top: 16px;
-  margin-bottom: 16px;
   text-align: center;
+}
+
+/* CODE PAIRING input — overrides the inline styles in the existing
+   component so the digit field reads as part of the dark theme. */
+input[inputmode="numeric"] {
+  background: var(--surface) !important;
+  color: var(--foreground) !important;
+  border: 1px solid var(--border) !important;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.25);
+  font-family: 'Geist Mono', ui-monospace, monospace !important;
+}
+input[inputmode="numeric"]:focus {
+  outline: none;
+  border-color: var(--primary) !important;
+  box-shadow: 0 0 0 3px var(--primary-tint), inset 0 1px 2px rgba(0,0,0,0.25);
 }

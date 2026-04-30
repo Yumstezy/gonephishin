@@ -60,17 +60,16 @@ export function CodePairingScreen({
           value={code}
           onChange={(e) => setCode(e.target.value.replace(/\D/g, ""))}
           style={{
-            fontSize: 28,
-            letterSpacing: "0.4em",
+            fontSize: 26,
+            letterSpacing: "0.35em",
             textAlign: "center",
-            padding: 12,
-            borderRadius: 8,
-            border: "1px solid #d1d5db",
+            padding: "12px 14px",
+            borderRadius: 10,
           }}
         />
         <button
           type="submit"
-          className="button"
+          className="button button-primary"
           disabled={loading || code.length !== 6}
         >
           {loading ? "Checking…" : "Confirm"}
@@ -80,7 +79,7 @@ export function CodePairingScreen({
         </button>
       </form>
       {error && (
-        <p className="note" style={{ color: "#b91c1c" }}>
+        <p className="note" style={{ color: "#f87171" }}>
           {error}
         </p>
       )}
