@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Plus, Minus } from "lucide-react";
+import { Reveal } from "./reveal";
 
 const FAQS = [
   {
@@ -14,7 +15,7 @@ const FAQS = [
   },
   {
     q: "Does it really not read my email?",
-    a: "Correct. The extension only inspects the URLs of the links in your messages. The subject line, sender, and body are never sent anywhere. The Chrome Web Store reviewers verified this before listing us.",
+    a: "Correct. The extension only inspects the URLs of the links in your messages. The subject line, sender, and body are never sent anywhere.",
   },
   {
     q: "How do I install it for my parent?",
@@ -26,7 +27,7 @@ const FAQS = [
   },
   {
     q: "How do I remove it?",
-    a: "Right-click the extension icon and choose 'Remove from Chrome.' That deletes everything Gone Phishin' stored locally. If you had an account, you can delete it from Settings on this site.",
+    a: "Right-click the extension icon and choose 'Remove from Chrome.' That deletes everything Gone Phishin' stored locally.",
   },
 ];
 
@@ -34,47 +35,50 @@ export function FAQSection() {
   const [open, setOpen] = useState<number | null>(0);
 
   return (
-    <section id="faq" className="bg-background py-32 md:py-40">
+    <section id="faq" className="bg-background py-32 md:py-44">
       <div className="mx-auto max-w-3xl px-6">
-        <div className="mb-16 text-center">
-          <p className="mb-4 text-sm font-medium uppercase tracking-[0.14em] text-primary">
+        <Reveal className="mb-16 text-center">
+          <p className="mb-4 text-sm font-medium uppercase tracking-[0.18em] text-primary">
             Questions
           </p>
-          <h2 className="font-display text-balance text-4xl font-semibold leading-[1.05] tracking-tight md:text-6xl">
+          <h2 className="font-display text-balance text-5xl font-semibold leading-[1] tracking-tight md:text-7xl">
             Answered <span className="text-muted-foreground">plainly.</span>
           </h2>
-        </div>
+        </Reveal>
 
         <div className="space-y-3">
           {FAQS.map((f, i) => {
             const expanded = open === i;
             return (
-              <div
-                key={f.q}
-                className="rounded-2xl bg-secondary/50 transition-colors"
-              >
-                <button
-                  onClick={() => setOpen(expanded ? null : i)}
-                  className="flex w-full items-start justify-between gap-4 px-6 py-5 text-left"
-                  aria-expanded={expanded}
+              <Reveal key={f.q} delay={i * 0.04}>
+                <div
+                  className={`overflow-hidden rounded-2xl transition-colors ${
+                    expanded ? "bg-secondary" : "bg-secondary/50"
+                  }`}
                 >
-                  <span className="font-display text-lg font-medium leading-snug md:text-xl">
-                    {f.q}
-                  </span>
-                  <span className="mt-1 shrink-0 text-foreground/70">
-                    {expanded ? (
-                      <Minus className="h-5 w-5" />
-                    ) : (
-                      <Plus className="h-5 w-5" />
-                    )}
-                  </span>
-                </button>
-                {expanded && (
-                  <p className="px-6 pb-5 text-base leading-relaxed text-muted-foreground">
-                    {f.a}
-                  </p>
-                )}
-              </div>
+                  <button
+                    onClick={() => setOpen(expanded ? null : i)}
+                    className="flex w-full items-start justify-between gap-4 px-6 py-5 text-left"
+                    aria-expanded={expanded}
+                  >
+                    <span className="font-display text-lg font-medium leading-snug text-foreground md:text-xl">
+                      {f.q}
+                    </span>
+                    <span className="mt-1 shrink-0 text-foreground/60">
+                      {expanded ? (
+                        <Minus className="h-5 w-5" />
+                      ) : (
+                        <Plus className="h-5 w-5" />
+                      )}
+                    </span>
+                  </button>
+                  {expanded && (
+                    <p className="px-6 pb-5 text-base leading-relaxed text-muted-foreground">
+                      {f.a}
+                    </p>
+                  )}
+                </div>
+              </Reveal>
             );
           })}
         </div>

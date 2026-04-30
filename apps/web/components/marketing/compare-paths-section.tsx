@@ -1,40 +1,47 @@
 import Link from "next/link";
+import { Reveal } from "./reveal";
 
 /**
- * Two paths, stacked vertically as oversized rounded cards. Apple's
- * single-column compare style — full-width on desktop, lots of breathing
- * room. Each card has a friendly emoji-style indicator and one big CTA.
+ * Two oversized rounded cards stacked vertically (Apple's compare style,
+ * not side-by-side). Each card has a corner-bleed accent blob and a
+ * single CTA. The first card uses primary blue tone, the second uses
+ * warm peach — the only place on the page peach plays a starring role.
  */
 export function ComparePathsSection() {
   return (
-    <section className="bg-secondary/40 py-32 md:py-40">
+    <section className="bg-secondary/40 py-32 md:py-44">
       <div className="mx-auto max-w-5xl px-6">
-        <div className="mb-20 text-center">
-          <h2 className="font-display text-balance text-4xl font-semibold leading-[1.05] tracking-tight md:text-6xl">
-            Two ways to <span className="text-primary">stay safe.</span>
-          </h2>
-          <p className="mx-auto mt-5 max-w-xl text-lg text-muted-foreground md:text-xl">
-            Whichever side you&apos;re on, the protection is the same.
+        <Reveal className="mb-20 text-center">
+          <p className="mb-4 text-sm font-medium uppercase tracking-[0.18em] text-primary">
+            Two paths
           </p>
-        </div>
+          <h2 className="font-display text-balance text-5xl font-semibold leading-[1] tracking-tight md:text-7xl">
+            For yourself,{" "}
+            <span className="text-muted-foreground">or someone you love.</span>
+          </h2>
+        </Reveal>
 
         <div className="space-y-6">
-          <PathCard
-            tone="primary"
-            label="For yourself"
-            title="Protect your own inbox."
-            blurb="Sign up, install the extension, and you'll see every dangerous link we've stopped on your own dashboard."
-            cta="Sign up — it's free"
-            href="/sign-up"
-          />
-          <PathCard
-            tone="warm"
-            label="For someone you love"
-            title="A parent. A grandparent. A friend."
-            blurb="Create your account, generate a six-digit code, and read it to them on the phone. You'll see the dangerous links they encounter — never anything they actually read."
-            cta="Set up a family circle"
-            href="/sign-up"
-          />
+          <Reveal>
+            <PathCard
+              tone="primary"
+              label="For yourself"
+              title="Protect your own inbox."
+              blurb="Sign up, install the extension, and you'll see every dangerous link we've stopped on your own dashboard."
+              cta="Sign up — it's free"
+              href="/sign-up"
+            />
+          </Reveal>
+          <Reveal delay={0.1}>
+            <PathCard
+              tone="warm"
+              label="For someone you love"
+              title="A parent. A grandparent. A friend."
+              blurb="Create your account, generate a six-digit code, and read it to them on the phone. They type it once. You see only the dangerous links they encounter."
+              cta="Set up a family circle"
+              href="/sign-up"
+            />
+          </Reveal>
         </div>
       </div>
     </section>
@@ -60,16 +67,23 @@ function PathCard({
   const accentText = tone === "primary" ? "text-primary" : "text-warm-foreground";
 
   return (
-    <article className="group relative overflow-hidden rounded-3xl bg-background p-10 shadow-sm transition-shadow hover:shadow-md md:p-14">
+    <article className="group relative overflow-hidden rounded-[2rem] bg-background p-10 transition-shadow hover:shadow-lg md:p-14">
       <div
         aria-hidden
-        className={`absolute -right-20 -top-20 h-64 w-64 rounded-full ${accentBg} opacity-10 transition-transform group-hover:scale-110`}
+        className={`absolute -right-24 -top-24 h-72 w-72 rounded-full ${accentBg} opacity-15 blur-2xl transition-transform duration-700 group-hover:scale-110`}
       />
+      <div
+        aria-hidden
+        className={`absolute -right-10 -top-10 h-32 w-32 rounded-full ${accentBg} opacity-25 blur-2xl`}
+      />
+
       <div className="relative">
-        <p className={`mb-5 text-sm font-medium uppercase tracking-[0.14em] ${accentText}`}>
+        <p
+          className={`mb-5 text-sm font-medium uppercase tracking-[0.18em] ${accentText}`}
+        >
           {label}
         </p>
-        <h3 className="font-display text-balance text-3xl font-semibold leading-tight md:text-5xl">
+        <h3 className="font-display text-balance text-3xl font-semibold leading-tight text-foreground md:text-5xl">
           {title}
         </h3>
         <p className="mt-5 max-w-xl text-lg leading-relaxed text-muted-foreground md:text-xl">

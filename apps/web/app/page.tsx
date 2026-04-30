@@ -5,6 +5,7 @@ import { HowItWorksSection } from "@/components/marketing/how-it-works-section";
 import { ComparePathsSection } from "@/components/marketing/compare-paths-section";
 import { PrivacySection } from "@/components/marketing/privacy-section";
 import { FAQSection } from "@/components/marketing/faq-section";
+import { CTASection } from "@/components/marketing/cta-section";
 import { FooterSection } from "@/components/marketing/footer-section";
 
 export default function Home() {
@@ -18,6 +19,7 @@ export default function Home() {
         <ComparePathsSection />
         <PrivacySection />
         <FAQSection />
+        <CTASection />
       </main>
       <FooterSection />
     </>

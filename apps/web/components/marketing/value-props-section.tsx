@@ -1,63 +1,74 @@
+import { Reveal } from "./reveal";
+
 /**
- * Three single-column "stages" — each is a full-width row with a friendly
- * SVG illustration on one side and Apple-style display type on the other.
- * Alternates left/right for visual rhythm.
+ * Three full-width zigzag rows, each with a custom inline SVG illustration
+ * (single-color, geometric, friendly — Headspace-adjacent without being
+ * twee) and Apple-scale display type. Alternating left/right.
  */
 export function ValuePropsSection() {
   const items: Array<{
     eyebrow: string;
     title: string;
+    accent: string;
     desc: string;
     illustration: React.ReactNode;
     flip?: boolean;
+    bg?: "white" | "tint";
   }> = [
     {
-      eyebrow: "Always watching",
-      title: "Every link, checked the second it lands.",
-      desc: "Gone Phishin' inspects every link in every email — silently, in real time, against the same threat database Chrome itself uses, plus our own detection for fake brand pages and look-alike domains.",
+      eyebrow: "Always on",
+      title: "Every link checked.",
+      accent: "Silently.",
+      desc: "Gone Phishin' inspects every link as the email loads — against the same threat database Chrome itself uses, plus our own detection for fake brand pages and look-alike domains.",
       illustration: <ShieldIllustration />,
     },
     {
-      eyebrow: "Stop, before you click",
-      title: "A clear warning, in plain English.",
-      desc: "When something looks dangerous, the click is intercepted. A warning appears with one big button to go back safely — no jargon, no decisions to make.",
-      illustration: <WarningIllustration />,
+      eyebrow: "Stop. Look.",
+      title: "A clear warning,",
+      accent: "in plain English.",
+      desc: "When a link looks dangerous, the click is intercepted. A warning appears with one big button to go back safely — no jargon, no decisions.",
+      illustration: <CatchIllustration />,
       flip: true,
+      bg: "tint",
     },
     {
-      eyebrow: "For someone you love",
-      title: "Set up by a phone call.",
-      desc: "Pair Gone Phishin' with a parent or grandparent in under a minute. They never need an account. You see the dangerous links they encounter — never anything they actually read.",
+      eyebrow: "Quietly looking out",
+      title: "Set it up for someone",
+      accent: "you love.",
+      desc: "Pair Gone Phishin' with a parent or grandparent in under a minute. They never need an account. You see only the dangerous links they encounter — never anything they actually read.",
       illustration: <FamilyIllustration />,
     },
   ];
 
   return (
-    <section id="features" className="bg-background">
-      {items.map((item, i) => (
+    <section id="features">
+      {items.map((item) => (
         <div
           key={item.title}
           className={
-            i % 2 === 1 ? "bg-secondary/50 py-32 md:py-40" : "py-32 md:py-40"
+            item.bg === "tint"
+              ? "bg-secondary/50 py-32 md:py-44"
+              : "bg-background py-32 md:py-44"
           }
         >
           <div
-            className={`mx-auto grid max-w-6xl items-center gap-16 px-6 md:grid-cols-2 md:gap-20 ${
+            className={`mx-auto grid max-w-6xl items-center gap-16 px-6 md:grid-cols-2 md:gap-24 ${
               item.flip ? "md:[&>*:first-child]:order-last" : ""
             }`}
           >
-            <div>{item.illustration}</div>
-            <div>
-              <p className="mb-5 text-sm font-medium uppercase tracking-[0.14em] text-primary">
+            <Reveal>{item.illustration}</Reveal>
+            <Reveal delay={0.1}>
+              <p className="mb-5 text-sm font-medium uppercase tracking-[0.18em] text-primary">
                 {item.eyebrow}
               </p>
-              <h2 className="font-display text-balance text-4xl font-semibold leading-[1.05] tracking-tight md:text-5xl lg:text-[56px]">
-                {item.title}
+              <h2 className="font-display text-balance text-4xl font-semibold leading-[1] tracking-tight md:text-5xl lg:text-[64px]">
+                {item.title}{" "}
+                <span className="text-muted-foreground">{item.accent}</span>
               </h2>
-              <p className="mt-6 max-w-lg text-lg leading-relaxed text-muted-foreground md:text-xl">
+              <p className="mt-7 max-w-lg text-lg leading-relaxed text-muted-foreground md:text-xl">
                 {item.desc}
               </p>
-            </div>
+            </Reveal>
           </div>
         </div>
       ))}
@@ -68,33 +79,37 @@ export function ValuePropsSection() {
 function ShieldIllustration() {
   return (
     <div className="relative mx-auto aspect-square max-w-md">
-      <div className="absolute inset-8 rounded-[3rem] bg-gradient-to-br from-secondary to-warm/30 blur-2xl" />
-      <svg
-        viewBox="0 0 320 320"
-        className="relative h-full w-full"
-        aria-hidden
-      >
-        {/* Ambient circles */}
-        <circle cx="60" cy="80" r="6" fill="rgb(var(--warm))" opacity="0.6" />
-        <circle cx="270" cy="60" r="4" fill="rgb(var(--primary))" opacity="0.3" />
-        <circle cx="280" cy="220" r="8" fill="rgb(var(--warm))" opacity="0.5" />
+      <div className="absolute inset-6 rounded-[3rem] bg-gradient-to-br from-secondary to-warm/20 blur-2xl" />
+      <svg viewBox="0 0 320 320" className="relative h-full w-full" aria-hidden>
+        <circle cx="60" cy="80" r="6" fill="rgb(var(--warm))" opacity="0.7" />
+        <circle cx="266" cy="58" r="4" fill="rgb(var(--primary))" opacity="0.4" />
+        <circle cx="282" cy="226" r="9" fill="rgb(var(--warm))" opacity="0.55" />
 
-        {/* Soft shield blob */}
+        {/* Soft outer halo */}
         <path
-          d="M 160 50 Q 220 50 240 80 Q 260 120 250 180 Q 230 250 160 280 Q 90 250 70 180 Q 60 120 80 80 Q 100 50 160 50 Z"
+          d="M 160 50 Q 222 50 240 82 Q 258 120 250 182 Q 230 252 160 282 Q 90 252 70 182 Q 62 120 80 82 Q 98 50 160 50 Z"
           fill="rgb(var(--primary))"
           opacity="0.08"
         />
+        {/* Solid shield */}
         <path
-          d="M 160 70 Q 210 70 226 96 Q 242 130 234 180 Q 218 240 160 264 Q 102 240 86 180 Q 78 130 94 96 Q 110 70 160 70 Z"
+          d="M 160 70 Q 212 70 226 96 Q 244 130 234 180 Q 218 240 160 264 Q 102 240 86 180 Q 76 130 94 96 Q 108 70 160 70 Z"
           fill="rgb(var(--primary))"
         />
-
-        {/* Checkmark */}
+        {/* Inner highlight for depth */}
         <path
-          d="M 120 165 L 150 195 L 200 140"
+          d="M 100 95 Q 130 80 160 80 Q 175 80 188 86"
           stroke="white"
-          strokeWidth="14"
+          strokeWidth="2"
+          strokeLinecap="round"
+          fill="none"
+          opacity="0.3"
+        />
+        {/* Bold checkmark */}
+        <path
+          d="M 118 168 L 152 200 L 204 138"
+          stroke="white"
+          strokeWidth="16"
           strokeLinecap="round"
           strokeLinejoin="round"
           fill="none"
@@ -104,21 +119,33 @@ function ShieldIllustration() {
   );
 }
 
-function WarningIllustration() {
+function CatchIllustration() {
   return (
     <div className="relative mx-auto aspect-square max-w-md">
-      <div className="absolute inset-8 rounded-[3rem] bg-gradient-to-br from-warm/40 to-secondary blur-2xl" />
-      <svg
-        viewBox="0 0 320 320"
-        className="relative h-full w-full"
-        aria-hidden
-      >
-        <circle cx="280" cy="80" r="6" fill="rgb(var(--primary))" opacity="0.4" />
-        <circle cx="50" cy="140" r="4" fill="rgb(var(--warm))" opacity="0.7" />
-        <circle cx="60" cy="260" r="8" fill="rgb(var(--primary))" opacity="0.2" />
+      <div className="absolute inset-6 rounded-[3rem] bg-gradient-to-br from-warm/40 to-secondary blur-2xl" />
+      <svg viewBox="0 0 320 320" className="relative h-full w-full" aria-hidden>
+        <circle cx="44" cy="62" r="4" fill="rgb(var(--primary))" opacity="0.4" />
+        <circle cx="282" cy="100" r="5" fill="rgb(var(--warm))" opacity="0.7" />
+        <circle cx="60" cy="262" r="7" fill="rgb(var(--primary))" opacity="0.25" />
 
-        {/* Envelope (hooked) */}
-        <g transform="translate(160 160)">
+        {/* Hook line dropping from the top */}
+        <path
+          d="M 162 30 L 162 78"
+          stroke="rgb(var(--foreground))"
+          strokeWidth="2.5"
+          strokeLinecap="round"
+        />
+        {/* Hook curl */}
+        <path
+          d="M 162 78 Q 162 96 145 96 Q 130 96 130 80"
+          stroke="rgb(var(--foreground))"
+          strokeWidth="3"
+          strokeLinecap="round"
+          fill="none"
+        />
+
+        {/* Envelope (caught fish) */}
+        <g transform="translate(160 178) rotate(-6)">
           <rect
             x="-90"
             y="-50"
@@ -136,20 +163,25 @@ function WarningIllustration() {
             strokeWidth="3"
             strokeLinejoin="round"
           />
-          {/* Hook */}
-          <path
-            d="M 0 -50 L 0 -90 Q 0 -110 -16 -110 Q -32 -110 -32 -94"
-            fill="none"
-            stroke="rgb(var(--foreground))"
-            strokeWidth="4"
-            strokeLinecap="round"
-          />
+          {/* @ symbol */}
+          <circle cx="0" cy="-18" r="14" fill="rgb(var(--primary))" />
+          <text
+            x="0"
+            y="-13"
+            textAnchor="middle"
+            fontSize="18"
+            fontWeight="700"
+            fill="white"
+            fontFamily="-apple-system, system-ui"
+          >
+            @
+          </text>
         </g>
 
-        {/* Big warning bubble — peach for warmth, not aggressive red */}
-        <g transform="translate(232 86)">
+        {/* Big peach "!" warning bubble */}
+        <g transform="translate(238 92)">
           <circle
-            r="44"
+            r="36"
             fill="rgb(var(--warm))"
             stroke="rgb(var(--foreground))"
             strokeWidth="3"
@@ -157,7 +189,7 @@ function WarningIllustration() {
           <text
             textAnchor="middle"
             dominantBaseline="central"
-            fontSize="44"
+            fontSize="40"
             fontWeight="800"
             fontFamily="-apple-system, system-ui"
             fill="rgb(var(--foreground))"
@@ -173,87 +205,67 @@ function WarningIllustration() {
 function FamilyIllustration() {
   return (
     <div className="relative mx-auto aspect-square max-w-md">
-      <div className="absolute inset-8 rounded-[3rem] bg-gradient-to-br from-secondary to-warm/30 blur-2xl" />
+      <div className="absolute inset-6 rounded-[3rem] bg-gradient-to-br from-secondary to-warm/30 blur-2xl" />
       <svg viewBox="0 0 320 320" className="relative h-full w-full" aria-hidden>
-        <circle cx="50" cy="60" r="6" fill="rgb(var(--warm))" opacity="0.7" />
-        <circle cx="280" cy="240" r="4" fill="rgb(var(--primary))" opacity="0.4" />
+        <circle cx="50" cy="50" r="6" fill="rgb(var(--warm))" opacity="0.7" />
+        <circle cx="284" cy="240" r="4" fill="rgb(var(--primary))" opacity="0.4" />
 
-        {/* Two phone-card silhouettes overlapping, joined by a dotted line */}
+        {/* Back phone (caregiver — primary blue) */}
         <g>
-          <rect
-            x="40"
-            y="80"
-            width="120"
-            height="200"
-            rx="20"
-            fill="rgb(var(--primary))"
-          />
-          <rect
-            x="62"
-            y="108"
-            width="76"
-            height="8"
-            rx="4"
-            fill="white"
-            opacity="0.5"
-          />
-          <rect
-            x="62"
-            y="128"
-            width="56"
-            height="6"
-            rx="3"
-            fill="white"
-            opacity="0.35"
-          />
-          <circle cx="100" cy="170" r="22" fill="white" opacity="0.85" />
+          <rect x="38" y="86" width="118" height="194" rx="22" fill="rgb(var(--primary))" />
+          <rect x="56" y="112" width="78" height="8" rx="4" fill="white" opacity="0.55" />
+          <rect x="56" y="130" width="58" height="6" rx="3" fill="white" opacity="0.35" />
+          <rect x="56" y="146" width="68" height="6" rx="3" fill="white" opacity="0.35" />
+          <circle cx="97" cy="200" r="26" fill="white" opacity="0.95" />
           <text
-            x="100"
-            y="178"
+            x="97"
+            y="210"
             textAnchor="middle"
-            fontSize="28"
+            fontSize="32"
             fontWeight="700"
-            fontFamily="-apple-system, system-ui"
             fill="rgb(var(--primary))"
+            fontFamily="-apple-system, system-ui"
           >
             ♥
           </text>
         </g>
 
+        {/* Front phone (senior — white) */}
         <g>
           <rect
-            x="160"
-            y="40"
-            width="120"
-            height="200"
-            rx="20"
+            x="158"
+            y="44"
+            width="118"
+            height="194"
+            rx="22"
             fill="white"
             stroke="rgb(var(--foreground))"
             strokeWidth="3"
           />
-          <rect x="182" y="68" width="76" height="8" rx="4" fill="rgb(var(--foreground))" opacity="0.6" />
-          <rect x="182" y="88" width="56" height="6" rx="3" fill="rgb(var(--foreground))" opacity="0.4" />
-          <circle cx="220" cy="130" r="22" fill="rgb(var(--warm))" />
+          <rect x="178" y="72" width="78" height="8" rx="4" fill="rgb(var(--foreground))" opacity="0.7" />
+          <rect x="178" y="90" width="58" height="6" rx="3" fill="rgb(var(--foreground))" opacity="0.4" />
+          <rect x="178" y="106" width="68" height="6" rx="3" fill="rgb(var(--foreground))" opacity="0.4" />
+          <circle cx="217" cy="158" r="26" fill="rgb(var(--warm))" />
           <text
-            x="220"
-            y="138"
+            x="217"
+            y="167"
             textAnchor="middle"
             fontSize="22"
             fontWeight="800"
-            fontFamily="-apple-system, system-ui"
             fill="rgb(var(--foreground))"
+            fontFamily="-apple-system, system-ui"
           >
             ✓
           </text>
         </g>
 
-        {/* Connecting dotted line */}
+        {/* Connecting heartbeat-line */}
         <path
-          d="M 130 220 Q 160 270 220 240"
+          d="M 130 250 Q 160 280 215 250"
           fill="none"
           stroke="rgb(var(--primary))"
           strokeWidth="3"
-          strokeDasharray="2 7"
+          strokeDasharray="2 8"
           strokeLinecap="round"
         />
       </svg>
