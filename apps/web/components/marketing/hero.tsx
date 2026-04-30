@@ -1,125 +1,149 @@
 import Link from "next/link";
+import { CompassStar, WaveRule } from "./ornament";
 
 /**
- * Hero — left-side copy + right-side product mockup. Pure markup, no
- * external assets. The mockup is a stylized "fake email" card with our
- * warning modal floating over a flagged link, giving the homepage an
- * immediate sense of what the product does.
+ * Editorial hero. Asymmetric grid: large display headline on the left,
+ * stylized email-warning vignette on the right. Vintage newspaper-by-the-sea
+ * aesthetic — ornaments, small caps, italics, and a single coral accent.
  */
 export function Hero() {
   return (
-    <section className="relative w-full overflow-hidden bg-background">
-      <div className="mx-auto grid max-w-6xl items-center gap-16 px-6 pb-24 pt-16 md:grid-cols-[1.1fr_1fr] md:gap-12 md:pt-24">
+    <section className="relative overflow-hidden">
+      {/* Top metadata strip — like a paper masthead's date line */}
+      <div className="mx-auto max-w-6xl border-b border-border/70 px-6 py-3">
+        <div className="flex items-center justify-between font-mono-display text-[11px] uppercase tracking-widest text-foreground/60">
+          <span>Vol. I · No. 1</span>
+          <span className="hidden sm:inline">A Manual on Modern Phishing</span>
+          <span>Cape Cod · 2026</span>
+        </div>
+      </div>
+
+      <div className="mx-auto grid max-w-6xl items-start gap-14 px-6 pb-24 pt-16 md:grid-cols-[1.25fr_1fr] md:gap-20 md:pb-32 md:pt-24">
         <div>
-          <p className="mb-4 inline-flex items-center gap-2 rounded-full border border-border bg-muted/60 px-3 py-1 text-xs font-medium text-muted-foreground">
-            <span className="h-1.5 w-1.5 rounded-full bg-primary" />
-            Free Chrome extension
-          </p>
-          <h1 className="text-balance text-5xl font-semibold leading-[1.05] tracking-tight text-foreground md:text-6xl lg:text-[64px]">
-            Phishing scams shouldn&apos;t catch you off guard.
+          {/* Section eyebrow */}
+          <div className="mb-10 flex items-center gap-4 text-primary">
+            <CompassStar className="h-7 w-7" />
+            <span className="font-mono-display text-xs uppercase tracking-[0.3em]">
+              The Bulletin
+            </span>
+          </div>
+
+          <h1 className="font-display text-[68px] leading-[0.95] tracking-tight text-foreground md:text-[88px] lg:text-[104px]">
+            Don&apos;t get
+            <br />
+            <span className="font-display-italic text-primary">
+              caught
+            </span>{" "}
+            by
+            <br />
+            phishing scams.
           </h1>
-          <p className="mt-6 max-w-md text-lg leading-relaxed text-muted-foreground">
-            Gone Phishin&apos; watches the links in your inbox and warns you
-            before you click on something dangerous. For you, or for someone
-            you love.
-          </p>
-          <div className="mt-10 flex flex-wrap items-center gap-3">
+
+          <div className="mt-8 max-w-md font-newsreader has-dropcap">
+            <p className="text-[19px] leading-[1.55] text-foreground/85">
+              Gone Phishin&apos; is a free Chrome extension that watches the
+              links in your inbox and warns you — in plain English —{" "}
+              <em>before</em> you click on something dangerous. For you, or
+              for someone you love.
+            </p>
+          </div>
+
+          <div className="mt-10 flex flex-wrap items-center gap-4">
             <Link
               href="/sign-up"
-              className="inline-flex items-center gap-2 rounded-full bg-primary px-7 py-3 text-base font-semibold text-primary-foreground shadow-sm transition-transform hover:scale-[1.02]"
+              className="group inline-flex items-center gap-3 rounded-none border-y-2 border-primary bg-primary px-7 py-3 font-display text-base text-primary-foreground transition-colors hover:bg-foreground hover:border-foreground"
             >
-              Install free
+              Install Free
+              <span className="transition-transform group-hover:translate-x-1">
+                →
+              </span>
             </Link>
             <Link
               href="#how-it-works"
-              className="inline-flex items-center gap-2 rounded-full border border-border bg-background px-7 py-3 text-base font-medium text-foreground transition-colors hover:bg-muted"
+              className="font-display text-base italic text-foreground underline decoration-foreground/30 underline-offset-[6px] transition-colors hover:decoration-foreground"
             >
               See how it works
             </Link>
           </div>
-          <p className="mt-6 text-xs text-muted-foreground">
-            Works on Gmail and Outlook. We never read your emails.
+
+          <p className="mt-10 max-w-md font-mono-display text-[10px] uppercase tracking-[0.3em] text-foreground/55">
+            Works in Gmail &amp; Outlook · We never read your emails
           </p>
         </div>
-        <HeroMockup />
+
+        <HeroVignette />
+      </div>
+
+      <div className="mx-auto max-w-6xl px-6">
+        <WaveRule className="h-3 w-full text-primary/40" />
       </div>
     </section>
   );
 }
 
-/**
- * Stylized mockup of an email with our warning floating over a flagged
- * link. Three layers stacked diagonally for depth: a back card (gradient
- * placeholder for "another email"), the foreground email, and the
- * warning pill.
- */
-function HeroMockup() {
+function HeroVignette() {
   return (
-    <div className="relative mx-auto w-full max-w-md md:mx-0">
-      {/* Back-card decoration */}
+    <figure className="relative">
+      {/* Decorative back panel — angled cream card behind the foreground */}
       <div
         aria-hidden
-        className="absolute -right-6 -top-6 hidden h-[360px] w-[360px] rounded-3xl bg-primary/10 md:block"
+        className="absolute -right-3 -top-3 hidden h-full w-full rotate-2 rounded-md border border-border bg-secondary/50 md:block"
       />
-      {/* Front email card */}
-      <div className="relative rounded-3xl border border-border bg-background shadow-xl">
-        <div className="flex items-center gap-1.5 rounded-t-3xl border-b border-border bg-muted/40 px-5 py-3">
-          <span className="h-2.5 w-2.5 rounded-full bg-rose-300" />
-          <span className="h-2.5 w-2.5 rounded-full bg-amber-300" />
-          <span className="h-2.5 w-2.5 rounded-full bg-emerald-300" />
-          <span className="ml-3 text-xs text-muted-foreground">
-            Inbox · Gmail
-          </span>
+
+      {/* Foreground "newspaper photo" frame */}
+      <div className="relative -rotate-1 rounded-md border border-border bg-card p-6 shadow-[8px_10px_0_rgba(14,26,38,0.06)] md:rotate-0">
+        {/* Caption strip on top */}
+        <div className="mb-4 flex items-center justify-between border-b border-border pb-3 font-mono-display text-[10px] uppercase tracking-[0.25em] text-foreground/60">
+          <span>Exhibit A</span>
+          <span>Inbox · 2:14 PM</span>
         </div>
-        <div className="space-y-4 p-6">
-          <div>
-            <p className="text-sm font-semibold text-foreground">
-              Action Required: Verify Your Account
-            </p>
-            <p className="text-xs text-muted-foreground">
-              service@paypa1-secure.com · 2:14 PM
-            </p>
+
+        {/* Sender + subject */}
+        <p className="font-display text-lg leading-snug text-foreground">
+          Action Required: Verify Your Account
+        </p>
+        <p className="mt-1 font-mono-display text-[11px] uppercase tracking-wider text-foreground/55">
+          service@paypa1-secure.com
+        </p>
+
+        {/* Body excerpt */}
+        <p className="mt-5 font-newsreader text-[15px] leading-[1.6] text-foreground/80">
+          Dear Customer, we have detected unusual activity on your account.
+          Please{" "}
+          <span className="relative inline-flex items-baseline">
+            <span className="border-b-2 border-destructive font-medium text-destructive">
+              verify your account here
+            </span>
+          </span>{" "}
+          within twenty-four hours to avoid suspension.
+        </p>
+
+        {/* Faux signature */}
+        <p className="mt-4 font-display-italic text-sm text-foreground/55">
+          — PayPal Security Team
+        </p>
+
+        {/* The warning slip — pinned at the bottom-right, like a stamped
+           verdict on a case file. */}
+        <div className="absolute -bottom-7 -right-4 max-w-[260px] rotate-2 border-y-2 border-foreground bg-background p-4 shadow-[5px_6px_0_rgba(14,26,38,0.12)]">
+          <div className="flex items-center justify-between font-mono-display text-[9px] uppercase tracking-[0.3em] text-destructive">
+            <span>Verdict</span>
+            <span>·</span>
+            <span>No. 0042</span>
           </div>
-          <p className="text-sm leading-relaxed text-foreground/85">
-            Dear Customer, we&apos;ve detected unusual activity on your
-            account. Please{" "}
-            <span className="relative inline-flex items-center">
-              <span className="border-b-2 border-rose-500 font-medium text-rose-600">
-                verify your account here
-              </span>
-              <span
-                aria-hidden
-                className="ml-1 inline-flex h-5 w-5 items-center justify-center rounded-full bg-rose-100 text-[11px]"
-              >
-                🛑
-              </span>
-            </span>{" "}
-            within 24 hours to avoid suspension.
+          <p className="mt-2 font-display text-2xl leading-none text-destructive">
+            Dangerous
           </p>
-          <p className="text-sm text-muted-foreground">
-            Thank you,
-            <br />
-            PayPal Security Team
+          <p className="mt-3 font-newsreader text-[13px] leading-[1.45] text-foreground/80">
+            This is a fake PayPal page.{" "}
+            <span className="font-display-italic">Don&apos;t click.</span>
           </p>
         </div>
       </div>
 
-      {/* Warning pill — floats over the flagged link */}
-      <div className="absolute -bottom-6 right-6 max-w-[280px] rounded-2xl border border-border bg-background p-4 shadow-2xl md:-bottom-8 md:right-2">
-        <div className="flex items-start gap-3">
-          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-rose-50 text-lg">
-            🛑
-          </div>
-          <div className="min-w-0">
-            <p className="text-sm font-semibold text-foreground">
-              Dangerous link
-            </p>
-            <p className="mt-0.5 text-xs leading-snug text-muted-foreground">
-              This looks like a fake PayPal page. Don&apos;t click.
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
+      <figcaption className="mt-10 max-w-xs font-display-italic text-sm text-foreground/55 md:mt-14">
+        A scam in the wild, caught on the line and labeled.
+      </figcaption>
+    </figure>
   );
 }

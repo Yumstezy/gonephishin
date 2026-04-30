@@ -2,104 +2,121 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Theme tokens, RGB triplets so Tailwind's `text-foo/70` opacity modifiers
-   resolve via `rgb(var(--foo) / <alpha-value>)`. Direct-CSS consumers (like
-   the QR code component) wrap in `rgb(...)` themselves. */
+/* Editorial-vintage palette. Warm cream paper instead of stark white,
+   deep ink instead of pure black, ocean-deep navy as primary, coral
+   red as the single warning accent. Variables are RGB triplets so
+   Tailwind's `<alpha-value>` opacity modifiers work. */
 @layer base {
   :root {
-    --background: 255 255 255;
-    --foreground: 15 23 42;
-    --card: 255 255 255;
-    --card-foreground: 15 23 42;
-    --popover: 255 255 255;
-    --popover-foreground: 15 23 42;
-    /* Ocean blue (sky-700). Single accent against an otherwise monotone
-       slate/white palette — used for CTAs, links, emphasis. */
-    --primary: 3 105 161;
-    --primary-foreground: 255 255 255;
-    --secondary: 241 245 249;
-    --secondary-foreground: 15 23 42;
-    --muted: 241 245 249;
-    --muted-foreground: 100 116 139;
-    --accent: 241 245 249;
-    --accent-foreground: 15 23 42;
-    --destructive: 239 68 68;
-    --destructive-foreground: oklch(1 0 0);
-    --border: 226 232 240;
-    --input: 226 232 240;
-    --ring: 15 23 42;
+    /* Cream paper */
+    --background: 250 246 239;
+    /* Deep ink */
+    --foreground: 14 26 38;
+    /* Card surfaces (slightly off the page color so they read as raised) */
+    --card: 252 249 244;
+    --card-foreground: 14 26 38;
+    --popover: 252 249 244;
+    --popover-foreground: 14 26 38;
+    /* Ocean navy */
+    --primary: 10 58 92;
+    --primary-foreground: 250 246 239;
+    /* Sea-glass teal — secondary accent for a touch of warmth */
+    --secondary: 232 220 196;
+    --secondary-foreground: 14 26 38;
+    /* Muted parchment */
+    --muted: 240 234 222;
+    --muted-foreground: 89 84 76;
+    /* Accent rose-coral — only for "warnings" on the page */
+    --accent: 232 220 196;
+    --accent-foreground: 14 26 38;
+    --destructive: 200 85 61;
+    --destructive-foreground: 250 246 239;
+    /* Subtle border that reads as engraving on paper */
+    --border: 218 207 188;
+    --input: 218 207 188;
+    --ring: 10 58 92;
     --radius: 0.5rem;
-    --context-card-border: hsla(0, 0%, 92%, 1);
+    --context-card-border: hsla(35, 30%, 78%, 1);
     --ds-gray-1000: hsla(0, 0%, 9%, 1);
-    --ds-background-100: hsla(0, 0%, 100%, 1);
-    --ds-gray-900: hsla(0, 0%, 40%, 1);
+    --ds-background-100: hsla(40, 50%, 96%, 1);
+    --ds-gray-900: hsla(0, 0%, 30%, 1);
   }
 
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --background: 15 23 42;
-      --foreground: 248 250 252;
-      --card: 15 23 42;
-      --card-foreground: 248 250 252;
-      --popover: 15 23 42;
-      --popover-foreground: 248 250 252;
-      /* Lighter ocean blue (sky-500) for dark mode so it stays legible. */
-      --primary: 14 165 233;
-      --primary-foreground: 15 23 42;
-      --secondary: 30 41 59;
-      --secondary-foreground: 248 250 252;
-      --muted: 30 41 59;
-      --muted-foreground: 148 163 184;
-      --accent: 30 41 59;
-      --accent-foreground: 248 250 252;
-      --border: 30 41 59;
-      --input: 30 41 59;
-      --ring: 226 232 240;
-    }
+  /* The dashboard uses a near-white background; we override on its routes
+     via a class instead of touching :root again. */
+
+  body {
+    /* Background paper grain — a fractal noise SVG, baked in. Layered
+       under everything via a fixed background. */
+    background-image:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='320'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.05  0 0 0 0 0.05  0 0 0 0 0.05  0 0 0 0.06 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"),
+      linear-gradient(rgb(var(--background)), rgb(var(--background)));
+    background-size: 320px 320px, auto;
+    background-attachment: fixed;
   }
 
-  /* Procedural film-grain noise used by the hero. SVG fractalNoise filter
-     baked into a base64 data URL so we don't ship a separate asset. */
-  .noise-overlay {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.5 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-    background-size: 240px 240px;
+  /* Display headlines lean on Fraunces' editorial axes — high optical
+     contrast, mild WONK for personality, SOFT for a touch of warmth. */
+  .font-display {
+    font-family: var(--font-fraunces), Georgia, serif;
+    font-variation-settings:
+      "opsz" 144,
+      "SOFT" 80,
+      "WONK" 1;
+    letter-spacing: -0.02em;
   }
-  .theme {
-    --color-context-card-border: var(--context-card-border);
-    --color-gray-1000: var(--ds-gray-1000);
-    --color-background-100: var(--ds-background-100);
-    --color-gray-900: var(--ds-gray-900);
-    --color-ds-background-100: var(----ds-background-100);
-    --color-ds-gray-1000: var(----ds-gray-1000);
-    --color-destructive-foreground: oklch(1 0 0);
-    --color-color-destructive-foreground: var(----color-destructive-foreground);
-    --animate-accordion-down: accordion-down 0.2s ease-out;
-    --animate-accordion-up: accordion-up 0.2s ease-out;
+  .font-display-italic {
+    font-family: var(--font-fraunces), Georgia, serif;
+    font-style: italic;
+    font-variation-settings:
+      "opsz" 144,
+      "SOFT" 100,
+      "WONK" 1;
   }
-  .dark {
-    --context-card-border: hsla(0, 0%, 18%, 1);
-    --ds-gray-1000: hsla(0, 0%, 93%, 1);
-    --ds-background-100: hsla(0,0%,4%, 1);
-    --ds-gray-900: hsla(0, 0%, 63%, 1);
-    --destructive-foreground: oklch(1 0 0);
-  }
-}
 
-@theme inline {
-  @keyframes accordion-down {
-  from {
-    height: 0;
-    }
-  to {
-    height: var(--radix-accordion-content-height);
-    }
+  .font-newsreader {
+    font-family: var(--font-newsreader), Georgia, serif;
   }
-  @keyframes accordion-up {
-  from {
-    height: var(--radix-accordion-content-height);
-    }
-  to {
-    height: 0;
-    }
+
+  .font-mono-display {
+    font-family: var(--font-mono), monospace;
+    letter-spacing: 0.05em;
+  }
+
+  /* Editorial flourishes */
+  .small-caps {
+    font-variant-caps: all-small-caps;
+    letter-spacing: 0.18em;
+  }
+
+  /* Drop cap — first letter of body block grows large and old-style.
+     Only enabled inside .has-dropcap to avoid collateral damage. */
+  .has-dropcap > p:first-of-type::first-letter {
+    font-family: var(--font-fraunces), Georgia, serif;
+    font-variation-settings:
+      "opsz" 144,
+      "SOFT" 100;
+    font-weight: 700;
+    font-size: 4.5em;
+    line-height: 0.85;
+    float: left;
+    margin: 0.05em 0.12em -0.05em 0;
+    color: rgb(var(--primary));
+  }
+
+  /* Decorative rule with a centered fleuron */
+  .rule-fleuron {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    color: rgb(var(--primary) / 0.55);
+  }
+  .rule-fleuron::before,
+  .rule-fleuron::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: currentColor;
+    opacity: 0.55;
   }
 }

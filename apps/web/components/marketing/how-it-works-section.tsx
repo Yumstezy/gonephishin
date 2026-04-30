@@ -1,62 +1,66 @@
+import { WaveRule } from "./ornament";
+
 /**
- * Three numbered steps in plain English. Numbered circles + headline +
- * description per step. Vertical stack on mobile, horizontal on desktop.
+ * Three numbered steps as a single editorial spread. Roman numerals,
+ * heavy display headlines, italic emphasis. Reads like book chapters.
  */
 export function HowItWorksSection() {
   const steps = [
     {
-      num: "01",
-      title: "Install Gone Phishin'",
-      desc: "One click on the Chrome Web Store. No setup, no account required.",
+      num: "Chapter I",
+      title: "Install Gone Phishin'.",
+      desc: "One click on the Chrome Web Store. No setup. No account required.",
     },
     {
-      num: "02",
-      title: "Browse normally",
-      desc: "Open Gmail or Outlook the way you always do. Every link in every email gets checked silently.",
+      num: "Chapter II",
+      title: "Browse normally.",
+      desc: "Open Gmail or Outlook the way you always do. Every link gets checked silently in the background.",
     },
     {
-      num: "03",
-      title: "We catch the bad ones",
-      desc: "If you almost click on something dangerous, a clear warning appears with a big button to go back. That's it.",
+      num: "Chapter III",
+      title: "We catch the bad ones.",
+      desc: "If you almost click on something dangerous, a clear warning appears with a big button to go back. That's the entirety of it.",
     },
   ];
 
   return (
-    <section
-      id="how-it-works"
-      className="bg-background py-24 md:py-32"
-    >
-      <div className="mx-auto max-w-6xl px-6">
-        <div className="mb-16 max-w-2xl">
-          <p className="mb-3 text-sm font-semibold uppercase tracking-[0.18em] text-primary">
-            How it works
+    <section id="how-it-works" className="bg-background py-24 md:py-32">
+      <div className="mx-auto max-w-5xl px-6">
+        <header className="mb-20 text-center">
+          <p className="mb-4 font-mono-display text-[11px] uppercase tracking-[0.3em] text-primary">
+            How It Works
           </p>
-          <h2 className="text-balance text-3xl font-semibold tracking-tight md:text-4xl">
-            Three steps. No technical setup.
+          <h2 className="font-display text-[44px] leading-[1] tracking-tight text-foreground md:text-[60px]">
+            Three steps, no{" "}
+            <span className="font-display-italic">technical setup</span>.
           </h2>
-        </div>
-        <div className="grid gap-12 md:grid-cols-3 md:gap-8">
+        </header>
+
+        <div className="space-y-20">
           {steps.map((s, i) => (
-            <div key={s.num} className="relative">
-              <div className="mb-5 flex items-baseline gap-3">
-                <span className="font-mono text-sm font-semibold text-primary">
+            <article
+              key={s.num}
+              className="grid grid-cols-1 items-baseline gap-6 md:grid-cols-[200px_1fr] md:gap-12"
+            >
+              <div className="border-l-2 border-primary pl-4 md:border-l-0 md:pl-0 md:text-right">
+                <p className="font-mono-display text-[10px] uppercase tracking-[0.3em] text-foreground/55">
                   {s.num}
-                </span>
-                <span className="h-px flex-1 bg-border" />
+                </p>
               </div>
-              <h3 className="mb-3 text-2xl font-semibold tracking-tight">
-                {s.title}
-              </h3>
-              <p className="text-base leading-relaxed text-muted-foreground">
-                {s.desc}
-              </p>
+              <div>
+                <h3 className="font-display text-[36px] leading-[1.05] tracking-tight text-foreground md:text-[44px]">
+                  {s.title}
+                </h3>
+                <p className="mt-4 max-w-prose font-newsreader text-[18px] leading-[1.6] text-foreground/75">
+                  {s.desc}
+                </p>
+              </div>
               {i < steps.length - 1 && (
-                <div
-                  aria-hidden
-                  className="absolute -right-4 top-2 hidden h-px w-8 bg-border md:block"
-                />
+                <div className="md:col-span-2 mt-12 flex justify-center">
+                  <WaveRule className="h-3 w-32 text-foreground/25" />
+                </div>
               )}
-            </div>
+            </article>
           ))}
         </div>
       </div>

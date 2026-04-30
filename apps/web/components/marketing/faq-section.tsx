@@ -1,14 +1,17 @@
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
+"use client";
 
+import { useState } from "react";
+import { Plus, Minus } from "lucide-react";
+
+/**
+ * FAQ as a numbered editorial list — clicking expands the answer. Custom
+ * accordion (not the shadcn radix one) so the typography is fully
+ * editorial: roman numerals, display question, body answer.
+ */
 const FAQS = [
   {
     q: "Is Gone Phishin' really free?",
-    a: "Yes. The extension and the dashboard are both free. There's no paid tier yet, and no plans to charge ordinary users. We're not building this on ads or data resale either — see the privacy section above.",
+    a: "Yes. The extension and the dashboard are both free. There's no paid tier yet, and no plans to charge ordinary users. We're not building this on advertisements or data resale either — see the privacy section above.",
   },
   {
     q: "What email services does it work on?",
@@ -20,11 +23,11 @@ const FAQS = [
   },
   {
     q: "How do I install it for my parent?",
-    a: "Sign up on this page, then create a 'circle' for them. Generate a 6-digit code and read it to them over the phone. They type it once into the extension popup. That's it — they never need an account.",
+    a: "Sign up on this page, then create a 'circle' for them. Generate a six-digit code and read it to them over the phone. They type it once into the extension popup. That's it — they never need an account.",
   },
   {
     q: "Will it slow down my browser?",
-    a: "No noticeable difference. We check links in batches, cache results for 24 hours, and never block the page from rendering. If our service is offline, links just stay un-checked instead of breaking.",
+    a: "No noticeable difference. We check links in batches, cache results for twenty-four hours, and never block the page from rendering. If our service is offline, links just stay un-checked instead of breaking.",
   },
   {
     q: "How do I remove it?",
@@ -32,30 +35,57 @@ const FAQS = [
   },
 ];
 
+const ROMAN = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"];
+
 export function FAQSection() {
+  const [open, setOpen] = useState<number | null>(0);
+
   return (
     <section id="faq" className="bg-background py-24 md:py-32">
       <div className="mx-auto max-w-3xl px-6">
-        <div className="mb-12 text-center">
-          <p className="mb-3 text-sm font-semibold uppercase tracking-[0.18em] text-primary">
-            FAQ
+        <header className="mb-16 text-center">
+          <p className="mb-4 font-mono-display text-[11px] uppercase tracking-[0.3em] text-primary">
+            Correspondence
           </p>
-          <h2 className="text-balance text-3xl font-semibold tracking-tight md:text-4xl">
-            Questions, answered plainly.
+          <h2 className="font-display text-[44px] leading-[1] tracking-tight text-foreground md:text-[56px]">
+            Questions, answered{" "}
+            <span className="font-display-italic">plainly</span>.
           </h2>
-        </div>
-        <Accordion type="single" collapsible className="w-full">
+        </header>
+
+        <ol className="border-t border-border">
           {FAQS.map((f, i) => (
-            <AccordionItem key={f.q} value={`item-${i}`}>
-              <AccordionTrigger className="text-left text-base font-medium">
-                {f.q}
-              </AccordionTrigger>
-              <AccordionContent className="text-base leading-relaxed text-muted-foreground">
-                {f.a}
-              </AccordionContent>
-            </AccordionItem>
+            <li key={f.q} className="border-b border-border">
+              <button
+                onClick={() => setOpen(open === i ? null : i)}
+                className="grid w-full grid-cols-[36px_1fr_24px] items-baseline gap-4 py-6 text-left transition-colors hover:bg-secondary/40"
+                aria-expanded={open === i}
+              >
+                <span className="font-mono-display text-[11px] uppercase tracking-[0.25em] text-primary">
+                  {ROMAN[i]}.
+                </span>
+                <span className="font-display text-[22px] leading-snug text-foreground">
+                  {f.q}
+                </span>
+                <span className="self-center text-foreground/55">
+                  {open === i ? (
+                    <Minus className="h-5 w-5" />
+                  ) : (
+                    <Plus className="h-5 w-5" />
+                  )}
+                </span>
+              </button>
+              {open === i && (
+                <div className="grid grid-cols-[36px_1fr_24px] gap-4 pb-7">
+                  <span aria-hidden />
+                  <p className="font-newsreader text-[17px] leading-[1.65] text-foreground/75">
+                    {f.a}
+                  </p>
+                </div>
+              )}
+            </li>
           ))}
-        </Accordion>
+        </ol>
       </div>
     </section>
   );
