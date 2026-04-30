@@ -1,20 +1,8 @@
 import type { Metadata } from "next";
-import { Bricolage_Grotesque, DM_Sans } from "next/font/google";
+import { GeistSans } from "geist/font/sans";
+import { GeistMono } from "geist/font/mono";
 import { ClerkProvider } from "@clerk/nextjs";
 import "./globals.css";
-
-const display = Bricolage_Grotesque({
-  subsets: ["latin"],
-  variable: "--font-display",
-  display: "swap",
-  axes: ["opsz"],
-});
-
-const body = DM_Sans({
-  subsets: ["latin"],
-  variable: "--font-body",
-  display: "swap",
-});
 
 export const metadata: Metadata = {
   title: "Gone Phishin'",
@@ -28,8 +16,11 @@ export default function RootLayout({
 }) {
   return (
     <ClerkProvider>
-      <html lang="en" className={`${display.variable} ${body.variable}`}>
-        <body className="antialiased">{children}</body>
+      <html
+        lang="en"
+        className={`${GeistSans.variable} ${GeistMono.variable}`}
+      >
+        <body className="antialiased font-sans">{children}</body>
       </html>
     </ClerkProvider>
   );

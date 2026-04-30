@@ -8,8 +8,8 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        display: ["var(--font-display)", "-apple-system", "sans-serif"],
-        body: ["var(--font-body)", "-apple-system", "sans-serif"],
+        sans: ["var(--font-geist-sans)", "ui-sans-serif", "system-ui"],
+        mono: ["var(--font-geist-mono)", "ui-monospace", "monospace"],
       },
       colors: {
         border: rgb("--border"),
@@ -24,10 +24,6 @@ export default {
         secondary: {
           DEFAULT: rgb("--secondary"),
           foreground: rgb("--secondary-foreground"),
-        },
-        warm: {
-          DEFAULT: rgb("--warm"),
-          foreground: rgb("--warm-foreground"),
         },
         destructive: {
           DEFAULT: rgb("--destructive"),
@@ -53,9 +49,7 @@ export default {
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 4px)",
-        sm: "calc(var(--radius) - 8px)",
-        "3xl": "1.5rem",
-        "4xl": "2rem",
+        sm: "calc(var(--radius) - 6px)",
       },
       keyframes: {
         "accordion-down": {

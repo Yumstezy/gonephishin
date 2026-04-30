@@ -3,35 +3,28 @@
 @tailwind utilities;
 
 @layer base {
-  /* Force light color-scheme so browsers in OS dark mode don't override
-     our manually-defined light tokens. */
   :root {
     color-scheme: light;
     --background: 255 255 255;
-    --foreground: 10 25 41;
+    --foreground: 15 23 42;
     --card: 255 255 255;
-    --card-foreground: 10 25 41;
+    --card-foreground: 15 23 42;
     --popover: 255 255 255;
-    --popover-foreground: 10 25 41;
-    /* Ocean blue (sky-700) — the single brand accent. */
+    --popover-foreground: 15 23 42;
     --primary: 3 105 161;
     --primary-foreground: 255 255 255;
-    /* Soft tinted blue for full-bleed sections — sky-50 */
-    --secondary: 240 249 255;
-    --secondary-foreground: 10 25 41;
+    --secondary: 248 250 252;
+    --secondary-foreground: 15 23 42;
     --muted: 248 250 252;
     --muted-foreground: 100 116 139;
     --accent: 240 249 255;
     --accent-foreground: 3 105 161;
-    /* Warm peach used SPARINGLY in illustrations only. */
-    --warm: 254 215 170;
-    --warm-foreground: 154 52 18;
     --destructive: 239 68 68;
     --destructive-foreground: 255 255 255;
     --border: 226 232 240;
     --input: 226 232 240;
-    --ring: 3 105 161;
-    --radius: 1rem;
+    --ring: 15 23 42;
+    --radius: 0.75rem;
     --context-card-border: hsla(0, 0%, 92%, 1);
     --ds-gray-1000: hsla(0, 0%, 9%, 1);
     --ds-background-100: hsla(0, 0%, 100%, 1);
@@ -41,11 +34,11 @@
   body {
     background-color: rgb(var(--background));
     color: rgb(var(--foreground));
-    font-family: var(--font-body), -apple-system, sans-serif;
   }
 
-  .font-display {
-    font-family: var(--font-display), -apple-system, sans-serif;
-    letter-spacing: -0.025em;
+  /* Selection feels considered, not default browser blue */
+  ::selection {
+    background-color: rgb(var(--primary) / 0.15);
+    color: rgb(var(--foreground));
   }
 }

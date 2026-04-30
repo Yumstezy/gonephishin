@@ -1,47 +1,40 @@
 import Link from "next/link";
-import { Reveal } from "./reveal";
 
 /**
- * Two oversized rounded cards stacked vertically (Apple's compare style,
- * not side-by-side). Each card has a corner-bleed accent blob and a
- * single CTA. The first card uses primary blue tone, the second uses
- * warm peach — the only place on the page peach plays a starring role.
+ * Two paths, side-by-side on desktop, stacked on mobile. Plain cards,
+ * thin border, generous padding. The CTA button is the only color
+ * present per card.
  */
 export function ComparePathsSection() {
   return (
-    <section className="bg-secondary/40 py-32 md:py-44">
+    <section className="border-t border-border bg-background py-32 md:py-40">
       <div className="mx-auto max-w-5xl px-6">
-        <Reveal className="mb-20 text-center">
-          <p className="mb-4 text-sm font-medium uppercase tracking-[0.18em] text-primary">
+        <div className="mx-auto mb-16 max-w-2xl text-center">
+          <p className="font-mono text-xs uppercase tracking-[0.2em] text-primary">
             Two paths
           </p>
-          <h2 className="font-display text-balance text-5xl font-semibold leading-[1] tracking-tight md:text-7xl">
-            For yourself,{" "}
-            <span className="text-muted-foreground">or someone you love.</span>
+          <h2 className="mt-4 text-balance text-4xl font-semibold tracking-[-0.03em] md:text-5xl">
+            For yourself, or for someone you love.
           </h2>
-        </Reveal>
+          <p className="mt-5 text-base leading-relaxed text-muted-foreground md:text-lg">
+            Whichever side you&apos;re on, the protection is the same.
+          </p>
+        </div>
 
-        <div className="space-y-6">
-          <Reveal>
-            <PathCard
-              tone="primary"
-              label="For yourself"
-              title="Protect your own inbox."
-              blurb="Sign up, install the extension, and you'll see every dangerous link we've stopped on your own dashboard."
-              cta="Sign up — it's free"
-              href="/sign-up"
-            />
-          </Reveal>
-          <Reveal delay={0.1}>
-            <PathCard
-              tone="warm"
-              label="For someone you love"
-              title="A parent. A grandparent. A friend."
-              blurb="Create your account, generate a six-digit code, and read it to them on the phone. They type it once. You see only the dangerous links they encounter."
-              cta="Set up a family circle"
-              href="/sign-up"
-            />
-          </Reveal>
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6">
+          <PathCard
+            label="For yourself"
+            title="Protect your own inbox."
+            blurb="Sign up, install the extension, and you'll see every dangerous link we've stopped on your own dashboard."
+            cta="Sign up — it's free"
+            primary
+          />
+          <PathCard
+            label="For a family member"
+            title="A parent. A grandparent. A friend."
+            blurb="Create your account, generate a 6-digit code, and read it to them on the phone. They type it once. You see only what's dangerous."
+            cta="Set up a family circle"
+          />
         </div>
       </div>
     </section>
@@ -49,53 +42,39 @@ export function ComparePathsSection() {
 }
 
 function PathCard({
-  tone,
   label,
   title,
   blurb,
   cta,
-  href,
+  primary = false,
 }: {
-  tone: "primary" | "warm";
   label: string;
   title: string;
   blurb: string;
   cta: string;
-  href: string;
+  primary?: boolean;
 }) {
-  const accentBg = tone === "primary" ? "bg-primary" : "bg-warm";
-  const accentText = tone === "primary" ? "text-primary" : "text-warm-foreground";
-
   return (
-    <article className="group relative overflow-hidden rounded-[2rem] bg-background p-10 transition-shadow hover:shadow-lg md:p-14">
-      <div
-        aria-hidden
-        className={`absolute -right-24 -top-24 h-72 w-72 rounded-full ${accentBg} opacity-15 blur-2xl transition-transform duration-700 group-hover:scale-110`}
-      />
-      <div
-        aria-hidden
-        className={`absolute -right-10 -top-10 h-32 w-32 rounded-full ${accentBg} opacity-25 blur-2xl`}
-      />
-
-      <div className="relative">
-        <p
-          className={`mb-5 text-sm font-medium uppercase tracking-[0.18em] ${accentText}`}
-        >
-          {label}
-        </p>
-        <h3 className="font-display text-balance text-3xl font-semibold leading-tight text-foreground md:text-5xl">
-          {title}
-        </h3>
-        <p className="mt-5 max-w-xl text-lg leading-relaxed text-muted-foreground md:text-xl">
-          {blurb}
-        </p>
-        <Link
-          href={href}
-          className="mt-10 inline-flex items-center gap-2 rounded-full bg-foreground px-7 py-3 text-base font-medium text-background transition-transform hover:scale-[1.02]"
-        >
-          {cta} <span aria-hidden>→</span>
-        </Link>
-      </div>
+    <article className="flex flex-col rounded-2xl border border-border bg-card p-8 md:p-10">
+      <p className="font-mono text-xs uppercase tracking-[0.18em] text-muted-foreground">
+        {label}
+      </p>
+      <h3 className="mt-4 text-2xl font-semibold leading-tight tracking-[-0.02em] md:text-3xl">
+        {title}
+      </h3>
+      <p className="mt-4 flex-1 text-[15px] leading-relaxed text-muted-foreground">
+        {blurb}
+      </p>
+      <Link
+        href="/sign-up"
+        className={
+          primary
+            ? "mt-8 inline-flex h-10 w-fit items-center rounded-full bg-primary px-5 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+            : "mt-8 inline-flex h-10 w-fit items-center rounded-full border border-border bg-background px-5 text-sm font-medium text-foreground transition-colors hover:bg-secondary"
+        }
+      >
+        {cta}
+      </Link>
     </article>
   );
 }
