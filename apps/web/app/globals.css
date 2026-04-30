@@ -6,7 +6,11 @@
    resolve via `rgb(var(--foo) / <alpha-value>)`. Direct-CSS consumers (like
    the QR code component) wrap in `rgb(...)` themselves. */
 @layer base {
+  /* Force light color scheme — without this, browsers in dark mode will
+     override our colors with their own dark theme defaults, which produces
+     unreadable contrast against our manually-set light tokens. */
   :root {
+    color-scheme: light;
     --background: 255 255 255;
     --foreground: 15 23 42;
     --card: 255 255 255;
@@ -24,7 +28,7 @@
     --accent: 241 245 249;
     --accent-foreground: 15 23 42;
     --destructive: 239 68 68;
-    --destructive-foreground: oklch(1 0 0);
+    --destructive-foreground: 255 255 255;
     --border: 226 232 240;
     --input: 226 232 240;
     --ring: 15 23 42;
@@ -35,27 +39,9 @@
     --ds-gray-900: hsla(0, 0%, 40%, 1);
   }
 
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --background: 15 23 42;
-      --foreground: 248 250 252;
-      --card: 15 23 42;
-      --card-foreground: 248 250 252;
-      --popover: 15 23 42;
-      --popover-foreground: 248 250 252;
-      /* Lighter ocean blue (sky-500) for dark mode so it stays legible. */
-      --primary: 14 165 233;
-      --primary-foreground: 15 23 42;
-      --secondary: 30 41 59;
-      --secondary-foreground: 248 250 252;
-      --muted: 30 41 59;
-      --muted-foreground: 148 163 184;
-      --accent: 30 41 59;
-      --accent-foreground: 248 250 252;
-      --border: 30 41 59;
-      --input: 30 41 59;
-      --ring: 226 232 240;
-    }
+  body {
+    background-color: rgb(var(--background));
+    color: rgb(var(--foreground));
   }
 
   /* Procedural film-grain noise used by the hero. SVG fractalNoise filter
