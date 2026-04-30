@@ -7,11 +7,6 @@ export default {
   content: ["./app/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}"],
   theme: {
     extend: {
-      fontFamily: {
-        display: ["var(--font-fraunces)", "Georgia", "serif"],
-        newsreader: ["var(--font-newsreader)", "Georgia", "serif"],
-        mono: ["var(--font-mono)", "ui-monospace", "monospace"],
-      },
       colors: {
         border: rgb("--border"),
         input: rgb("--input"),
