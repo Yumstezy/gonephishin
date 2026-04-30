@@ -9,17 +9,20 @@ export async function MarketingNav() {
   const signedIn = Boolean(userId);
 
   return (
-    <nav className="absolute left-0 right-0 top-0 z-30">
-      <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
+    <nav className="sticky top-0 z-30 w-full border-b border-border/60 bg-background/80 backdrop-blur">
+      <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-3">
         <Logo size={32} />
         <div className="flex items-center gap-4">
           <Link
             href="#how-it-works"
-            className="text-sm text-white hover:underline"
+            className="text-sm text-foreground/80 hover:text-foreground"
           >
             How it works
           </Link>
-          <Link href="#faq" className="text-sm text-white hover:underline">
+          <Link
+            href="#faq"
+            className="text-sm text-foreground/80 hover:text-foreground"
+          >
             FAQ
           </Link>
           {signedIn ? (
@@ -33,7 +36,7 @@ export async function MarketingNav() {
             <>
               <Link
                 href="/sign-in"
-                className="text-sm text-white hover:underline"
+                className="text-sm text-foreground/80 hover:text-foreground"
               >
                 Sign in
               </Link>
