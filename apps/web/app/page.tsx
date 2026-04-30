@@ -1,6 +1,5 @@
 import { Hero } from "@/components/marketing/hero";
 import { MarketingNav } from "@/components/marketing/nav";
-import { StatsSection } from "@/components/marketing/stats-section";
 import { ValuePropsSection } from "@/components/marketing/value-props-section";
 import { ShowcaseSection } from "@/components/marketing/showcase-section";
 import { HowItWorksSection } from "@/components/marketing/how-it-works-section";
@@ -16,7 +15,6 @@ export default function Home() {
       <MarketingNav />
       <main>
         <Hero />
-        <StatsSection />
         <ValuePropsSection />
         <ShowcaseSection />
         <HowItWorksSection />
