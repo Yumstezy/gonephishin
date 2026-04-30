@@ -5,8 +5,9 @@ import { ClerkProvider } from "@clerk/nextjs";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Gone Phishin'",
-  description: "Protect yourself, or someone you love, from phishing scams.",
+  title: "Gone Phishin' — Phishing scams, stopped at the door.",
+  description:
+    "We watch the links in your inbox and warn you before you click anything that could steal your password, your money, or your identity.",
 };
 
 export default function RootLayout({
@@ -20,7 +21,7 @@ export default function RootLayout({
         lang="en"
         className={`${GeistSans.variable} ${GeistMono.variable}`}
       >
-        <body className="antialiased font-sans">{children}</body>
+        <body>{children}</body>
       </html>
     </ClerkProvider>
   );

@@ -11,3 +11,6 @@ dist
 .vercel
 coverage
 *.tsbuildinfo
+
+# Claude Code per-project cache (plans, etc.) — not part of the project
+.claude/

@@ -1,6 +1,7 @@
 import { Hero } from "@/components/marketing/hero";
 import { MarketingNav } from "@/components/marketing/nav";
 import { ValuePropsSection } from "@/components/marketing/value-props-section";
+import { ShowcaseSection } from "@/components/marketing/showcase-section";
 import { HowItWorksSection } from "@/components/marketing/how-it-works-section";
 import { ComparePathsSection } from "@/components/marketing/compare-paths-section";
 import { PrivacySection } from "@/components/marketing/privacy-section";
@@ -15,6 +16,7 @@ export default function Home() {
       <main>
         <Hero />
         <ValuePropsSection />
+        <ShowcaseSection />
         <HowItWorksSection />
         <ComparePathsSection />
         <PrivacySection />

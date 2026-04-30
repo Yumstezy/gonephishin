@@ -1,63 +1,52 @@
 import Link from "next/link";
 import { auth } from "@clerk/nextjs/server";
 import { UserButton } from "@clerk/nextjs";
-import { Logo } from "@/components/ui/logo";
+import { InlineSvg } from "./inline-svg";
+import { StickyNavScript } from "./sticky-nav-script";
 
+/**
+ * Sticky marketing nav. Brand fish mark + "Gone Phishin'" text, four
+ * anchor links, and either Sign-in/Install for signed-out visitors or
+ * Dashboard/UserButton for signed-in ones.
+ */
 export async function MarketingNav() {
   const { userId } = await auth();
   const signedIn = Boolean(userId);
 
   return (
-    <nav className="sticky top-0 z-30 w-full border-b border-border/60 bg-background/85 backdrop-blur-md">
-      <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
-        <Logo size={28} />
-        <div className="flex items-center gap-7">
-          <Link
-            href="#features"
-            className="hidden text-sm text-muted-foreground transition-colors hover:text-foreground sm:inline"
-          >
-            Features
+    <>
+      <nav className="site" id="siteNav">
+        <div className="container-marketing inner">
+          <Link href="/" className="brand" aria-label="Gone Phishin' home">
+            <span className="mark">
+              <InlineSvg src="/fish.svg" />
+            </span>
+            <span className="name">Gone Phishin&apos;</span>
           </Link>
-          <Link
-            href="#privacy"
-            className="hidden text-sm text-muted-foreground transition-colors hover:text-foreground sm:inline"
-          >
-            Privacy
-          </Link>
-          <Link
-            href="#faq"
-            className="hidden text-sm text-muted-foreground transition-colors hover:text-foreground sm:inline"
-          >
-            FAQ
-          </Link>
-          {signedIn ? (
-            <>
-              <Link
-                href="/dashboard"
-                className="text-sm text-muted-foreground transition-colors hover:text-foreground"
-              >
-                Dashboard
-              </Link>
-              <UserButton />
-            </>
-          ) : (
-            <>
-              <Link
-                href="/sign-in"
-                className="hidden text-sm text-muted-foreground transition-colors hover:text-foreground sm:inline"
-              >
-                Sign in
-              </Link>
-              <Link
-                href="/sign-up"
-                className="inline-flex h-9 items-center rounded-full bg-foreground px-4 text-sm font-medium text-background transition-colors hover:bg-foreground/90"
-              >
-                Install
-              </Link>
-            </>
-          )}
+          <ul>
+            <li><Link href="#features">Features</Link></li>
+            <li><Link href="#how-it-works">How it works</Link></li>
+            <li><Link href="#privacy">Privacy</Link></li>
+            <li><Link href="#faq">FAQ</Link></li>
+          </ul>
+          <div className="right">
+            {signedIn ? (
+              <>
+                <Link href="/dashboard" className="signin">Dashboard</Link>
+                <UserButton />
+              </>
+            ) : (
+              <>
+                <Link href="/sign-in" className="signin">Sign in</Link>
+                <Link href="/sign-up" className="btn btn-primary btn-sm">
+                  Install free
+                </Link>
+              </>
+            )}
+          </div>
         </div>
-      </div>
-    </nav>
+      </nav>
+      <StickyNavScript />
+    </>
   );
 }

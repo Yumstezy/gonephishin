@@ -1,35 +1,65 @@
 "use client";
 
-import { motion } from "framer-motion";
-import type { ReactNode } from "react";
+import { useEffect, useRef, type ReactNode } from "react";
 
 /**
- * Subtle fade-up reveal on first scroll into view. Used on every section
- * heading and key block to give the page Apple's "settling into place"
- * feel. Once-only, ~600ms, with a tiny easing.
+ * Adds the `.is-visible` class to its child once the element scrolls into view.
+ * The actual fade/translate animation lives in globals.css under `.reveal`,
+ * so this component only owns the observer wiring. Stagger via the `delay`
+ * prop, which corresponds to the `.reveal-delay-{1,2,3}` CSS classes.
  */
 export function Reveal({
   children,
-  delay = 0,
+  delay,
   className,
+  mockup = false,
+  reverse = false,
 }: {
   children: ReactNode;
-  delay?: number;
+  delay?: 1 | 2 | 3;
   className?: string;
+  /** Adds the `.reveal-mockup` class for the showcase parallax variant. */
+  mockup?: boolean;
+  /** Showcase rows that have their mockup column on the left use this. */
+  reverse?: boolean;
 }) {
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    if (!("IntersectionObserver" in window)) {
+      el.classList.add("is-visible");
+      return;
+    }
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          if (e.isIntersecting) {
+            e.target.classList.add("is-visible");
+            io.unobserve(e.target);
+          }
+        }
+      },
+      { threshold: 0.12, rootMargin: "0px 0px -8% 0px" },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
+  const cls = [
+    "reveal",
+    mockup ? "reveal-mockup" : null,
+    reverse ? "reverse" : null,
+    delay ? `reveal-delay-${delay}` : null,
+    className,
+  ]
+    .filter(Boolean)
+    .join(" ");
+
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 24 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-80px" }}
-      transition={{
-        duration: 0.7,
-        delay,
-        ease: [0.16, 1, 0.3, 1],
-      }}
-      className={className}
-    >
+    <div ref={ref} className={cls}>
       {children}
-    </motion.div>
+    </div>
   );
 }

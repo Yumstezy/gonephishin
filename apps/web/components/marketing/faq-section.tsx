@@ -1,83 +1,76 @@
 "use client";
 
 import { useState } from "react";
-import { Plus, Minus } from "lucide-react";
+import { Reveal } from "./reveal";
 
 const FAQS = [
   {
     q: "Is Gone Phishin' really free?",
-    a: "Yes. The extension and the dashboard are both free. We're not building this on advertising or data resale either.",
+    a: "Yes. The extension and the dashboard are both free. No trial, no credit card, no upsell. We may add a paid tier with team features down the road, but the core protection will always be free.",
   },
   {
     q: "What email services does it work on?",
-    a: "Gmail and Outlook on the web today. Yahoo Mail and a few others are coming next.",
+    a: "Gmail and Outlook on the web, in any Chromium-based browser (Chrome, Edge, Brave, Arc). Apple Mail and other native email apps aren't supported yet.",
   },
   {
     q: "Does it really not read my email?",
-    a: "Correct. The extension only inspects the URLs of the links in your messages. The subject line, sender, and body are never sent anywhere.",
+    a: "Correct. The extension only looks at the URLs inside your messages — the addresses behind the links — and checks each one against known phishing lists. The subject, sender, body, and attachments are never read or sent anywhere.",
   },
   {
     q: "How do I install it for my parent?",
-    a: "Sign up on this page, create a 'circle' for them, generate a 6-digit code, and read it to them over the phone. They type it once into the extension popup. They never need an account.",
+    a: "Sign up for an account, generate a 6-digit pairing code, and read it to them over the phone. They install the extension once and type the code in. From then on, it just works — they never need to log in again.",
   },
   {
     q: "Will it slow down my browser?",
-    a: "Not noticeably. We check links in batches, cache results for 24 hours, and never block the page from rendering.",
+    a: "No. Link checking happens in milliseconds against a local cache, and the extension is tiny — under a megabyte. You won't notice it's there until it stops something.",
   },
   {
     q: "How do I remove it?",
-    a: "Right-click the extension icon and choose 'Remove from Chrome.' That deletes everything stored locally.",
+    a: 'Right-click the fish icon in your browser toolbar and choose "Remove from Chrome." That\'s it. Nothing left behind.',
   },
 ];
 
 export function FAQSection() {
-  const [open, setOpen] = useState<number | null>(0);
+  const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   return (
-    <section
-      id="faq"
-      className="border-t border-border bg-background py-32 md:py-40"
-    >
-      <div className="mx-auto max-w-3xl px-6">
-        <div className="mb-16 text-center">
-          <p className="font-mono text-xs uppercase tracking-[0.2em] text-primary">
-            FAQ
-          </p>
-          <h2 className="mt-4 text-balance text-4xl font-semibold tracking-[-0.03em] md:text-5xl">
-            Questions, answered plainly.
-          </h2>
-        </div>
-
-        <ul className="divide-y divide-border border-y border-border">
-          {FAQS.map((f, i) => {
-            const expanded = open === i;
-            return (
-              <li key={f.q}>
-                <button
-                  onClick={() => setOpen(expanded ? null : i)}
-                  className="flex w-full items-start justify-between gap-6 py-6 text-left transition-colors hover:opacity-90"
-                  aria-expanded={expanded}
-                >
-                  <span className="text-base font-medium leading-snug md:text-lg">
-                    {f.q}
-                  </span>
-                  <span className="mt-0.5 shrink-0 text-muted-foreground">
-                    {expanded ? (
-                      <Minus className="h-5 w-5" />
-                    ) : (
-                      <Plus className="h-5 w-5" />
-                    )}
-                  </span>
-                </button>
-                {expanded && (
-                  <p className="pb-6 pr-12 text-[15px] leading-relaxed text-muted-foreground">
-                    {f.a}
-                  </p>
-                )}
-              </li>
-            );
-          })}
-        </ul>
+    <section className="band" id="faq">
+      <div className="container-marketing">
+        <Reveal className="max-3xl">
+          <div className="section-intro" style={{ marginBottom: 8 }}>
+            <span className="kicker">FAQ</span>
+            <h2>Questions, answered plainly.</h2>
+          </div>
+          <ul className="faq-list">
+            {FAQS.map((item, i) => {
+              const isOpen = i === openIndex;
+              return (
+                <li key={item.q} className="faq-item">
+                  <button
+                    className="faq-q"
+                    aria-expanded={isOpen}
+                    onClick={() => setOpenIndex(isOpen ? null : i)}
+                  >
+                    <span>{item.q}</span>
+                    <span className="icn" aria-hidden="true">
+                      {isOpen ? (
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <line x1="5" y1="12" x2="19" y2="12" />
+                        </svg>
+                      ) : (
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <line x1="12" y1="5" x2="12" y2="19" />
+                          <line x1="5" y1="12" x2="19" y2="12" />
+                        </svg>
+                      )}
+                    </span>
+                  </button>
+                  {isOpen && <div className="faq-a">{item.a}</div>}
+                </li>
+              );
+            })}
+          </ul>
+        </Reveal>
       </div>
     </section>
   );
