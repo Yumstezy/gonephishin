@@ -3,6 +3,7 @@ import type { ExtensionMessage } from "../shared/messages.js";
 import { setPairedState } from "../shared/paired-state.js";
 import { logEventViaApi, scanUrlsViaApi } from "./api-client.js";
 import { getCachedVerdict, putCachedVerdict } from "./cache.js";
+import { getDiagnostics, recordScan } from "./diagnostics.js";
 
 console.log("[gonephishin] service worker booted");
 
@@ -22,6 +23,14 @@ chrome.runtime.onMessage.addListener(
     if (message.type === "ping") {
       sendResponse({ ok: true });
       return false;
+    }
+    if (message.type === "get-diagnostics") {
+      void getDiagnostics().then((diagnostics) => sendResponse(diagnostics));
+      return true;
+    }
+    if (message.type === "unpair") {
+      void setPairedState(null).then(() => sendResponse({ ok: true }));
+      return true;
     }
     return false;
   },
@@ -69,12 +78,33 @@ async function handleScanUrls(urls: string[]): Promise<ScanResult[]> {
 
   if (need.length > 0) {
     const fresh = await scanUrlsViaApi(need);
+    let allFallback = true;
     for (const r of fresh) {
       if (r.source !== "fallback") {
         await putCachedVerdict(r);
+        allFallback = false;
       }
       results.push(r);
     }
+    const flagged = fresh.filter(
+      (r) => r.verdict === "sketchy" || r.verdict === "dangerous",
+    ).length;
+    void recordScan({
+      scanned: fresh.length,
+      flagged,
+      apiReachable: !allFallback,
+      error: allFallback ? "API unreachable or returned an error" : null,
+    });
+  } else if (results.length > 0) {
+    const flagged = results.filter(
+      (r) => r.verdict === "sketchy" || r.verdict === "dangerous",
+    ).length;
+    void recordScan({
+      scanned: results.length,
+      flagged,
+      apiReachable: true,
+      error: null,
+    });
   }
   return results;
 }

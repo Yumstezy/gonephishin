@@ -1,12 +1,21 @@
 import type { SiteAdapter } from "../shared/site-adapter.js";
 
 /**
- * Gmail's open conversation pane uses role="main". We scan all anchors inside
- * the main pane, skipping Gmail's own UI chrome.
+ * Gmail's conversation pane uses `[role="main"]` at the top level. Some HTML
+ * emails are sandboxed in iframes — the manifest already enables
+ * `all_frames: true`, so when the script runs inside an iframe we just scan
+ * the whole document. Falling back to `body` keeps us working if Gmail ever
+ * changes the role attribute.
  */
+const ROOT_SELECTORS = [
+  'div[role="main"]',
+  'div[aria-label="Message Body"]',
+  "body",
+];
+
 export const gmail: SiteAdapter = {
   id: "gmail",
-  rootSelector: 'div[role="main"]',
+  rootSelector: ROOT_SELECTORS.join(", "),
   shouldScanLink(linkEl) {
     if (
       linkEl.closest(
@@ -15,6 +24,10 @@ export const gmail: SiteAdapter = {
     )
       return false;
     if (!linkEl.href) return false;
+    // Skip Gmail's own internal links (e.g. starring, label management).
+    const href = linkEl.href;
+    if (href.startsWith("javascript:")) return false;
+    if (href.startsWith("mailto:")) return false;
     return true;
   },
   unwrapTrackingUrl(href) {
@@ -23,6 +36,11 @@ export const gmail: SiteAdapter = {
       // google.com/url?q=<real>&...
       if (u.hostname.endsWith("google.com") && u.pathname === "/url") {
         const real = u.searchParams.get("q");
+        if (real) return real;
+      }
+      // l.gmail.com/<token>?<real-url-encoded>
+      if (u.hostname === "l.gmail.com") {
+        const real = u.searchParams.get("u") ?? u.searchParams.get("q");
         if (real) return real;
       }
     } catch {

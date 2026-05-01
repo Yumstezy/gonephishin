@@ -48,7 +48,13 @@ export function App() {
           <>
             {view === "status" && (
               <>
-                <StatusScreen paired={paired} />
+                <StatusScreen
+                  paired={paired}
+                  onUnpair={async () => {
+                    await chrome.runtime.sendMessage({ type: "unpair" });
+                    setPaired(null);
+                  }}
+                />
                 {!paired && (
                   <>
                     <hr className="divider" />
@@ -56,7 +62,7 @@ export function App() {
                       className="button button-primary"
                       onClick={() => setView("choose")}
                     >
-                      Pair this browser
+                      Connect to my dashboard
                     </button>
                   </>
                 )}

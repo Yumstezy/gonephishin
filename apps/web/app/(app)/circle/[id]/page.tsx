@@ -84,23 +84,46 @@ export default async function CirclePage(props: {
         <section className="app-card" style={{ alignSelf: "start" }}>
           <div className="head">
             <div>
-              <h2>{circle.mode === "caregiver" ? "Pairing" : "Connection"}</h2>
+              <h2>{circle.mode === "caregiver" ? "Pair their browser" : "Connect this browser"}</h2>
               <div className="sub">
                 {circle.mode === "caregiver"
-                  ? "Read this code to your family member."
-                  : "This circle is connected to your own browser."}
+                  ? "Steps to set up their computer over the phone."
+                  : "How to point your browser at this circle."}
               </div>
             </div>
           </div>
           {circle.mode === "caregiver" ? (
-            <PairingCodeDisplay circleId={circle.id} />
+            <>
+              <ol className="setup-steps">
+                <li>
+                  Have <strong>{circle.label}</strong> install the Gone
+                  Phishin&apos; extension on <em>their</em> computer.
+                </li>
+                <li>
+                  Tell them to click the fish icon in their browser toolbar,
+                  then <strong>Connect to my dashboard</strong> →{" "}
+                  <strong>I&apos;m setting this up for someone</strong>.
+                </li>
+                <li>Read them the code below.</li>
+              </ol>
+              <PairingCodeDisplay circleId={circle.id} />
+            </>
           ) : (
-            <div className="family-add">
-              <span style={{ fontSize: 13, color: "rgb(var(--muted))" }}>
-                You don&apos;t need a pairing code. Sign in via the extension
-                popup&apos;s &quot;Sign in for myself&quot; option.
-              </span>
-            </div>
+            <ol className="setup-steps">
+              <li>
+                Install the Gone Phishin&apos; extension on this browser if
+                you haven&apos;t yet.
+              </li>
+              <li>
+                Click the fish icon in the toolbar →{" "}
+                <strong>Connect to my dashboard</strong> →{" "}
+                <strong>This is my browser</strong>.
+              </li>
+              <li>
+                Sign in with the same email you used here. Threats stopped on
+                this browser will appear in this circle&apos;s activity log.
+              </li>
+            </ol>
           )}
         </section>
       </div>

@@ -8,12 +8,14 @@ import { circles } from "@/lib/db/schema";
 
 export async function createCircleAction(formData: FormData): Promise<void> {
   const label = String(formData.get("label") ?? "").trim();
+  const modeInput = String(formData.get("mode") ?? "self");
+  const mode = modeInput === "caregiver" ? "caregiver" : "self";
   if (!label) return;
 
   const user = await getOrCreateCurrentUser();
   const [row] = await db
     .insert(circles)
-    .values({ ownerId: user.id, label, mode: "caregiver" })
+    .values({ ownerId: user.id, label, mode })
     .returning();
   if (!row) return;
   revalidatePath("/dashboard");

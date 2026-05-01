@@ -47,7 +47,7 @@ export default defineManifest({
       js: ["src/content/index.ts"],
       css: ["src/content/content.css"],
       run_at: "document_idle",
-      all_frames: false,
+      all_frames: true,
     },
   ],
   externally_connectable: {

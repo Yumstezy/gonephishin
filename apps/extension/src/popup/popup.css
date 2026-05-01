@@ -276,3 +276,102 @@ input[inputmode="numeric"]:focus {
   border-color: var(--primary) !important;
   box-shadow: 0 0 0 3px var(--primary-tint), inset 0 1px 2px rgba(0,0,0,0.25);
 }
+
+/* Diagnostics block in the status screen */
+.diag {
+  margin: 16px 0 0;
+  padding: 14px 14px 12px;
+  border: 1px solid var(--border-soft);
+  border-radius: 12px;
+  background: var(--surface);
+}
+.diag-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4px 0;
+  font-size: 12.5px;
+}
+.diag-row .lbl {
+  color: var(--muted);
+}
+.diag-row .val {
+  color: var(--foreground);
+  font-variant-numeric: tabular-nums;
+}
+.diag-row .val.ok { color: var(--success); }
+.diag-row .val.warn { color: var(--danger); }
+.diag-error {
+  margin-top: 8px;
+  padding: 8px 10px;
+  background: rgba(248, 113, 113, 0.08);
+  border: 1px solid rgba(248, 113, 113, 0.3);
+  border-radius: 8px;
+  color: var(--danger);
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+/* Mode chooser cards */
+.mode-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 12px;
+}
+.mode-card {
+  position: relative;
+  text-align: left;
+  padding: 14px 16px;
+  border-radius: 12px;
+  border: 1px solid var(--border-soft);
+  background: var(--surface);
+  color: var(--foreground);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  transition: border-color 0.15s, transform 0.15s;
+}
+.mode-card:hover {
+  border-color: var(--primary);
+  transform: translateY(-1px);
+}
+.mode-card .mode-title {
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--foreground);
+}
+.mode-card .mode-sub {
+  font-size: 12.5px;
+  color: var(--muted);
+  line-height: 1.45;
+}
+.mode-card .mode-tag {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--primary);
+  background: var(--primary-tint);
+  padding: 3px 7px;
+  border-radius: 4px;
+}
+
+/* Ghost button for "Unpair" */
+.button-ghost {
+  width: 100%;
+  margin-top: 12px;
+  padding: 10px;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  color: var(--muted);
+  font-size: 12.5px;
+  transition: color 0.15s, border-color 0.15s;
+}
+.button-ghost:hover {
+  color: var(--foreground);
+  border-color: var(--muted-2);
+}

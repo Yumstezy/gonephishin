@@ -167,14 +167,15 @@ export default async function DashboardPage() {
         <section className="app-card">
           <div className="head">
             <div>
-              <h2>Family circle</h2>
-              <div className="sub">People you protect</div>
+              <h2>Your circles</h2>
+              <div className="sub">One row per browser you protect</div>
             </div>
           </div>
 
           {myCircles.length === 0 ? (
             <div className="empty">
-              No one in your circle yet. Add your first below.
+              No circles yet. Add one for yourself or for a family member
+              below — you can have as many as you like.
             </div>
           ) : (
             myCircles.map((c) => (
@@ -207,23 +208,48 @@ export default async function DashboardPage() {
             ))
           )}
 
-          <div className="family-add">
-            <form
-              action={createCircleAction}
-              style={{ display: "flex", gap: 8, flex: 1, minWidth: 0 }}
-            >
+          <form action={createCircleAction} className="circle-add">
+            <div className="circle-add-row">
               <input
                 name="label"
                 className="app-input"
-                placeholder="Mom, Dad, Grandma…"
+                placeholder='Name this circle (e.g. "Me", "Mom", "Dad")'
                 required
-                style={{ flex: 1, minWidth: 0 }}
+                aria-label="Circle name"
               />
               <button type="submit" className="app-btn app-btn-primary">
-                Add
+                Add circle
               </button>
-            </form>
-          </div>
+            </div>
+            <fieldset className="circle-add-modes">
+              <legend className="sr-only">Who is this for?</legend>
+              <label className="mode-pick">
+                <input
+                  type="radio"
+                  name="mode"
+                  value="self"
+                  defaultChecked
+                />
+                <span className="pick-body">
+                  <span className="pick-title">For me</span>
+                  <span className="pick-sub">
+                    No code needed — just click &ldquo;This is my browser&rdquo;
+                    in the extension popup.
+                  </span>
+                </span>
+              </label>
+              <label className="mode-pick">
+                <input type="radio" name="mode" value="caregiver" />
+                <span className="pick-body">
+                  <span className="pick-title">For a family member</span>
+                  <span className="pick-sub">
+                    Generates a 6-digit code. Read it to them on the phone so
+                    their browser pairs to your dashboard.
+                  </span>
+                </span>
+              </label>
+            </fieldset>
+          </form>
         </section>
       </div>
     </>
