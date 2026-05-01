@@ -13,7 +13,7 @@ export function FooterSection() {
         </Link>
         <nav aria-label="Footer">
           <Link href="#features">Features</Link>
-          <Link href="#privacy">Privacy</Link>
+          <Link href="/privacy">Privacy</Link>
           <Link href="#faq">FAQ</Link>
           <Link href="/sign-in">Sign in</Link>
           <a href="mailto:hello@gonephishin.com">Contact</a>
