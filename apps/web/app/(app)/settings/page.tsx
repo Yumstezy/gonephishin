@@ -1,6 +1,5 @@
-import { eq, inArray, isNull } from "drizzle-orm";
+import { eq, inArray } from "drizzle-orm";
 import { getOrCreateCurrentUser } from "@/lib/auth/current-user";
-import { Button } from "@/components/ui/button";
 import { db } from "@/lib/db/client";
 import { circles, extensionTokens } from "@/lib/db/schema";
 import { deleteCircleAction, revokeTokenAction } from "./actions";
@@ -19,75 +18,92 @@ export default async function SettingsPage() {
     ? await db
         .select()
         .from(extensionTokens)
-        .where(
-          inArray(extensionTokens.circleId, myCircleIds),
-        )
+        .where(inArray(extensionTokens.circleId, myCircleIds))
         .then((rows) => rows.filter((t) => !t.revokedAt))
     : [];
 
   return (
-    <div className="space-y-10">
-      <div>
-        <h1 className="mb-2 text-3xl font-semibold">Settings</h1>
-        <p className="text-muted-foreground">
-          Signed in as <strong>{user.email}</strong>
-        </p>
+    <>
+      <div className="circle-header">
+        <div>
+          <h1>Settings</h1>
+          <p className="sub">
+            Signed in as <strong>{user.email}</strong>
+          </p>
+        </div>
       </div>
 
-      <section>
-        <h2 className="mb-4 text-xl font-semibold">Active extensions</h2>
-        {myActiveTokens.length === 0 ? (
-          <p className="text-sm text-muted-foreground">
-            No active paired extensions.
-          </p>
-        ) : (
-          <ul className="space-y-2">
-            {myActiveTokens.map((t) => (
-              <li
-                key={t.id}
-                className="flex items-center justify-between rounded-lg border border-border p-3"
-              >
-                <span className="text-sm">
-                  Last seen{" "}
-                  {t.lastSeenAt ? t.lastSeenAt.toLocaleString() : "never"}
-                </span>
-                <form action={revokeTokenAction}>
-                  <input type="hidden" name="tokenId" value={t.id} />
-                  <Button type="submit" variant="destructive" size="sm">
-                    Revoke
-                  </Button>
-                </form>
-              </li>
-            ))}
-          </ul>
-        )}
+      <section className="settings-section">
+        <h2>Active extensions</h2>
+        <p className="desc">
+          Each row is a browser where Gone Phishin&apos; is paired to one of
+          your circles. Revoke if a device is lost or you want to re-pair.
+        </p>
+        <div className="app-card">
+          {myActiveTokens.length === 0 ? (
+            <div className="empty">
+              No active paired extensions. Generate a pairing code from a
+              circle&apos;s page to set one up.
+            </div>
+          ) : (
+            <div className="settings-list">
+              {myActiveTokens.map((t) => (
+                <div key={t.id} className="settings-list-item">
+                  <div className="info">
+                    <div className="nm">Paired browser</div>
+                    <div className="meta">
+                      Last seen{" "}
+                      {t.lastSeenAt
+                        ? t.lastSeenAt.toLocaleString()
+                        : "never"}
+                    </div>
+                  </div>
+                  <form action={revokeTokenAction}>
+                    <input type="hidden" name="tokenId" value={t.id} />
+                    <button type="submit" className="app-btn app-btn-danger">
+                      Revoke
+                    </button>
+                  </form>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
       </section>
 
-      <section>
-        <h2 className="mb-4 text-xl font-semibold">Circles</h2>
-        {myCircles.length === 0 ? (
-          <p className="text-sm text-muted-foreground">
-            No circles yet — add one from the dashboard.
-          </p>
-        ) : (
-          <ul className="space-y-2">
-            {myCircles.map((c) => (
-              <li
-                key={c.id}
-                className="flex items-center justify-between rounded-lg border border-border p-3"
-              >
-                <span className="text-sm font-medium">{c.label}</span>
-                <form action={deleteCircleAction}>
-                  <input type="hidden" name="circleId" value={c.id} />
-                  <Button type="submit" variant="destructive" size="sm">
-                    Delete
-                  </Button>
-                </form>
-              </li>
-            ))}
-          </ul>
-        )}
+      <section className="settings-section">
+        <h2>Circles</h2>
+        <p className="desc">
+          Deleting a circle revokes any paired extensions and removes the
+          danger event history. This can&apos;t be undone.
+        </p>
+        <div className="app-card">
+          {myCircles.length === 0 ? (
+            <div className="empty">
+              No circles yet — add one from the dashboard.
+            </div>
+          ) : (
+            <div className="settings-list">
+              {myCircles.map((c) => (
+                <div key={c.id} className="settings-list-item">
+                  <div className="info">
+                    <div className="nm">{c.label}</div>
+                    <div className="meta">
+                      {c.mode === "self" ? "Self-managed" : "Family circle"}
+                    </div>
+                  </div>
+                  <form action={deleteCircleAction}>
+                    <input type="hidden" name="circleId" value={c.id} />
+                    <button type="submit" className="app-btn app-btn-danger">
+                      Delete
+                    </button>
+                  </form>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
       </section>
-    </div>
+    </>
   );
 }

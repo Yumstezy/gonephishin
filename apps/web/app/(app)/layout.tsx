@@ -2,7 +2,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { auth } from "@clerk/nextjs/server";
 import { UserButton } from "@clerk/nextjs";
-import { Logo } from "@/components/ui/logo";
+import { InlineSvg } from "@/components/marketing/inline-svg";
 
 export default async function AppLayout({
   children,
@@ -13,22 +13,28 @@ export default async function AppLayout({
   if (!userId) redirect("/sign-in");
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
-      <header className="border-b border-border">
-        <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
-          <Logo size={32} />
-          <nav className="flex items-center gap-6 text-sm">
-            <Link href="/dashboard" className="hover:text-primary">
-              Dashboard
-            </Link>
-            <Link href="/settings" className="hover:text-primary">
-              Settings
-            </Link>
-            <UserButton />
+    <>
+      <header className="app-topbar">
+        <div className="inner">
+          <Link href="/dashboard" className="brand">
+            <span className="mark">
+              <InlineSvg src="/fish.svg" />
+            </span>
+            <span>Gone Phishin&apos;</span>
+          </Link>
+          <nav>
+            <Link href="/dashboard">Overview</Link>
+            <Link href="/settings">Settings</Link>
           </nav>
+          <div className="spacer" />
+          <UserButton
+            appearance={{
+              variables: { colorPrimary: "#38bdf8" },
+            }}
+          />
         </div>
       </header>
-      <main className="mx-auto max-w-6xl px-6 py-10">{children}</main>
-    </div>
+      <main className="app-main">{children}</main>
+    </>
   );
 }

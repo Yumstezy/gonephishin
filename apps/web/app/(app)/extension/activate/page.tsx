@@ -68,32 +68,96 @@ export default function ActivatePage() {
     }
   }, []);
 
+  if (status === "done") {
+    return (
+      <div className="activate-card">
+        <span className="icon success" aria-hidden="true">
+          <CheckIcon />
+        </span>
+        <h1>You&apos;re all set</h1>
+        <p>Gone Phishin&apos; is now connected. You can close this tab.</p>
+      </div>
+    );
+  }
+
+  if (status === "error") {
+    return (
+      <div className="activate-card">
+        <span className="icon error" aria-hidden="true">
+          <AlertIcon />
+        </span>
+        <h1>Sign-in didn&apos;t finish</h1>
+        <p>{error}</p>
+      </div>
+    );
+  }
+
   return (
-    <div className="mx-auto max-w-md py-20 text-center">
-      {status === "done" ? (
-        <>
-          <h1 className="mb-2 text-2xl font-semibold">You&apos;re all set</h1>
-          <p className="text-muted-foreground">
-            Gone Phishin&apos; is now connected. You can close this tab.
-          </p>
-        </>
-      ) : status === "error" ? (
-        <>
-          <h1 className="mb-2 text-2xl font-semibold text-destructive">
-            Sign-in didn&apos;t finish
-          </h1>
-          <p className="text-muted-foreground">{error}</p>
-        </>
-      ) : (
-        <>
-          <h1 className="mb-2 text-2xl font-semibold">Connecting…</h1>
-          <p className="text-muted-foreground">
-            {status === "minting" && "Generating your secure code…"}
-            {status === "sending" && "Sending it to your browser…"}
-            {status === "starting" && "Starting…"}
-          </p>
-        </>
-      )}
+    <div className="activate-card">
+      <span className="icon" aria-hidden="true">
+        <SpinnerIcon />
+      </span>
+      <h1>Connecting…</h1>
+      <p>
+        {status === "minting" && "Generating your secure code…"}
+        {status === "sending" && "Sending it to your browser…"}
+        {status === "starting" && "Starting…"}
+      </p>
     </div>
+  );
+}
+
+function CheckIcon() {
+  return (
+    <svg
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M20 6 9 17l-5-5" />
+    </svg>
+  );
+}
+
+function AlertIcon() {
+  return (
+    <svg
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <circle cx="12" cy="12" r="10" />
+      <line x1="12" y1="8" x2="12" y2="12" />
+      <line x1="12" y1="16" x2="12.01" y2="16" />
+    </svg>
+  );
+}
+
+function SpinnerIcon() {
+  return (
+    <svg
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      style={{ animation: "spin 1s linear infinite" }}
+    >
+      <path d="M21 12a9 9 0 1 1-6.219-8.56" />
+      <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
+    </svg>
   );
 }

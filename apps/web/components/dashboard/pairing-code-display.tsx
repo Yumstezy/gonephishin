@@ -1,13 +1,18 @@
 "use client";
 
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
 
+/**
+ * Generate-and-display surface for a circle's 6-digit pairing code.
+ * Renders inside an .app-card; the family-add row at the bottom holds
+ * the action buttons. Match the marketing site's dark dashboard style.
+ */
 export function PairingCodeDisplay({ circleId }: { circleId: string }) {
   const [code, setCode] = useState<string | null>(null);
   const [expiresAt, setExpiresAt] = useState<Date | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [copied, setCopied] = useState(false);
 
   async function generate() {
     setLoading(true);
@@ -29,33 +34,61 @@ export function PairingCodeDisplay({ circleId }: { circleId: string }) {
     }
   }
 
+  async function copy() {
+    if (!code) return;
+    try {
+      await navigator.clipboard.writeText(code);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1400);
+    } catch {
+      /* clipboard refusal is non-fatal */
+    }
+  }
+
   return (
-    <div className="rounded-2xl border border-border bg-card p-6">
-      <h3 className="mb-2 text-lg font-semibold">Pairing code</h3>
-      <p className="mb-4 text-sm text-muted-foreground">
-        Read this code to your family member over the phone. They type it into
-        the Gone Phishin&apos; extension on their browser.
-      </p>
+    <>
       {code ? (
-        <div className="space-y-2">
-          <div className="font-mono text-4xl tracking-[0.4em] text-primary">
-            {code}
+        <div className="pair-row">
+          <div>
+            <div className="lbl">Pairing code</div>
+            <div className="code">{formatCode(code)}</div>
+            {expiresAt && (
+              <div className="meta">
+                Expires {expiresAt.toLocaleTimeString()}
+              </div>
+            )}
           </div>
-          {expiresAt && (
-            <p className="text-xs text-muted-foreground">
-              Expires {expiresAt.toLocaleTimeString()}
-            </p>
-          )}
-          <Button variant="outline" onClick={generate} disabled={loading}>
-            {loading ? "Generating…" : "New code"}
-          </Button>
+          <button className="copy" onClick={copy}>
+            {copied ? "Copied!" : "Copy"}
+          </button>
         </div>
       ) : (
-        <Button onClick={generate} disabled={loading}>
-          {loading ? "Generating…" : "Generate pairing code"}
-        </Button>
+        <div className="empty" style={{ padding: "20px" }}>
+          No active pairing code. Generate one and read it to your family
+          member over the phone.
+        </div>
       )}
-      {error && <p className="mt-2 text-sm text-destructive">{error}</p>}
-    </div>
+      <div className="family-add">
+        <button
+          className="app-btn app-btn-primary"
+          onClick={generate}
+          disabled={loading}
+        >
+          {loading ? "Generating…" : code ? "New code" : "Generate code"}
+        </button>
+        {error && (
+          <span style={{ fontSize: 12.5, color: "rgb(var(--danger))" }}>
+            {error}
+          </span>
+        )}
+      </div>
+    </>
   );
+}
+
+function formatCode(c: string): string {
+  // 492718 → "4 9 2 — 7 1 8" — same shape as the design.
+  const a = c.slice(0, 3).split("").join(" ");
+  const b = c.slice(3).split("").join(" ");
+  return `${a} — ${b}`;
 }

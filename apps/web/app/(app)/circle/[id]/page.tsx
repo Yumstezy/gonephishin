@@ -1,7 +1,6 @@
 import { notFound } from "next/navigation";
 import { and, desc, eq } from "drizzle-orm";
 import { getOrCreateCurrentUser } from "@/lib/auth/current-user";
-import { EventRow } from "@/components/dashboard/event-row";
 import { PairingCodeDisplay } from "@/components/dashboard/pairing-code-display";
 import { db } from "@/lib/db/client";
 import { circles, dangerEvents } from "@/lib/db/schema";
@@ -30,42 +29,142 @@ export default async function CirclePage(props: {
     .limit(200);
 
   return (
-    <div className="space-y-8">
-      <div>
-        <h1 className="text-3xl font-semibold">{circle.label}</h1>
-        <p className="text-muted-foreground">
-          {circle.mode === "self" ? "Self-managed" : "Family-paired"} circle
-        </p>
-      </div>
-
-      {circle.mode === "caregiver" && (
-        <PairingCodeDisplay circleId={circle.id} />
-      )}
-
-      <div>
-        <h2 className="mb-4 text-xl font-semibold">Activity</h2>
-        {events.length === 0 ? (
-          <p className="rounded-2xl border border-dashed border-border p-12 text-center text-muted-foreground">
-            No danger events yet. Once the extension sees a sketchy or
-            dangerous link, it will appear here.
+    <>
+      <div className="circle-header">
+        <div>
+          <h1>{circle.label}</h1>
+          <p className="sub">
+            {circle.mode === "self" ? "Yourself" : "Family member"} ·{" "}
+            {events.length} {events.length === 1 ? "event" : "events"} on
+            record
           </p>
-        ) : (
-          <div className="space-y-2">
-            {events.map((e) => (
-              <EventRow
-                key={e.id}
-                createdAt={e.createdAt}
-                threatType={e.threatType}
-                domain={e.domain}
-                action={
-                  e.action as "shown" | "dismissed" | "ignored_warning"
-                }
-                sourceSite={e.sourceSite}
-              />
-            ))}
-          </div>
-        )}
+        </div>
+        <span className="status-pill">
+          <span className="dot" />
+          Active
+        </span>
       </div>
-    </div>
+
+      <div className="app-grid">
+        <section className="app-card">
+          <div className="head">
+            <div>
+              <h2>Recent activity</h2>
+              <div className="sub">
+                Every threat blocked for {circle.label}, newest first.
+              </div>
+            </div>
+          </div>
+          {events.length === 0 ? (
+            <div className="empty">
+              No danger events yet. Once the extension sees a sketchy or
+              dangerous link, it will appear here.
+            </div>
+          ) : (
+            events.map((e) => (
+              <div key={e.id} className="threat-row">
+                <div className={`threat-icon ${threatTone(e.threatType)}`}>
+                  <ShieldAlertIcon />
+                </div>
+                <div className="threat-info">
+                  <div className="top">
+                    <span className="from">
+                      {prettyThreatType(e.threatType)}
+                    </span>
+                    <span className="for">· {prettyAction(e.action)}</span>
+                  </div>
+                  <div className="url">{e.domain}</div>
+                </div>
+                <span className="threat-time">{timeAgo(e.createdAt)}</span>
+              </div>
+            ))
+          )}
+        </section>
+
+        <section className="app-card" style={{ alignSelf: "start" }}>
+          <div className="head">
+            <div>
+              <h2>{circle.mode === "caregiver" ? "Pairing" : "Connection"}</h2>
+              <div className="sub">
+                {circle.mode === "caregiver"
+                  ? "Read this code to your family member."
+                  : "This circle is connected to your own browser."}
+              </div>
+            </div>
+          </div>
+          {circle.mode === "caregiver" ? (
+            <PairingCodeDisplay circleId={circle.id} />
+          ) : (
+            <div className="family-add">
+              <span style={{ fontSize: 13, color: "rgb(var(--muted))" }}>
+                You don&apos;t need a pairing code. Sign in via the extension
+                popup&apos;s &quot;Sign in for myself&quot; option.
+              </span>
+            </div>
+          )}
+        </section>
+      </div>
+    </>
+  );
+}
+
+function threatTone(threatType: string): "" | "warn" | "safe" {
+  if (threatType === "sketchy" || threatType.startsWith("heuristic_")) {
+    return "warn";
+  }
+  return "";
+}
+
+function prettyThreatType(t: string): string {
+  if (t.startsWith("sb_")) return "Phishing or malware page";
+  if (t.startsWith("heuristic_typosquat")) return "Look-alike domain";
+  if (t.startsWith("heuristic_idn_homoglyph")) return "Suspicious lookalike";
+  if (t.startsWith("heuristic_ip_address")) return "Suspicious IP-only link";
+  if (t.startsWith("heuristic_excessive_subdomains"))
+    return "Suspicious link structure";
+  if (t.startsWith("heuristic_suspicious_tld")) return "Suspicious TLD";
+  if (t.startsWith("heuristic_")) return "Suspicious link";
+  if (t === "dangerous") return "Phishing or malware page";
+  if (t === "sketchy") return "Suspicious link";
+  return "Threat caught";
+}
+
+function prettyAction(a: string): string {
+  if (a === "shown") return "Warning shown";
+  if (a === "dismissed") return "Went back safely";
+  if (a === "ignored_warning") return "Continued anyway";
+  return a;
+}
+
+function timeAgo(d: Date): string {
+  const ms = Date.now() - d.getTime();
+  const m = Math.floor(ms / 60_000);
+  if (m < 1) return "just now";
+  if (m < 60) return `${m}m ago`;
+  const h = Math.floor(m / 60);
+  if (h < 24) return `${h}h ago`;
+  const days = Math.floor(h / 24);
+  if (days === 1) return "Yesterday";
+  if (days < 7) return `${days}d ago`;
+  return d.toLocaleDateString();
+}
+
+function ShieldAlertIcon() {
+  return (
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z" />
+      <line x1="12" y1="9" x2="12" y2="13" />
+      <line x1="12" y1="17" x2="12.01" y2="17" />
+    </svg>
   );
 }
