@@ -1,0 +1,54 @@
+/* Inline always-on indicators. Only applied to anchors carrying the
+   `gp-link` class — link-painter.ts decides which states get the class
+   based on user verbosity. The hover tooltip in hover-tooltip.ts handles
+   the rest, so no inline badge is needed for Safe by default.
+
+   Colors match the dark Glowing Sky brand palette (sky-700 primary,
+   coral danger, amber sketchy, emerald safe). The !important is needed
+   because Gmail and Outlook both ship aggressive inline link styles. */
+.gp-link[data-gp-state] {
+  border-bottom: 2px solid currentColor !important;
+  text-decoration: none !important;
+}
+.gp-link[data-gp-state]::after {
+  display: inline-block;
+  font-size: 0.95em;
+  font-weight: 600;
+  margin-left: 0.3em;
+  vertical-align: baseline;
+  font-family:
+    'Geist', ui-sans-serif, system-ui, -apple-system, sans-serif;
+}
+
+/* Safe — emerald (rare to see; only Verbose mode shows it). */
+.gp-link[data-gp-state="safe"] {
+  color: #34d399 !important;
+}
+.gp-link[data-gp-state="safe"]::after {
+  content: "✓";
+}
+
+/* Unknown — sky blue. The magnifying glass reads as "we tried to
+   look this up." */
+.gp-link[data-gp-state="unknown"] {
+  color: #38bdf8 !important;
+}
+.gp-link[data-gp-state="unknown"]::after {
+  content: "🔍";
+}
+
+/* Sketchy — amber. */
+.gp-link[data-gp-state="sketchy"] {
+  color: #fbbf24 !important;
+}
+.gp-link[data-gp-state="sketchy"]::after {
+  content: "⚠";
+}
+
+/* Dangerous — coral red, matching the warning modal headline. */
+.gp-link[data-gp-state="dangerous"] {
+  color: #f87171 !important;
+}
+.gp-link[data-gp-state="dangerous"]::after {
+  content: "🛑";
+}

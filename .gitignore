@@ -1,0 +1,16 @@
+node_modules
+.next
+dist
+.turbo
+.env
+.env.local
+.env.*.local
+!*.example
+*.log
+.DS_Store
+.vercel
+coverage
+*.tsbuildinfo
+
+# Claude Code per-project cache (plans, etc.) — not part of the project
+.claude/

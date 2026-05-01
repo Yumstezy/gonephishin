@@ -1,0 +1,21 @@
+{
+  "name": "gonephishin",
+  "private": true,
+  "version": "0.1.0",
+  "packageManager": "pnpm@10.18.1",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev --parallel",
+    "test": "turbo run test",
+    "lint": "turbo run lint",
+    "typecheck": "turbo run typecheck"
+  },
+  "devDependencies": {
+    "sharp": "^0.34.5",
+    "turbo": "^2.2.0",
+    "typescript": "^5.6.0"
+  }
+}
