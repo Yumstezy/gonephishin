@@ -25,6 +25,7 @@ export default async function AppLayout({
           <nav>
             <Link href="/dashboard">Overview</Link>
             <Link href="/settings">Settings</Link>
+            <Link href="/">Home</Link>
           </nav>
           <div className="spacer" />
           <UserButton
