@@ -273,6 +273,8 @@ function prettyThreatType(t: string): string {
   if (t.startsWith("heuristic_excessive_subdomains"))
     return "Suspicious link structure";
   if (t.startsWith("heuristic_suspicious_tld")) return "Suspicious TLD";
+  if (t.startsWith("heuristic_brand_mismatch"))
+    return "Brand-impersonation link";
   if (t.startsWith("heuristic_")) return "Suspicious link";
   if (t === "dangerous") return "Phishing or malware page";
   if (t === "sketchy") return "Suspicious link";

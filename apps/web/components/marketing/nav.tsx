@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { auth } from "@clerk/nextjs/server";
 import { UserButton } from "@clerk/nextjs";
-import { InlineSvg } from "./inline-svg";
 import { StickyNavScript } from "./sticky-nav-script";
 
 /**
@@ -19,7 +18,7 @@ export async function MarketingNav() {
         <div className="container-marketing inner">
           <Link href="/" className="brand" aria-label="Gone Phishin' home">
             <span className="mark">
-              <InlineSvg src="/fish.svg" />
+              <img src="/brand-fish.png" alt="" />
             </span>
             <span className="name">Gone Phishin&apos;</span>
           </Link>

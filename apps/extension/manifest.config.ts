@@ -3,7 +3,7 @@ import { defineManifest } from "@crxjs/vite-plugin";
 export default defineManifest({
   manifest_version: 3,
   name: "Gone Phishin'",
-  version: "0.1.0",
+  version: "0.1.1",
   description:
     "Warns you about phishing links in Gmail and Outlook before you click them.",
   action: {

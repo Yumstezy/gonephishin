@@ -160,7 +160,7 @@ nav.site .brand .mark {
   color: rgb(var(--primary));
   flex-shrink: 0;
 }
-nav.site .brand .mark svg { width: 100%; height: 100%; display: block; }
+nav.site .brand .mark svg, nav.site .brand .mark img { width: 100%; height: 100%; display: block; }
 nav.site .brand .name { font-size: 15px; }
 nav.site ul { list-style: none; padding: 0; margin: 0; display: flex; gap: 28px; }
 nav.site ul a { font-size: 14px; color: rgb(var(--muted)); transition: color .15s; }
@@ -841,7 +841,7 @@ section.final-cta p {
   color: rgb(var(--primary));
   flex-shrink: 0;
 }
-.app-topbar .brand .mark svg { width: 100%; height: 100%; display: block; }
+.app-topbar .brand .mark svg, nav.site .brand .mark img { width: 100%; height: 100%; display: block; }
 .app-topbar nav {
   display: flex; gap: 4px; margin-left: 8px;
 }
@@ -1310,7 +1310,7 @@ footer.site .brand .mark {
   width: 30px; height: 30px;
   color: rgb(var(--primary));
 }
-footer.site .brand .mark svg { width: 100%; height: 100%; display: block; }
+footer.site .brand .mark svg, nav.site .brand .mark img { width: 100%; height: 100%; display: block; }
 footer.site nav { display: flex; flex-wrap: wrap; gap: 24px; }
 footer.site nav a {
   font-size: 14px; color: rgb(var(--muted)); transition: color .15s;
@@ -1543,4 +1543,17 @@ footer.site .copyright { font-size: 12.5px; color: rgb(var(--muted-2)); }
 .setup-steps em {
   color: rgb(var(--foreground));
   font-style: italic;
+}
+
+/* Brand mark: support either an inline SVG or a PNG <img>. Same sizing rules
+ * as the existing svg branch above. Added when we switched the brand mark
+ * from fish.svg to brand-fish.png. */
+nav.site .brand .mark img,
+.app-topbar .brand .mark img,
+footer.site .brand .mark img,
+.legal-back .brand-mark img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: contain;
 }

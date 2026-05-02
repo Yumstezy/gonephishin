@@ -28,12 +28,33 @@ export function startLinkScanner(
         const target = adapter.unwrapTrackingUrl(a.href);
         if (shouldSkipUrl(target)) continue;
         a.dataset.gpUrl = target;
+        // Cache the anchor text so the brand-mismatch heuristic can see
+        // what the link claims to be ("download Adobe…") and compare it
+        // to where it actually goes.
+        const anchorText = readAnchorText(a);
+        if (anchorText) a.dataset.gpText = anchorText;
         const list = pendingByUrl.get(target);
         if (list) list.push(a);
         else pendingByUrl.set(target, [a]);
       }
     }
     scheduleFlush();
+  };
+
+  const readAnchorText = (a: HTMLAnchorElement): string => {
+    // Prefer the rendered text, then aria-label, then title, then alt of any
+    // child image. Trim and cap so we don't ship paragraph-length payloads.
+    const candidates = [
+      a.textContent,
+      a.getAttribute("aria-label"),
+      a.getAttribute("title"),
+      a.querySelector("img")?.getAttribute("alt"),
+    ];
+    for (const c of candidates) {
+      const t = c?.replace(/\s+/g, " ").trim();
+      if (t) return t.slice(0, 240);
+    }
+    return "";
   };
 
   const scheduleFlush = () => {
@@ -52,11 +73,20 @@ export function startLinkScanner(
     for (let i = 0; i < urls.length; i += BATCH_SIZE) {
       const slice = urls.slice(i, i + BATCH_SIZE);
       const sliceMap = new Map<string, HTMLAnchorElement[]>();
-      for (const u of slice) sliceMap.set(u, batch.get(u)!);
+      const meta: Array<{ anchorText?: string }> = [];
+      for (const u of slice) {
+        const anchors = batch.get(u)!;
+        sliceMap.set(u, anchors);
+        // First anchor's text is representative; if multiple anchors share
+        // the URL, picking one is fine (they're going to the same place).
+        const first = anchors[0]?.dataset.gpText;
+        meta.push(first ? { anchorText: first } : {});
+      }
       try {
         const response = (await chrome.runtime.sendMessage({
           type: "scan-urls",
           urls: slice,
+          meta,
         })) as { results: ScanResult[] } | undefined;
         if (response) onVerdicts(response.results, sliceMap);
       } catch (err) {

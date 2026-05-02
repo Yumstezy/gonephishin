@@ -5,7 +5,11 @@ import type { ScanResult } from "@gonephishin/shared";
  * popup. Discriminated by `type`.
  */
 export type ExtensionMessage =
-  | { type: "scan-urls"; urls: string[] }
+  | {
+      type: "scan-urls";
+      urls: string[];
+      meta?: Array<{ anchorText?: string }>;
+    }
   | { type: "scan-result"; results: ScanResult[] }
   | {
       type: "warning-acknowledged";

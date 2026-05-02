@@ -45,12 +45,19 @@ export async function POST(request: Request): Promise<Response> {
 
   // 1) Local heuristics (catches some attacks before any external lookup).
   const heuristicVerdicts = new Map<string, ScanResult>();
-  for (const url of body.urls) {
-    const h = checkHeuristics(url);
+  for (let i = 0; i < body.urls.length; i++) {
+    const url = body.urls[i]!;
+    const anchorText = body.meta?.[i]?.anchorText;
+    const h = checkHeuristics(url, anchorText);
     if (h) {
+      // Brand-mismatch is a higher-confidence signal than the URL-only
+      // heuristics, so we promote it to "dangerous". The others stay
+      // "sketchy" — they're inferential and can false-positive.
+      const verdict: Verdict =
+        h.threatType === "heuristic_brand_mismatch" ? "dangerous" : "sketchy";
       heuristicVerdicts.set(url, {
         url,
-        verdict: "sketchy" satisfies Verdict,
+        verdict,
         threatType: h.threatType,
         source: "heuristic",
       });

@@ -17,6 +17,7 @@ export type ThreatType =
   | "heuristic_suspicious_tld"
   | "heuristic_ip_address"
   | "heuristic_excessive_subdomains"
+  | "heuristic_brand_mismatch"
   | null;
 
 export type VerdictSource = "fresh" | "cache" | "fallback" | "heuristic";

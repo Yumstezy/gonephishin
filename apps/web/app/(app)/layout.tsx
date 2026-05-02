@@ -2,7 +2,6 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { auth } from "@clerk/nextjs/server";
 import { UserButton } from "@clerk/nextjs";
-import { InlineSvg } from "@/components/marketing/inline-svg";
 
 export default async function AppLayout({
   children,
@@ -18,7 +17,7 @@ export default async function AppLayout({
         <div className="inner">
           <Link href="/dashboard" className="brand">
             <span className="mark">
-              <InlineSvg src="/fish.svg" />
+              <img src="/brand-fish.png" alt="" />
             </span>
             <span>Gone Phishin&apos;</span>
           </Link>

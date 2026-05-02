@@ -10,7 +10,7 @@ console.log("[gonephishin] service worker booted");
 chrome.runtime.onMessage.addListener(
   (message: ExtensionMessage, _sender, sendResponse) => {
     if (message.type === "scan-urls") {
-      void handleScanUrls(message.urls).then((results) =>
+      void handleScanUrls(message.urls, message.meta).then((results) =>
         sendResponse({ results } satisfies { results: ScanResult[] }),
       );
       return true;
@@ -63,21 +63,30 @@ chrome.runtime.onMessageExternal.addListener(
   },
 );
 
-async function handleScanUrls(urls: string[]): Promise<ScanResult[]> {
+async function handleScanUrls(
+  urls: string[],
+  meta?: Array<{ anchorText?: string }>,
+): Promise<ScanResult[]> {
   const results: ScanResult[] = [];
   const need: string[] = [];
+  const needMeta: Array<{ anchorText?: string }> = [];
 
-  for (const url of urls) {
-    const cached = await getCachedVerdict(url);
+  for (let i = 0; i < urls.length; i++) {
+    const url = urls[i]!;
+    const m = meta?.[i] ?? {};
+    // Bypass the cache when anchor text is available — heuristics may
+    // depend on it, and our cache key is the URL alone.
+    const cached = m.anchorText ? null : await getCachedVerdict(url);
     if (cached) {
       results.push(cached);
     } else {
       need.push(url);
+      needMeta.push(m);
     }
   }
 
   if (need.length > 0) {
-    const fresh = await scanUrlsViaApi(need);
+    const fresh = await scanUrlsViaApi(need, needMeta);
     let allFallback = true;
     for (const r of fresh) {
       if (r.source !== "fallback") {
