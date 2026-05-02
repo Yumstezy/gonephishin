@@ -1,46 +1,64 @@
 import sharp from "sharp";
-import { readFileSync, writeFileSync } from "node:fs";
+import { writeFileSync } from "node:fs";
 
-const SKY = "#38bdf8";
-const BG = "#0b0f17";
+const SOURCE = "/Users/ianbarrie/gonephisin/apps/web/public/brand-fish.png";
+const OUT = "/Users/ianbarrie/gonephisin/apps/web/public";
 
-const fishSvg = readFileSync(
-  "/Users/ianbarrie/gonephisin/apps/web/public/fish.svg",
-  "utf8",
-)
-  .replace(/<\?xml.*?\?>/, "")
-  .replace(/<svg[^>]*>/, "")
-  .replace(/<\/svg>$/, "")
-  .replace(/currentColor/g, SKY);
+// Source is RGBA with transparent background. Trim transparent edges
+// (sharp.trim() defaults to the top-left pixel value, which here is
+// fully transparent) so the fish fills the canvas.
+const trimmed = await sharp(SOURCE).trim().toBuffer();
+const meta = await sharp(trimmed).metadata();
+console.log(`trimmed to ${meta.width}×${meta.height}`);
 
-function wrap(size) {
-  return `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 ${size} ${size}">
-    <rect width="${size}" height="${size}" rx="${Math.round(size * 0.18)}" fill="${BG}"/>
-    <g transform="translate(${size * 0.11}, ${size * 0.11}) scale(${(size * 0.78) / 330})">
-      ${fishSvg}
-    </g>
-  </svg>`;
+// Make a square version with the fish centered + a little padding.
+async function makeSquare(size, bg = "#ffffff") {
+  const padPct = 0.08;
+  const fishSize = Math.round(size * (1 - padPct * 2));
+  const fish = await sharp(trimmed)
+    .resize(fishSize, fishSize, {
+      fit: "contain",
+      background: { r: 0, g: 0, b: 0, alpha: 0 },
+    })
+    .toBuffer();
+  return sharp({
+    create: {
+      width: size,
+      height: size,
+      channels: 3,
+      background: bg,
+    },
+  })
+    .composite([{ input: fish, gravity: "center" }])
+    .flatten({ background: bg })
+    .removeAlpha()
+    .png()
+    .toBuffer();
 }
 
-const out = "/Users/ianbarrie/gonephisin/apps/web/app";
+const png32 = await makeSquare(32);
+writeFileSync(`${OUT}/icon.png`, png32);
+console.log(`icon.png ${png32.length} bytes`);
 
-// 1) SVG favicon (modern browsers prefer this; crisp at every size).
-//    Use a small viewBox-perfect version so it renders cleanly in tab bars.
-writeFileSync(`${out}/icon.svg`, wrap(64));
-console.log("wrote app/icon.svg");
+const apple = await makeSquare(180);
+writeFileSync(`${OUT}/apple-icon.png`, apple);
+console.log(`apple-icon.png ${apple.length} bytes`);
 
-// 2) PNG fallback at 32×32 for older browsers + the favicon spot.
-const png32 = await sharp(Buffer.from(wrap(32)))
-  .flatten({ background: BG })
-  .png()
-  .toBuffer();
-writeFileSync(`${out}/icon.png`, png32);
-console.log(`wrote app/icon.png (${png32.length} bytes)`);
+// SVG that embeds a 512×512 PNG of the trimmed fish on white.
+const big = await makeSquare(512);
+const b64 = big.toString("base64");
+const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64"><image width="64" height="64" href="data:image/png;base64,${b64}"/></svg>`;
+writeFileSync(`${OUT}/icon.svg`, svg);
+console.log(`icon.svg ${svg.length} bytes`);
 
-// 3) Apple touch icon for iOS home-screen pinning. 180×180.
-const apple = await sharp(Buffer.from(wrap(180)))
-  .flatten({ background: BG })
-  .png()
-  .toBuffer();
-writeFileSync(`${out}/apple-icon.png`, apple);
-console.log(`wrote app/apple-icon.png (${apple.length} bytes)`);
+// Also rebuild the EXTENSION icons from the new brand. Web Store still needs
+// no-alpha 24-bit PNG, white BG keeps the brand reading the same in the
+// store as on the site.
+for (const size of [16, 32, 48, 128]) {
+  const png = await makeSquare(size);
+  writeFileSync(
+    `/Users/ianbarrie/gonephisin/apps/extension/public/icons/icon-${size}.png`,
+    png,
+  );
+  console.log(`extension icon-${size}.png ${png.length} bytes`);
+}
