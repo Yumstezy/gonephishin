@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { InlineSvg } from "./inline-svg";
 
 export function FooterSection() {
   return (
@@ -6,7 +7,7 @@ export function FooterSection() {
       <div className="container-marketing inner max-6xl">
         <Link href="/" className="brand" aria-label="Gone Phishin' home">
           <span className="mark">
-            <img src="/brand-fish.png" alt="" />
+            <InlineSvg src="/fish.svg" />
           </span>
           <span>Gone Phishin&apos;</span>
         </Link>

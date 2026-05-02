@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { InlineSvg } from "@/components/marketing/inline-svg";
 
 export const metadata = {
   title: "Privacy — Gone Phishin'",
@@ -11,9 +12,11 @@ export default function PrivacyPage() {
     <>
       <header className="legal-nav">
         <Link href="/" className="legal-back" aria-label="Back to home">
-          <span className="brand-mark">
-            <img src="/brand-fish.png" alt="" />
-          </span>
+          <InlineSvg
+            src="/fish.svg"
+            className="brand-mark"
+            aria-label="Gone Phishin'"
+          />
           <span>Gone Phishin&apos;</span>
         </Link>
         <Link href="/" className="legal-back-link">
