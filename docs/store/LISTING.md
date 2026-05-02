@@ -61,7 +61,7 @@ renders for you.
 FOR FAMILIES
 
 If you're setting this up for a parent, grandparent, or anyone else who
-isn't a power-user, sign in to gonephishin.com, create a "family circle"
+isn't a power-user, sign in to gonephishin.tech, create a "family circle"
 with their name on it, and read them a 6-digit pairing code over the phone
 (no email links to click — that would be ironic). Once they enter the code,
 the extension on their browser is paired to your dashboard, where you can
@@ -77,7 +77,7 @@ PRIVACY
   attachments.
 • We do not track your browsing history.
 • We do not show ads, sell data, or train AI models on your data.
-• Full privacy policy: https://gonephishin.com/privacy
+• Full privacy policy: https://gonephishin.tech/privacy
 
 PERMISSIONS WE ASK FOR (AND WHY)
 
@@ -103,9 +103,9 @@ to be your bank, log into your bank directly.
 
 CONTACT & FEEDBACK
 
-• Web: https://gonephishin.com
-• Privacy questions: privacy@gonephishin.com
-• Bug reports: support@gonephishin.com
+• Web: https://gonephishin.tech
+• Privacy questions: privacy@gonephishin.tech
+• Bug reports: support@gonephishin.tech
 
 If the extension flagged something it shouldn't have, please send us the
 domain — we'd like to know.
@@ -163,12 +163,12 @@ these into the corresponding boxes when the form asks for them.
 > uses (consumer, work / school, and the older office365 hostname). The
 > extension only inspects anchor URLs the page already displays.
 
-### `https://gonephishin.com/*`, `https://*.vercel.app/*`, `http://localhost:3000/*`
+### `https://gonephishin.tech/*`, `https://*.vercel.app/*`, `http://localhost:3000/*`
 > The extension communicates with the Gone Phishin' API to (1) ask for a
 > verdict when it encounters a new URL, (2) log a threat event when a
 > warning is shown, and (3) accept a pairing token from the activate page
 > on our website. The Vercel and localhost hosts are used for staging and
-> local development; in the production build only the gonephishin.com host
+> local development; in the production build only the gonephishin.tech host
 > is contacted in normal use.
 
 ### `externally_connectable` (the same three host patterns)
@@ -199,11 +199,11 @@ Browsing.
 
 ## Required URLs
 
-- Privacy policy URL: `https://gonephishin.com/privacy` (host the contents
+- Privacy policy URL: `https://gonephishin.tech/privacy` (host the contents
   of `docs/store/PRIVACY.md` at this path before submission)
-- Homepage URL: `https://gonephishin.com`
-- Support URL: `https://gonephishin.com/support` or
-  `mailto:support@gonephishin.com`
+- Homepage URL: `https://gonephishin.tech`
+- Support URL: `https://gonephishin.tech/support` or
+  `mailto:support@gonephishin.tech`
 
 ---
 

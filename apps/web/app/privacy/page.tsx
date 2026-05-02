@@ -207,7 +207,7 @@ export default function PrivacyPage() {
           </li>
           <li>
             To delete your account and all associated data, email{" "}
-            <a href="mailto:privacy@gonephishin.com">privacy@gonephishin.com</a>.
+            <a href="mailto:privacy@gonephishin.tech">privacy@gonephishin.tech</a>.
           </li>
         </ul>
 
@@ -239,10 +239,10 @@ export default function PrivacyPage() {
         <ul>
           <li>
             Email:{" "}
-            <a href="mailto:privacy@gonephishin.com">privacy@gonephishin.com</a>
+            <a href="mailto:privacy@gonephishin.tech">privacy@gonephishin.tech</a>
           </li>
           <li>
-            Web: <Link href="/">gonephishin.com</Link>
+            Web: <Link href="/">gonephishin.tech</Link>
           </li>
         </ul>
       </article>

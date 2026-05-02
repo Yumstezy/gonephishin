@@ -34,7 +34,7 @@ export default defineManifest({
     "https://outlook.office365.com/*",
     "http://localhost:3000/*",
     "https://*.vercel.app/*",
-    "https://gonephishin.com/*",
+    "https://gonephishin.tech/*",
   ],
   content_scripts: [
     {
@@ -52,7 +52,7 @@ export default defineManifest({
   ],
   externally_connectable: {
     matches: [
-      "https://gonephishin.com/*",
+      "https://gonephishin.tech/*",
       "https://*.vercel.app/*",
       "http://localhost:3000/*",
     ],

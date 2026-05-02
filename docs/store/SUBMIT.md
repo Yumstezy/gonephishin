@@ -12,7 +12,7 @@ minutes for the form, then 1–3 business days for review.
 | 1280×800 screenshots (5 of them)    | `docs/store/screenshots/0[1-5]-*.png`                          |
 | 440×280 small promo tile            | `docs/store/screenshots/promo-small-440x280.png`               |
 | 1400×560 marquee promo tile         | `docs/store/screenshots/promo-marquee-1400x560.png`            |
-| Privacy policy (live URL)           | https://gonephishin-echos-projects-74cc5946.vercel.app/privacy |
+| Privacy policy (live URL)           | https://gonephishin.tech/privacy |
 | Privacy policy (markdown source)    | `docs/store/PRIVACY.md`                                        |
 | Web Store form copy                 | `docs/store/LISTING.md`                                        |
 
@@ -95,8 +95,8 @@ This is where most rejections happen. Be precise.
 - **Regions**: All available
 - **Pricing**: Free
 - **Privacy policy URL**: paste
-  `https://gonephishin-echos-projects-74cc5946.vercel.app/privacy`. Once
-  the custom domain is connected, swap to `https://gonephishin.com/privacy`
+  `https://gonephishin.tech/privacy`. Once
+  the custom domain is connected, swap to `https://gonephishin.tech/privacy`
   (you can update this without re-submitting the bundle).
 
 ### 8. Submit for review
@@ -119,7 +119,7 @@ needs better justification.
   vercel --prod --yes
   ```
 - Update `apps/extension/manifest.config.ts`'s `externally_connectable.matches`
-  list if your custom domain isn't already in there (it is — `gonephishin.com`).
+  list if your custom domain isn't already in there (it is — `gonephishin.tech`).
 - Pin a "Get the extension" link to the Web Store URL in the marketing
   page and the popup's "Install" button.
 

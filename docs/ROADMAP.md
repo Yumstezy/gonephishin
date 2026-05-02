@@ -38,7 +38,7 @@ The Web Store is in review. Once it's approved:
 - [ ] Update marketing CTAs (`hero.tsx`, `nav.tsx`, `cta-section.tsx`,
       footer's "Install free") to point at the public Web Store URL
       instead of `/sign-up`.
-- [ ] Attach the custom `gonephishin.com` domain in Vercel. Update
+- [ ] Attach the custom `gonephishin.tech` domain in Vercel. Update
       privacy policy URL + support URL on the Web Store listing
       afterwards (no re-review needed for those two fields).
 - [ ] Post the Web Store URL on your own personal channels (LinkedIn,

@@ -30,7 +30,7 @@ export default function SupportPage() {
         <p className="lead">
           Need a hand with Gone Phishin&apos;? Most questions have an answer
           below. If yours doesn&apos;t, email{" "}
-          <a href="mailto:support@gonephishin.com">support@gonephishin.com</a>{" "}
+          <a href="mailto:support@gonephishin.tech">support@gonephishin.tech</a>{" "}
           and a real human will get back to you within a couple of business
           days.
         </p>
@@ -72,7 +72,7 @@ export default function SupportPage() {
             never block; we only ask.
           </li>
           <li>
-            Email <a href="mailto:support@gonephishin.com">support@gonephishin.com</a>{" "}
+            Email <a href="mailto:support@gonephishin.tech">support@gonephishin.tech</a>{" "}
             with the domain so we can investigate.
           </li>
         </ul>
@@ -81,7 +81,7 @@ export default function SupportPage() {
         <p>
           Brand-new phishing pages can take a few hours to land in the Safe
           Browsing list. If you spot one we missed, please send the URL to{" "}
-          <a href="mailto:support@gonephishin.com">support@gonephishin.com</a>{" "}
+          <a href="mailto:support@gonephishin.tech">support@gonephishin.tech</a>{" "}
           — we&apos;ll forward it to Google and update our heuristics if a
           pattern emerges.
         </p>
@@ -107,7 +107,7 @@ export default function SupportPage() {
         <h3>I want to delete my account</h3>
         <p>
           Email{" "}
-          <a href="mailto:privacy@gonephishin.com">privacy@gonephishin.com</a>{" "}
+          <a href="mailto:privacy@gonephishin.tech">privacy@gonephishin.tech</a>{" "}
           and we&apos;ll delete your account, all your circles, threat logs,
           and tokens within a few business days. See the{" "}
           <Link href="/privacy">privacy policy</Link> for the full retention
@@ -119,22 +119,22 @@ export default function SupportPage() {
           Read the <Link href="/privacy">privacy policy</Link> first — it
           covers exactly what we collect (and don&apos;t). For anything not
           answered there, email{" "}
-          <a href="mailto:privacy@gonephishin.com">privacy@gonephishin.com</a>.
+          <a href="mailto:privacy@gonephishin.tech">privacy@gonephishin.tech</a>.
         </p>
 
         <h2>Contact</h2>
         <ul>
           <li>
             General help:{" "}
-            <a href="mailto:support@gonephishin.com">support@gonephishin.com</a>
+            <a href="mailto:support@gonephishin.tech">support@gonephishin.tech</a>
           </li>
           <li>
             Privacy / data deletion:{" "}
-            <a href="mailto:privacy@gonephishin.com">privacy@gonephishin.com</a>
+            <a href="mailto:privacy@gonephishin.tech">privacy@gonephishin.tech</a>
           </li>
           <li>
             Security disclosures:{" "}
-            <a href="mailto:security@gonephishin.com">security@gonephishin.com</a>
+            <a href="mailto:security@gonephishin.tech">security@gonephishin.tech</a>
           </li>
         </ul>
       </article>

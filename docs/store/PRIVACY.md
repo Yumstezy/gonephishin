@@ -13,7 +13,7 @@ There are two parts:
 
 - The Chrome extension that runs in your browser when you open Gmail or
   Outlook. It scans the URLs of the links displayed in your inbox.
-- The Gone Phishin' web app at https://gonephishin.com (and its preview
+- The Gone Phishin' web app at https://gonephishin.tech (and its preview
   domains on `vercel.app`) where caregivers can sign in to set the extension
   up for a family member, view a log of blocked threats, and revoke access.
 
@@ -122,7 +122,7 @@ have their own privacy practices — links below.
 - You can delete a circle at any time from the Settings page; this removes
   its threat-log history.
 - To delete your account and all associated data, email us at
-  privacy@gonephishin.com.
+  privacy@gonephishin.tech.
 
 ## Children
 
@@ -147,5 +147,5 @@ changes, we will note the change in the extension popup.
 
 Questions, concerns, or data-deletion requests:
 
-- Email: privacy@gonephishin.com
-- Web: https://gonephishin.com
+- Email: privacy@gonephishin.tech
+- Web: https://gonephishin.tech

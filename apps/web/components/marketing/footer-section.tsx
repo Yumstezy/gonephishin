@@ -16,7 +16,7 @@ export function FooterSection() {
           <Link href="/privacy">Privacy</Link>
           <Link href="#faq">FAQ</Link>
           <Link href="/sign-in">Sign in</Link>
-          <a href="mailto:hello@gonephishin.com">Contact</a>
+          <a href="mailto:hello@gonephishin.tech">Contact</a>
         </nav>
         <div className="copyright">© 2026 Gone Phishin&apos;</div>
       </div>
