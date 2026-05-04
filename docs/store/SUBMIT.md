@@ -8,7 +8,7 @@ minutes for the form, then 1–3 business days for review.
 
 | Asset                               | Location                                                       |
 | ----------------------------------- | -------------------------------------------------------------- |
-| Production extension zip (v0.1.0)   | `dist/gone-phishin-extension-v0.1.0.zip`                       |
+| Production extension zip (v0.1.2)   | `dist/gone-phishin-extension-v0.1.2.zip`                       |
 | 1280×800 screenshots (5 of them)    | `docs/store/screenshots/0[1-5]-*.png`                          |
 | 440×280 small promo tile            | `docs/store/screenshots/promo-small-440x280.png`               |
 | 1400×560 marquee promo tile         | `docs/store/screenshots/promo-marquee-1400x560.png`            |
@@ -35,13 +35,13 @@ publish anything until this clears.
 ### 3. Add a new item
 
 In the Web Store dashboard, click **"+ Add new item"** and upload
-`dist/gone-phishin-extension-v0.1.0.zip`.
+`dist/gone-phishin-extension-v0.1.2.zip`.
 
 If Google rejects the zip, the most common causes are:
 
 - The manifest icons are missing → already fixed in v0.1.0.
 - The zip contains a parent folder → fix by re-zipping with the contents
-  at the root: `cd apps/extension/dist && zip -rq ../../../dist/gone-phishin-extension-v0.1.0.zip .`
+  at the root: `cd apps/extension/dist && zip -rq ../../../dist/gone-phishin-extension-v0.1.2.zip .`
 - The version number conflicts → bump `version` in
   `apps/extension/manifest.config.ts`.
 
@@ -131,7 +131,7 @@ To ship a new version:
    → `0.1.1`).
 2. From repo root: `pnpm --filter @gonephishin/extension build`.
 3. Re-zip: `cd apps/extension/dist && zip -rq
-   ../../../dist/gone-phishin-extension-v0.1.1.zip .`.
+   ../../../dist/gone-phishin-extension-v0.1.2.zip .`.
 4. Upload the new zip to the Web Store dashboard's same listing — it
    stays the same item, just a new version.
 

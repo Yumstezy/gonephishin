@@ -3,7 +3,7 @@ import { defineManifest } from "@crxjs/vite-plugin";
 export default defineManifest({
   manifest_version: 3,
   name: "Gone Phishin'",
-  version: "0.1.1",
+  version: "0.1.2",
   description:
     "Warns you about phishing links in Gmail and Outlook before you click them.",
   action: {
@@ -26,7 +26,7 @@ export default defineManifest({
     service_worker: "src/background/service-worker.ts",
     type: "module",
   },
-  permissions: ["storage", "alarms"],
+  permissions: ["storage"],
   host_permissions: [
     "https://mail.google.com/*",
     "https://outlook.live.com/*",

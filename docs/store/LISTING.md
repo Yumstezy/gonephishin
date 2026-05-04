@@ -85,7 +85,6 @@ PERMISSIONS WE ASK FOR (AND WHY)
   to read the link URLs already displayed on those pages so we can flag
   the dangerous ones. The extension only runs on those four hostnames.
 • "storage" — caches link verdicts and your sign-in state locally.
-• "alarms" — schedules background refreshes of cached verdicts.
 
 That's it. We don't ask for permissions on any other site, we don't read
 your tabs, and we don't have access to anything outside the webmail tabs
@@ -146,11 +145,6 @@ these into the corresponding boxes when the form asks for them.
 > (whether the browser is signed in for self-management or paired to a
 > caregiver dashboard). All values are local to the browser; nothing is
 > synced across devices.
-
-### `alarms`
-> Schedules a periodic background refresh of cached link verdicts. Without
-> alarms, cached entries would only refresh when the user actively browses,
-> which leaves stale data in long-running tabs.
 
 ### `https://mail.google.com/*`
 > Required to read the rendered URLs of the links inside Gmail messages so
