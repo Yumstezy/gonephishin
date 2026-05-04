@@ -95,10 +95,11 @@ OPEN ABOUT WHAT WE'RE NOT
 This is a community-maintained, free safety net — not a replacement for
 careful clicking. It catches the phishing and malware sites that Google
 already knows about, plus a small set of obvious-looking lookalikes
-(typosquats, IP-only links, suspicious TLDs). Brand-new attacks that
-haven't been reported yet won't be in the database. Pair it with the
-old-fashioned advice: if a message feels off, don't click; if it claims
-to be your bank, log into your bank directly.
+(typosquats, IP-only links, suspicious TLDs, brand-impersonation links
+where the text says one company but the URL goes somewhere else).
+Brand-new attacks that haven't been reported yet won't be in the
+database. Pair it with the old-fashioned advice: if a message feels off,
+don't click; if it claims to be your bank, log into your bank directly.
 
 CONTACT & FEEDBACK
 
@@ -193,11 +194,13 @@ Browsing.
 
 ## Required URLs
 
-- Privacy policy URL: `https://gonephishin.tech/privacy` (host the contents
-  of `docs/store/PRIVACY.md` at this path before submission)
+- Privacy policy URL: `https://gonephishin.tech/privacy` (live)
 - Homepage URL: `https://gonephishin.tech`
-- Support URL: `https://gonephishin.tech/support` or
-  `mailto:support@gonephishin.tech`
+- Support URL: `https://gonephishin.tech/support` (live)
+
+Note: the Support URL field requires an `https://` URL — the Web Store
+form rejects `mailto:` addresses outright (learned this the hard way on
+the first submission attempt).
 
 ---
 
