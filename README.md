@@ -31,7 +31,7 @@ adult child can set it up for a parent without becoming tech support.
 | Marketing + dashboard | https://gonephishin.tech |
 | Privacy policy | https://gonephishin.tech/privacy |
 | Support | https://gonephishin.tech/support |
-| Chrome Web Store | _in review at the moment — will link here once approved_ |
+| Chrome Web Store | https://chromewebstore.google.com/detail/gone-phishin/ifckleibjeadbcebapahhahhleoifofb |
 | Latest extension build | https://github.com/Yumstezy/gonephishin/releases/latest |
 
 ---
@@ -232,10 +232,10 @@ To load the extension locally:
 ## Status
 
 - **Web app:** live at https://gonephishin.tech
-- **Chrome Web Store:** in review (v0.1.2 submitted after two prior
-  rejections taught me that listing copy must match the manifest
-  exactly and that the "Privacy Policy URL" field really does mean
-  the privacy page, not the homepage)
+- **Chrome Web Store:** [published](https://chromewebstore.google.com/detail/gone-phishin/ifckleibjeadbcebapahhahhleoifofb)
+  as of v0.1.2 (after two earlier rejections that taught me listing
+  copy must match the manifest exactly, and that the "Privacy Policy
+  URL" field really does mean the privacy page, not the homepage)
 - **Custom domain:** `gonephishin.tech` registered + attached to Vercel
 - **First real users:** in progress — see [`docs/PROMO.md`](docs/PROMO.md)
   for the launch plan

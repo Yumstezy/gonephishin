@@ -38,9 +38,14 @@ export async function MarketingNav() {
             ) : (
               <>
                 <Link href="/sign-in" className="signin">Sign in</Link>
-                <Link href="/sign-up" className="btn btn-primary btn-sm">
+                <a
+                  href="https://chromewebstore.google.com/detail/gone-phishin/ifckleibjeadbcebapahhahhleoifofb"
+                  className="btn btn-primary btn-sm"
+                  target="_blank"
+                  rel="noreferrer"
+                >
                   Install free
-                </Link>
+                </a>
               </>
             )}
           </div>

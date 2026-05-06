@@ -35,9 +35,14 @@ export function Hero() {
               identity.
             </p>
             <div className="ctas">
-              <Link href="/sign-up" className="btn btn-primary btn-lg">
+              <a
+                href="https://chromewebstore.google.com/detail/gone-phishin/ifckleibjeadbcebapahhahhleoifofb"
+                className="btn btn-primary btn-lg"
+                target="_blank"
+                rel="noreferrer"
+              >
                 Install free
-              </Link>
+              </a>
               <Link href="#how-it-works" className="btn btn-ghost">
                 See how it works
                 <span className="arrow" aria-hidden="true">→</span>

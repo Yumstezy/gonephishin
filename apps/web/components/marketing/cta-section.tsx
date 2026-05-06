@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { Reveal } from "./reveal";
 
 export function CTASection() {
@@ -11,9 +10,14 @@ export function CTASection() {
             Install Gone Phishin&apos; on your browser, or set it up for
             someone who needs it more than you do.
           </p>
-          <Link href="/sign-up" className="btn btn-primary btn-lg">
+          <a
+            href="https://chromewebstore.google.com/detail/gone-phishin/ifckleibjeadbcebapahhahhleoifofb"
+            className="btn btn-primary btn-lg"
+            target="_blank"
+            rel="noreferrer"
+          >
             Install free
-          </Link>
+          </a>
         </Reveal>
       </div>
     </section>
