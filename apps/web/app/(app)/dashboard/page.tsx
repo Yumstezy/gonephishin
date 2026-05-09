@@ -3,7 +3,7 @@ import { and, desc, eq, gte, inArray, sql } from "drizzle-orm";
 import { getOrCreateCurrentUser } from "@/lib/auth/current-user";
 import { db } from "@/lib/db/client";
 import { circles, dangerEvents } from "@/lib/db/schema";
-import { createCircleAction } from "./actions";
+import { CreateCircleForm } from "@/components/dashboard/create-circle-form";
 
 export const dynamic = "force-dynamic";
 
@@ -208,48 +208,7 @@ export default async function DashboardPage() {
             ))
           )}
 
-          <form action={createCircleAction} className="circle-add">
-            <div className="circle-add-row">
-              <input
-                name="label"
-                className="app-input"
-                placeholder='Name this circle (e.g. "Me", "Mom", "Dad")'
-                required
-                aria-label="Circle name"
-              />
-              <button type="submit" className="app-btn app-btn-primary">
-                Add circle
-              </button>
-            </div>
-            <fieldset className="circle-add-modes">
-              <legend className="sr-only">Who is this for?</legend>
-              <label className="mode-pick">
-                <input
-                  type="radio"
-                  name="mode"
-                  value="self"
-                  defaultChecked
-                />
-                <span className="pick-body">
-                  <span className="pick-title">For me</span>
-                  <span className="pick-sub">
-                    No code needed — just click &ldquo;This is my browser&rdquo;
-                    in the extension popup.
-                  </span>
-                </span>
-              </label>
-              <label className="mode-pick">
-                <input type="radio" name="mode" value="caregiver" />
-                <span className="pick-body">
-                  <span className="pick-title">For a family member</span>
-                  <span className="pick-sub">
-                    Generates a 6-digit code. Read it to them on the phone so
-                    their browser pairs to your dashboard.
-                  </span>
-                </span>
-              </label>
-            </fieldset>
-          </form>
+          <CreateCircleForm />
         </section>
       </div>
     </>
