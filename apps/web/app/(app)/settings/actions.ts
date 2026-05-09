@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 import { and, eq } from "drizzle-orm";
 import { getOrCreateCurrentUser } from "@/lib/auth/current-user";
 import { db } from "@/lib/db/client";
@@ -30,6 +31,7 @@ export async function revokeTokenAction(formData: FormData): Promise<void> {
 
 export async function deleteCircleAction(formData: FormData): Promise<void> {
   const circleId = String(formData.get("circleId") ?? "");
+  const redirectTo = String(formData.get("redirectTo") ?? "");
   if (!circleId) return;
   const user = await getOrCreateCurrentUser();
   await db
@@ -41,4 +43,8 @@ export async function deleteCircleAction(formData: FormData): Promise<void> {
     .where(eq(extensionTokens.circleId, circleId));
   revalidatePath("/dashboard");
   revalidatePath("/settings");
+  // Caller can opt into a redirect (e.g. from the circle detail page,
+  // which 404s after the circle is gone). The settings list omits this
+  // field so the user stays where they were.
+  if (redirectTo === "/dashboard") redirect("/dashboard");
 }

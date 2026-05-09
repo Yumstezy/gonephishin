@@ -61,7 +61,7 @@ renders for you.
 FOR FAMILIES
 
 If you're setting this up for a parent, grandparent, or anyone else who
-isn't a power-user, sign in to gonephishin.tech, create a "family circle"
+isn't a power-user, sign in to gonephishin.com, create a "family circle"
 with their name on it, and read them a 6-digit pairing code over the phone
 (no email links to click — that would be ironic). Once they enter the code,
 the extension on their browser is paired to your dashboard, where you can
@@ -77,7 +77,7 @@ PRIVACY
   attachments.
 • We do not track your browsing history.
 • We do not show ads, sell data, or train AI models on your data.
-• Full privacy policy: https://gonephishin.tech/privacy
+• Full privacy policy: https://gonephishin.com/privacy
 
 PERMISSIONS WE ASK FOR (AND WHY)
 
@@ -85,6 +85,7 @@ PERMISSIONS WE ASK FOR (AND WHY)
   to read the link URLs already displayed on those pages so we can flag
   the dangerous ones. The extension only runs on those four hostnames.
 • "storage" — caches link verdicts and your sign-in state locally.
+• "alarms" — schedules background refreshes of cached verdicts.
 
 That's it. We don't ask for permissions on any other site, we don't read
 your tabs, and we don't have access to anything outside the webmail tabs
@@ -95,17 +96,16 @@ OPEN ABOUT WHAT WE'RE NOT
 This is a community-maintained, free safety net — not a replacement for
 careful clicking. It catches the phishing and malware sites that Google
 already knows about, plus a small set of obvious-looking lookalikes
-(typosquats, IP-only links, suspicious TLDs, brand-impersonation links
-where the text says one company but the URL goes somewhere else).
-Brand-new attacks that haven't been reported yet won't be in the
-database. Pair it with the old-fashioned advice: if a message feels off,
-don't click; if it claims to be your bank, log into your bank directly.
+(typosquats, IP-only links, suspicious TLDs). Brand-new attacks that
+haven't been reported yet won't be in the database. Pair it with the
+old-fashioned advice: if a message feels off, don't click; if it claims
+to be your bank, log into your bank directly.
 
 CONTACT & FEEDBACK
 
-• Web: https://gonephishin.tech
-• Privacy questions: privacy@gonephishin.tech
-• Bug reports: support@gonephishin.tech
+• Web: https://gonephishin.com
+• Privacy questions: privacy@gonephishin.com
+• Bug reports: support@gonephishin.com
 
 If the extension flagged something it shouldn't have, please send us the
 domain — we'd like to know.
@@ -147,6 +147,9 @@ these into the corresponding boxes when the form asks for them.
 > caregiver dashboard). All values are local to the browser; nothing is
 > synced across devices.
 
+### `alarms`
+3
+
 ### `https://mail.google.com/*`
 > Required to read the rendered URLs of the links inside Gmail messages so
 > the extension can flag and intercept dangerous ones. The extension does
@@ -158,12 +161,12 @@ these into the corresponding boxes when the form asks for them.
 > uses (consumer, work / school, and the older office365 hostname). The
 > extension only inspects anchor URLs the page already displays.
 
-### `https://gonephishin.tech/*`, `https://*.vercel.app/*`, `http://localhost:3000/*`
+### `https://gonephishin.com/*`, `https://*.vercel.app/*`, `http://localhost:3000/*`
 > The extension communicates with the Gone Phishin' API to (1) ask for a
 > verdict when it encounters a new URL, (2) log a threat event when a
 > warning is shown, and (3) accept a pairing token from the activate page
 > on our website. The Vercel and localhost hosts are used for staging and
-> local development; in the production build only the gonephishin.tech host
+> local development; in the production build only the gonephishin.com host
 > is contacted in normal use.
 
 ### `externally_connectable` (the same three host patterns)
@@ -194,13 +197,11 @@ Browsing.
 
 ## Required URLs
 
-- Privacy policy URL: `https://gonephishin.tech/privacy` (live)
-- Homepage URL: `https://gonephishin.tech`
-- Support URL: `https://gonephishin.tech/support` (live)
-
-Note: the Support URL field requires an `https://` URL — the Web Store
-form rejects `mailto:` addresses outright (learned this the hard way on
-the first submission attempt).
+- Privacy policy URL: `https://gonephishin.com/privacy` (host the contents
+  of `docs/store/PRIVACY.md` at this path before submission)
+- Homepage URL: `https://gonephishin.com`
+- Support URL: `https://gonephishin.com/support` or
+  `mailto:support@gonephishin.com`
 
 ---
 

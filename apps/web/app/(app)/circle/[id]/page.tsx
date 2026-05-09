@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { and, desc, eq } from "drizzle-orm";
 import { getOrCreateCurrentUser } from "@/lib/auth/current-user";
+import { DeleteCircleButton } from "@/components/dashboard/delete-circle-button";
 import { PairingCodeDisplay } from "@/components/dashboard/pairing-code-display";
 import { db } from "@/lib/db/client";
 import { circles, dangerEvents } from "@/lib/db/schema";
@@ -127,6 +128,21 @@ export default async function CirclePage(props: {
           )}
         </section>
       </div>
+
+      <section className="app-card danger-zone">
+        <div className="head">
+          <div>
+            <h2>Danger zone</h2>
+            <div className="sub">
+              Deleting this circle revokes any paired browsers and removes
+              the threat history. This can&apos;t be undone.
+            </div>
+          </div>
+        </div>
+        <div className="danger-zone-row">
+          <DeleteCircleButton circleId={circle.id} circleLabel={circle.label} />
+        </div>
+      </section>
     </>
   );
 }

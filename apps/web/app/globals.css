@@ -1557,3 +1557,16 @@ footer.site .brand .mark img,
   display: block;
   object-fit: contain;
 }
+
+/* Circle page danger zone — destructive actions, kept visually subdued so
+ * they don't compete with the brand-active states up top. */
+.danger-zone {
+  margin-top: 16px;
+  border-color: rgba(var(--danger), 0.25);
+}
+.danger-zone .head h2 {
+  color: rgb(var(--danger));
+}
+.danger-zone-row {
+  padding-top: 12px;
+}
