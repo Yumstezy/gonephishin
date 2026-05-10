@@ -1570,3 +1570,23 @@ footer.site .brand .mark img,
 .danger-zone-row {
   padding-top: 12px;
 }
+
+/* Demo video section — full-bleed video with rounded corners + subtle
+ * sky-tinted border to match the rest of the dark-theme cards. */
+.demo-video .demo-video-frame {
+  margin: 24px auto 0;
+}
+.demo-video video {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 80vh;
+  border-radius: 16px;
+  border: 1px solid rgb(var(--border-soft));
+  background: rgb(var(--surface));
+  outline: none;
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.04) inset,
+    0 30px 80px rgba(0, 0, 0, 0.6),
+    0 0 60px rgba(var(--primary), 0.06);
+}

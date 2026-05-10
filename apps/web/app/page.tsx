@@ -1,3 +1,4 @@
+import { DemoVideoSection } from "@/components/marketing/demo-video-section";
 import { Hero } from "@/components/marketing/hero";
 import { MarketingNav } from "@/components/marketing/nav";
 import { ValuePropsSection } from "@/components/marketing/value-props-section";
@@ -15,6 +16,7 @@ export default function Home() {
       <MarketingNav />
       <main>
         <Hero />
+        <DemoVideoSection />
         <ValuePropsSection />
         <ShowcaseSection />
         <HowItWorksSection />
