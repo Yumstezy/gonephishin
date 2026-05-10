@@ -1,10 +1,16 @@
 import { Reveal } from "./reveal";
 
+const YOUTUBE_ID = "4GLIMzQA6GM";
+
 /**
- * Hero-adjacent video section. Shows the 60-second walkthrough of the
- * extension in actual use — this is the single highest-conversion asset
- * on the page for the older-relative target audience, who decide on the
- * basis of "do I see the warning happen" not "does the copy mention X."
+ * Hero-adjacent video section. Embeds the unlisted YouTube walkthrough
+ * via the privacy-enhanced youtube-nocookie domain — for the
+ * older-relative target audience the demo is the single
+ * highest-conversion asset on the page (they decide based on watching
+ * the warning happen, not on copy). Uses native iframe rather than a
+ * lite-embed shim so playback works in every browser without an extra
+ * JS bundle; the loading="lazy" attribute defers the network call until
+ * the user scrolls near it.
  */
 export function DemoVideoSection() {
   return (
@@ -16,18 +22,15 @@ export function DemoVideoSection() {
           <p>A real inbox, a real phishing link, a real warning.</p>
         </Reveal>
         <Reveal className="max-4xl demo-video-frame">
-          <video
-            controls
-            playsInline
-            preload="metadata"
-            poster="/icon.png"
-            aria-label="Gone Phishin' demo: catching a phishing link in Gmail"
-          >
-            <source src="/promo.mov" type="video/mp4" />
-            <source src="/promo.mov" type="video/quicktime" />
-            Your browser doesn&apos;t support inline video.{" "}
-            <a href="/promo.mov">Download the demo (.mov)</a>.
-          </video>
+          <div className="demo-video-aspect">
+            <iframe
+              src={`https://www.youtube-nocookie.com/embed/${YOUTUBE_ID}?rel=0&modestbranding=1`}
+              title="Gone Phishin' demo: catching a phishing link in Gmail"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowFullScreen
+              loading="lazy"
+            />
+          </div>
         </Reveal>
       </div>
     </section>

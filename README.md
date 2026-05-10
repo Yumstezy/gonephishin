@@ -5,9 +5,11 @@ phishing or malware links inside Gmail and Outlook — built for the people
 in your life who are most often targeted, with a caregiver dashboard so an
 adult child can set it up for a parent without becoming tech support.
 
-**Live:** https://gonephishin.tech · **Privacy:** /privacy · **Support:** /support · **▶ [Watch the 60-second demo](https://gonephishin.tech/#how-it-works)**
+**Live:** https://gonephishin.tech · **Privacy:** /privacy · **Support:** /support
 
-![Inbox view, dangerous links flagged](docs/store/screenshots/01-inbox-flagged.png)
+[![Gone Phishin' — 60 second demo](https://img.youtube.com/vi/4GLIMzQA6GM/maxresdefault.jpg)](https://youtu.be/4GLIMzQA6GM)
+
+> ▶ **[Watch the 60-second demo on YouTube](https://youtu.be/4GLIMzQA6GM)** — a real inbox, a real phishing link, a real warning.
 
 ---
 
