@@ -83,20 +83,17 @@ html::before {
   z-index: -1;
   pointer-events: none;
   background:
-    radial-gradient(ellipse 1100px 700px at 12% 6%, rgba(56, 189, 248, 0.18), transparent 60%),
-    radial-gradient(ellipse 900px 600px at 92% 38%, rgba(56, 189, 248, 0.10), transparent 65%),
-    radial-gradient(ellipse 1200px 800px at 30% 78%, rgba(99, 102, 241, 0.08), transparent 65%),
-    radial-gradient(ellipse 800px 600px at 88% 96%, rgba(56, 189, 248, 0.10), transparent 65%);
+    radial-gradient(ellipse 1400px 900px at 50% 0%, rgba(56, 189, 248, 0.04), transparent 70%);
   transform: translateZ(0);
   will-change: transform;
 }
 
-.mono { font-family: var(--font-geist-mono), 'Geist Mono', ui-monospace, monospace; }
+.mono { font-family: var(--font-geist-sans), 'Geist', system-ui, -apple-system, sans-serif; }
 a { color: inherit; text-decoration: none; }
 h1, h2, h3, h4, p { margin: 0; }
 button { font-family: inherit; cursor: pointer; }
 
-::selection { background-color: rgba(56, 189, 248, 0.18); color: rgb(var(--foreground)); }
+::selection { background-color: rgba(56, 189, 248, 0.12); color: rgb(var(--foreground)); }
 
 /* Layout containers */
 .container-marketing { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
@@ -183,12 +180,12 @@ nav.site .signin:hover { color: rgb(var(--foreground)); }
 }
 .btn-primary {
   background: rgb(var(--primary)); color: #061018;
-  box-shadow: 0 1px 2px rgba(56,189,248,.30), 0 4px 14px rgba(56,189,248,.25);
+  box-shadow: 0 1px 2px rgba(0,0,0,.25), 0 4px 14px rgba(0,0,0,.30);
 }
 .btn-primary:hover {
   background: rgb(var(--primary-hover));
   transform: translateY(-1px);
-  box-shadow: 0 2px 4px rgba(3,105,161,.22), 0 10px 24px rgba(3,105,161,.22);
+  box-shadow: 0 2px 4px rgba(0,0,0,.25), 0 10px 24px rgba(0,0,0,.35);
 }
 .btn-primary:active { transform: translateY(0); }
 .btn-secondary {
@@ -208,7 +205,7 @@ nav.site .signin:hover { color: rgb(var(--foreground)); }
 
 /* TYPE */
 .kicker {
-  font-family: var(--font-geist-mono), 'Geist Mono', monospace;
+  font-family: var(--font-geist-sans), 'Geist', system-ui, -apple-system, sans-serif;
   font-size: 12px;
   text-transform: uppercase;
   letter-spacing: 0.12em;
@@ -255,7 +252,7 @@ section.hero .hero-grid {
   max-width: 540px;
   color: rgb(var(--primary));
   margin-bottom: 28px;
-  filter: drop-shadow(0 8px 32px rgba(56, 189, 248, 0.25));
+  filter: none;
 }
 .hero-wordmark svg { width: 100%; height: auto; display: block; }
 section.hero h1 {
@@ -303,13 +300,7 @@ section.hero .ctas { display: flex; gap: 12px; flex-wrap: wrap; align-items: cen
 @media (max-width: 768px) {
   .hero-watermark { top: -80px; right: -200px; width: 560px; opacity: 0.05; }
 }
-.hero-glow {
-  position: absolute; pointer-events: none; z-index: 0;
-  top: 30%; left: -10%;
-  width: 700px; height: 600px;
-  background: radial-gradient(ellipse at center, rgba(56, 189, 248, 0.10), transparent 65%);
-  filter: blur(20px);
-}
+.hero-glow { display: none; }
 
 /* MOCKUP */
 .mockup-wrap { width: 100%; margin: 0; position: relative; }
@@ -346,7 +337,7 @@ section.hero .ctas { display: flex; gap: 12px; flex-wrap: wrap; align-items: cen
   padding: 5px 10px;
   font-size: 12px;
   color: rgb(var(--muted));
-  font-family: var(--font-geist-mono), 'Geist Mono', monospace;
+  font-family: var(--font-geist-sans), 'Geist', system-ui, -apple-system, sans-serif;
   display: inline-flex; align-items: center; gap: 6px;
   max-width: 360px;
 }
@@ -393,7 +384,7 @@ section.hero .ctas { display: flex; gap: 12px; flex-wrap: wrap; align-items: cen
 .email-from .name { color: rgb(var(--foreground)); font-weight: 500; }
 .email-from .addr-from {
   color: rgb(var(--muted));
-  font-family: var(--font-geist-mono), 'Geist Mono', monospace;
+  font-family: var(--font-geist-sans), 'Geist', system-ui, -apple-system, sans-serif;
   font-size: 12px;
 }
 .email-text { font-size: 14.5px; line-height: 1.65; color: rgb(var(--muted)); }
@@ -497,7 +488,7 @@ section.band { border-top: 1px solid rgba(255,255,255,0.04); padding: 96px 0; }
   .value-col:last-child { padding-right: 0; }
 }
 .value-col .num {
-  font-family: var(--font-geist-mono), 'Geist Mono', monospace;
+  font-family: var(--font-geist-sans), 'Geist', system-ui, -apple-system, sans-serif;
   font-size: 12px;
   color: rgb(var(--muted-2));
   text-transform: uppercase;
@@ -650,7 +641,7 @@ section.showcase .intro h2 {
   align-items: start;
 }
 .step-num {
-  font-family: var(--font-geist-mono), 'Geist Mono', monospace;
+  font-family: var(--font-geist-sans), 'Geist', system-ui, -apple-system, sans-serif;
   font-size: 12px;
   color: rgb(var(--muted-2));
   text-transform: uppercase;
@@ -689,7 +680,7 @@ section.showcase .intro h2 {
 }
 @media (min-width: 768px) { .compare-card { padding: 40px; } }
 .compare-card .label {
-  font-family: var(--font-geist-mono), 'Geist Mono', monospace;
+  font-family: var(--font-geist-sans), 'Geist', system-ui, -apple-system, sans-serif;
   font-size: 11.5px;
   text-transform: uppercase;
   letter-spacing: 0.14em;
@@ -1019,7 +1010,7 @@ section.final-cta p {
   font-weight: 400;
 }
 .threat-info .url {
-  font-family: var(--font-geist-mono), 'Geist Mono', monospace;
+  font-family: var(--font-geist-sans), 'Geist', system-ui, -apple-system, sans-serif;
   font-size: 12px;
   color: rgb(var(--muted));
   overflow: hidden;
@@ -1164,7 +1155,7 @@ section.final-cta p {
   font-weight: 500;
 }
 .pair-row .code {
-  font-family: var(--font-geist-mono), 'Geist Mono', monospace;
+  font-family: var(--font-geist-sans), 'Geist', system-ui, -apple-system, sans-serif;
   font-size: 22px;
   font-weight: 600;
   letter-spacing: 0.18em;
@@ -1221,7 +1212,7 @@ section.final-cta p {
 .settings-list-item .info .meta {
   font-size: 12.5px; color: rgb(var(--muted));
   margin-top: 2px;
-  font-family: var(--font-geist-mono), 'Geist Mono', monospace;
+  font-family: var(--font-geist-sans), 'Geist', system-ui, -apple-system, sans-serif;
   font-variant-numeric: tabular-nums;
 }
 
@@ -1363,7 +1354,7 @@ footer.site .copyright { font-size: 12.5px; color: rgb(var(--muted-2)); }
   font-size: 16px;
 }
 .legal-doc .kicker {
-  font-family: var(--font-mono);
+  font-family: var(--font-geist-sans);
   font-size: 11.5px;
   letter-spacing: 0.18em;
   text-transform: uppercase;
@@ -1586,8 +1577,7 @@ footer.site .brand .mark img,
   background: rgb(var(--surface));
   box-shadow:
     0 1px 0 rgba(255, 255, 255, 0.04) inset,
-    0 30px 80px rgba(0, 0, 0, 0.6),
-    0 0 60px rgba(var(--primary), 0.06);
+    0 30px 80px rgba(0, 0, 0, 0.6);
 }
 .demo-video .demo-video-aspect iframe {
   position: absolute;

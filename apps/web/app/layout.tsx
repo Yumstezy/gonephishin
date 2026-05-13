@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { GeistSans } from "geist/font/sans";
-import { GeistMono } from "geist/font/mono";
 import { ClerkProvider } from "@clerk/nextjs";
 import "./globals.css";
 
@@ -24,10 +23,7 @@ export default function RootLayout({
 }) {
   return (
     <ClerkProvider>
-      <html
-        lang="en"
-        className={`${GeistSans.variable} ${GeistMono.variable}`}
-      >
+      <html lang="en" className={GeistSans.variable}>
         <body>{children}</body>
       </html>
     </ClerkProvider>

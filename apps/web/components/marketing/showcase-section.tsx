@@ -108,7 +108,7 @@ function MockupEmailList() {
       <circle cx="58" cy="40" r="5" fill="#febc2e" />
       <circle cx="76" cy="40" r="5" fill="#28c840" />
       <rect x="120" y="32" width="200" height="16" rx="4" fill="#131a26" stroke="#1f2735" />
-      <text x="130" y="44" fill="#8a93a3" fontFamily="monospace" fontSize="11">mail.google.com</text>
+      <text x="130" y="44" fill="#8a93a3" fontFamily="Geist, sans-serif" fontSize="11">mail.google.com</text>
 
       <g fontFamily="Geist, sans-serif">
         {/* Row 1 — SAFE */}
@@ -200,7 +200,7 @@ function MockupPairingCode() {
       <text x="60" y="80" fill="#38bdf8" fontFamily="Geist,sans-serif" fontSize="11" fontWeight="600" letterSpacing="2">PAIRING CODE FOR MOM</text>
       <text x="60" y="130" fill="#e7ecf3" fontFamily="Geist,sans-serif" fontSize="26" fontWeight="600">Read this to her on the phone.</text>
 
-      <g fontFamily="'Geist Mono',monospace" fontSize="48" fontWeight="600" fill="#e7ecf3">
+      <g fontFamily="Geist,sans-serif" fontSize="48" fontWeight="600" fill="#e7ecf3" letterSpacing="-1">
         <rect x="60" y="170" width="60" height="80" rx="10" fill="#0f1521" stroke="#1f2735" />
         <text x="90" y="226" textAnchor="middle">4</text>
         <rect x="130" y="170" width="60" height="80" rx="10" fill="#0f1521" stroke="#1f2735" />
