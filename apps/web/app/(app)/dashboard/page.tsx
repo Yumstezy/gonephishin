@@ -1,8 +1,8 @@
 import Link from "next/link";
-import { and, desc, eq, gte, inArray, sql } from "drizzle-orm";
+import { and, desc, eq, gte, inArray, isNull, sql } from "drizzle-orm";
 import { getOrCreateCurrentUser } from "@/lib/auth/current-user";
 import { db } from "@/lib/db/client";
-import { circles, dangerEvents } from "@/lib/db/schema";
+import { circles, dangerEvents, extensionTokens } from "@/lib/db/schema";
 import { CreateCircleForm } from "@/components/dashboard/create-circle-form";
 
 export const dynamic = "force-dynamic";
@@ -67,6 +67,20 @@ export default async function DashboardPage() {
   const greetingName = (user.name ?? user.email.split("@")[0] ?? "there")
     .split(" ")[0]!;
 
+  // Active (non-revoked) paired extensions, used to grade account safety.
+  const activeTokens = myCircleIds.length
+    ? await db
+        .select({ lastSeenAt: extensionTokens.lastSeenAt })
+        .from(extensionTokens)
+        .where(
+          and(
+            inArray(extensionTokens.circleId, myCircleIds),
+            isNull(extensionTokens.revokedAt),
+          ),
+        )
+    : [];
+  const safety = computeSafetyGrade(myCircles.length, activeTokens);
+
   return (
     <>
       <div className="greeting">
@@ -101,10 +115,10 @@ export default async function DashboardPage() {
         </div>
         <div className="app-stat">
           <div className="label">Account safety</div>
-          <div className="num" style={{ color: "#6ee7b7" }}>
-            A+
+          <div className="num" style={{ color: safety.color }}>
+            {safety.grade}
           </div>
-          <div className="delta up">All checks passing</div>
+          <div className={`delta ${safety.tone}`}>{safety.text}</div>
         </div>
         <div className="app-stat">
           <div className="label">Plan</div>
@@ -283,4 +297,66 @@ function ShieldAlertIcon() {
       <line x1="12" y1="17" x2="12.01" y2="17" />
     </svg>
   );
+}
+
+/**
+ * Real "Account safety" grade — was hardcoded A+ before. Now derived from
+ * (a) whether the user has any circles, (b) whether any extension token is
+ * paired and non-revoked, and (c) how recently that token last hit our API
+ * (we bump extensionTokens.lastSeenAt on every authenticated call).
+ */
+function computeSafetyGrade(
+  circleCount: number,
+  activeTokens: { lastSeenAt: Date | null }[],
+): { grade: string; text: string; color: string; tone: "up" | "" | "warn" } {
+  if (circleCount === 0) {
+    return {
+      grade: "—",
+      text: "Add a circle to start",
+      color: "rgb(var(--muted))",
+      tone: "",
+    };
+  }
+  if (activeTokens.length === 0) {
+    return {
+      grade: "C",
+      text: "No browser paired yet",
+      color: "#f87171",
+      tone: "warn",
+    };
+  }
+  const mostRecent = activeTokens
+    .map((t) => t.lastSeenAt?.getTime() ?? 0)
+    .reduce((a, b) => Math.max(a, b), 0);
+  if (mostRecent === 0) {
+    return {
+      grade: "B",
+      text: "Paired, not yet active",
+      color: "#fbbf24",
+      tone: "",
+    };
+  }
+  const hoursAgo = (Date.now() - mostRecent) / 3_600_000;
+  if (hoursAgo < 24) {
+    return {
+      grade: "A+",
+      text: "Active in the last day",
+      color: "#6ee7b7",
+      tone: "up",
+    };
+  }
+  if (hoursAgo < 24 * 7) {
+    return {
+      grade: "A",
+      text: "Active this week",
+      color: "#6ee7b7",
+      tone: "up",
+    };
+  }
+  return {
+    grade: "B",
+    text: "Idle for over a week",
+    color: "#fbbf24",
+    tone: "",
+  };
 }
